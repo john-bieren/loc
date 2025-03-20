@@ -1,0 +1,8 @@
+*
+!.gitignore
+!go.mod
+!main.go
+!directory.go
+!file.go
+!utils.go
+!languages.go
