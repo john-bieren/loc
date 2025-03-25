@@ -42,7 +42,7 @@ func (d *directory) searchDir() {
 		}
 
 		if info.IsDir() {
-			if *include_sub_flag {
+			if *include_sub_flag && d.parents+1 <= *max_depth_flag {
 				child := newDirectory(full_path, d.parents+1)
 				d.subdirectories = append(d.subdirectories, child)
 			}

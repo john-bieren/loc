@@ -16,6 +16,9 @@ var print_dir_flag = flag.Bool("d", false, "")
 // Flag to print loc by file
 var print_file_flag = flag.Bool("f", false, "")
 
+// Flag for max depth of subdirectories to search through
+var max_depth_flag = flag.Int("m", 1000, "")
+
 func main() {
 	flag.Usage = usage
 	flag.Parse()

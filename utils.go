@@ -72,5 +72,6 @@ func usage() {
 	fmt.Println("	-a	Include loc located in subdirectories")
 	fmt.Println("	-d	Print loc totals by directory")
 	fmt.Println("	-f	Print loc totals by file")
+	fmt.Println("	-m int	Maximum depth of subdirectories to search")
 	os.Exit(0)
 }
