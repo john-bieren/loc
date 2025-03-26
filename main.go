@@ -7,6 +7,8 @@ import (
 	"os"
 )
 
+const version = "v2.0.0"
+
 // Flag to print loc by directory
 var print_dir_flag = flag.Bool("d", false, "")
 
@@ -16,13 +18,20 @@ var print_file_flag = flag.Bool("f", false, "")
 // Flag for max depth of subdirectories to search through
 var max_depth_flag = flag.Int("m", 1000, "")
 
+var version_flag = flag.Bool("v", false, "")
+
 func main() {
+	// Handle flags and arguments
 	flag.Usage = usage
 	flag.Parse()
 	args := flag.Args()
 	if len(args) > 1 {
 		fmt.Println("flags/arguments not properly formatted")
 		flag.Usage()
+	}
+	if *version_flag {
+		fmt.Println("loc", version)
+		os.Exit(0)
 	}
 
 	// Set the directory that will be searched

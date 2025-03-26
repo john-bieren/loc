@@ -64,13 +64,17 @@ func relPath(full_path string, parents int) string {
 
 // Custom usage output for --help and relevant error messages
 func usage() {
+	fmt.Println("loc", version)
 	fmt.Println("Count lines of code (loc) in a directory by language")
+	fmt.Println("")
 	fmt.Println("Usage: loc [options] [path]")
-	fmt.Println("	options must come before path")
-	fmt.Println("	path defaults to current working directory if no argument is given")
+	fmt.Println("	Options must come before path")
+	fmt.Println("	Path defaults to current working directory if no argument is given")
+	fmt.Println("")
 	fmt.Println("Options:")
 	fmt.Println("	-d	Print loc totals by directory")
 	fmt.Println("	-f	Print loc totals by file")
 	fmt.Println("	-m int	Maximum depth of subdirectories to search")
+	fmt.Println("	-v	Print version and exit")
 	os.Exit(0)
 }
