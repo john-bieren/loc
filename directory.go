@@ -95,7 +95,7 @@ func (d directory) printDirLoc() {
 	}
 
 	// Print loc totals by file type
-	keys := alphaSortKeys(d.loc_counts)
+	keys := sortKeys(d.loc_counts)
 	for _, file_type := range keys {
 		fmt.Printf("%s%s %s | %s\n", spaces, file_type, addCommas(d.loc_counts[file_type]), addCommas(d.file_counts[file_type]))
 	}
@@ -107,7 +107,7 @@ func (d directory) printTreeLoc() {
 
 	if *print_file_flag {
 		spaces := strings.Repeat("    ", d.parents+1)
-		for _, child := range d.children {
+		for _, child := range sortFiles(d.children) {
 			fmt.Printf("%s%s - %s\n", spaces, addCommas(child.loc), child.name)
 		}
 	}
@@ -121,15 +121,24 @@ func (d directory) printTreeLoc() {
 
 // Print loc by file for all files counted
 func (d directory) printFileLoc() {
-	for _, child := range d.children {
-		fmt.Printf(" %s - %s\n", addCommas(child.loc), child.rel_path)
-	}
+	// collect all children to sort them
+	var files []*file
+	files = d.appendFiles(files)
 
+	for _, file := range sortFiles(files) {
+		fmt.Printf(" %s - %s\n", addCommas(file.loc), file.rel_path)
+	}
+}
+
+// Append files from d.children to input slice
+func (d directory) appendFiles(files []*file) []*file {
+	files = append(files, d.children...)
 	if d.search_subs {
 		for _, sub := range d.subdirectories {
-			sub.printFileLoc()
+			files = sub.appendFiles(files)
 		}
 	}
+	return files
 }
 
 // Constructor for instances of directory struct
