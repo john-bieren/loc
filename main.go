@@ -7,9 +7,6 @@ import (
 	"os"
 )
 
-// Flag to search and count loc from subdirectories
-var include_sub_flag = flag.Bool("a", false, "")
-
 // Flag to print loc by directory
 var print_dir_flag = flag.Bool("d", false, "")
 

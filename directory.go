@@ -11,6 +11,7 @@ type directory struct {
 	full_path      string
 	name           string
 	parents        int
+	search_subs    bool
 	subdirectories []*directory
 	children       []*file
 	children_loc   map[string]int
@@ -42,7 +43,7 @@ func (d *directory) searchDir() {
 		}
 
 		if info.IsDir() {
-			if *include_sub_flag && d.parents+1 <= *max_depth_flag {
+			if d.search_subs {
 				child := newDirectory(full_path, d.parents+1)
 				d.subdirectories = append(d.subdirectories, child)
 			}
@@ -61,7 +62,7 @@ func (d *directory) countDirLoc() {
 		d.children_loc[child.file_type] += child.loc
 	}
 
-	if *include_sub_flag {
+	if d.search_subs {
 		for _, sub := range d.subdirectories {
 			for file_type, loc := range sub.children_loc {
 				d.children_loc[file_type] += loc
@@ -106,7 +107,7 @@ func (d directory) printTreeLoc() {
 		}
 	}
 
-	if *include_sub_flag {
+	if d.search_subs {
 		for _, sub := range d.subdirectories {
 			sub.printTreeLoc()
 		}
@@ -119,7 +120,7 @@ func (d directory) printFileLoc() {
 		fmt.Printf(" %s loc - %s\n", addCommas(child.loc), child.rel_path)
 	}
 
-	if *include_sub_flag {
+	if d.search_subs {
 		for _, sub := range d.subdirectories {
 			sub.printFileLoc()
 		}
@@ -132,6 +133,7 @@ func newDirectory(path string, num_parents int) *directory {
 		full_path:    path,
 		name:         filepath.Base(path),
 		parents:      num_parents,
+		search_subs:  num_parents+1 <= *max_depth_flag,
 		children_loc: make(map[string]int),
 	}
 	self.searchDir()
