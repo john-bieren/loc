@@ -14,7 +14,8 @@ type directory struct {
 	search_subs    bool
 	subdirectories []*directory
 	children       []*file
-	children_loc   map[string]int
+	loc_counts     map[string]int
+	file_counts    map[string]int
 }
 
 // Index children and subdirectories
@@ -59,13 +60,17 @@ func (d *directory) searchDir() {
 // Count lines of code for each language in all indexed children
 func (d *directory) countDirLoc() {
 	for _, child := range d.children {
-		d.children_loc[child.file_type] += child.loc
+		d.loc_counts[child.file_type] += child.loc
+		d.file_counts[child.file_type]++
 	}
 
 	if d.search_subs {
 		for _, sub := range d.subdirectories {
-			for file_type, loc := range sub.children_loc {
-				d.children_loc[file_type] += loc
+			for file_type, loc := range sub.loc_counts {
+				d.loc_counts[file_type] += loc
+			}
+			for file_type, n := range sub.file_counts {
+				d.file_counts[file_type] += n
 			}
 		}
 	}
@@ -73,7 +78,7 @@ func (d *directory) countDirLoc() {
 
 // Print loc by file type for directory
 func (d directory) printDirLoc() {
-	if len(d.children_loc) == 0 {
+	if len(d.loc_counts) == 0 {
 		return
 	}
 	spaces := strings.Repeat("    ", d.parents)
@@ -85,14 +90,14 @@ func (d directory) printDirLoc() {
 	}
 
 	// Print loc total
-	if len(d.children_loc) > 1 {
-		fmt.Printf("%s%s loc\n", spaces, addCommas(sumValues(d.children_loc)))
+	if len(d.loc_counts) > 1 {
+		fmt.Printf("%s%s | %s\n", spaces, addCommas(sumValues(d.loc_counts)), addCommas(sumValues(d.file_counts)))
 	}
 
 	// Print loc totals by file type
-	keys := alphaSortKeys(d.children_loc)
+	keys := alphaSortKeys(d.loc_counts)
 	for _, file_type := range keys {
-		fmt.Printf("%s%s %s loc\n", spaces, addCommas(d.children_loc[file_type]), file_type)
+		fmt.Printf("%s%s %s | %s\n", spaces, file_type, addCommas(d.loc_counts[file_type]), addCommas(d.file_counts[file_type]))
 	}
 }
 
@@ -103,7 +108,7 @@ func (d directory) printTreeLoc() {
 	if *print_file_flag {
 		spaces := strings.Repeat("    ", d.parents+1)
 		for _, child := range d.children {
-			fmt.Printf("%s%s loc - %s\n", spaces, addCommas(child.loc), child.name)
+			fmt.Printf("%s%s - %s\n", spaces, addCommas(child.loc), child.name)
 		}
 	}
 
@@ -117,7 +122,7 @@ func (d directory) printTreeLoc() {
 // Print loc by file for all files counted
 func (d directory) printFileLoc() {
 	for _, child := range d.children {
-		fmt.Printf(" %s loc - %s\n", addCommas(child.loc), child.rel_path)
+		fmt.Printf(" %s - %s\n", addCommas(child.loc), child.rel_path)
 	}
 
 	if d.search_subs {
@@ -130,11 +135,12 @@ func (d directory) printFileLoc() {
 // Constructor for instances of directory struct
 func newDirectory(path string, num_parents int) *directory {
 	self := &directory{
-		full_path:    path,
-		name:         filepath.Base(path),
-		parents:      num_parents,
-		search_subs:  num_parents+1 <= *max_depth_flag,
-		children_loc: make(map[string]int),
+		full_path:   path,
+		name:        filepath.Base(path),
+		parents:     num_parents,
+		search_subs: num_parents+1 <= *max_depth_flag,
+		loc_counts:  make(map[string]int),
+		file_counts: make(map[string]int),
 	}
 	self.searchDir()
 	self.countDirLoc()
