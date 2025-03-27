@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"slices"
 	"strings"
 )
 
@@ -52,9 +51,8 @@ func newFile(path string, dir_parents int) *file {
 		full_path: path,
 		rel_path:  relPath(path, dir_parents),
 		name:      filepath.Base(path),
-		file_type: filepath.Ext(path),
 	}
-	self.is_code = slices.Contains(langauges, self.file_type)
+	self.file_type, self.is_code = langauges[filepath.Ext(path)]
 	if self.is_code {
 		self.countFileLoc()
 	}
