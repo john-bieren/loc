@@ -18,6 +18,7 @@ var print_file_flag = flag.Bool("f", false, "")
 // Flag for max depth of subdirectories to search through
 var max_depth_flag = flag.Int("m", 1000, "")
 
+// Flag to print version and exit
 var version_flag = flag.Bool("v", false, "")
 
 func main() {
@@ -47,6 +48,7 @@ func main() {
 		}
 	}
 
+	// Main functionality
 	main_dir := newDirectory(dir_path, 0)
 	if len(main_dir.children) > 0 {
 		if *print_dir_flag {

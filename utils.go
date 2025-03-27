@@ -52,6 +52,7 @@ func relPath(full_path string, parents int) string {
 	return rel_path
 }
 
+// Sort a slice of files by loc
 func sortFiles(slice []*file) []*file {
 	sort.Slice(slice, func(i, j int) bool {
 		return slice[i].loc > slice[j].loc
