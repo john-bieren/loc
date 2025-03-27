@@ -91,7 +91,7 @@ func (d directory) printDirLoc() {
 
 	// Print loc total
 	if len(d.loc_counts) > 1 {
-		fmt.Printf("%sTotal %s | %s\n", indent, addCommas(sumValues(d.loc_counts)), addCommas(sumValues(d.file_counts)))
+		fmt.Printf("%s%d langs %s | %s\n", indent, len(d.loc_counts), addCommas(sumValues(d.loc_counts)), addCommas(sumValues(d.file_counts)))
 	}
 
 	// Print loc totals by file type
