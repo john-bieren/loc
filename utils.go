@@ -101,7 +101,8 @@ func usage() {
 	fmt.Println("Options:")
 	fmt.Println("	-d	Print loc totals by directory")
 	fmt.Println("	-f	Print loc totals by file")
-	fmt.Println("	-m int	Maximum depth of subdirectories to search")
+	fmt.Println("	-md int	Maximum depth of subdirectories to search")
+	fmt.Println("	-ml int	Maximum number of language loc totals to print per directory")
 	fmt.Println("	-v	Print version and exit")
 	os.Exit(0)
 }

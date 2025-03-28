@@ -94,14 +94,18 @@ func (d directory) printDirLoc() {
 		fmt.Printf("\033[1m%sLanguage: loc | files\033[0m\n", indent)
 	}
 
-	// Print loc total
+	// Print loc total if multiple languages are present
 	if len(d.loc_counts) > 1 {
 		fmt.Printf("%s%d langs: %s | %s\n", indent, len(d.loc_counts), addCommas(sumValues(d.loc_counts)), addCommas(sumValues(d.file_counts)))
 	}
 
 	// Print loc totals by file type
 	keys := sortKeys(d.loc_counts)
-	for _, file_type := range keys {
+	for i, file_type := range keys {
+		// Print language total even if -ml=0 if there's only one language
+		if i+1 > *max_totals_flag && len(d.loc_counts) != 1 {
+			break
+		}
 		fmt.Printf("%s%s: %s | %s\n", indent, file_type, addCommas(d.loc_counts[file_type]), addCommas(d.file_counts[file_type]))
 	}
 }

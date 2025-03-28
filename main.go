@@ -16,7 +16,10 @@ var print_dir_flag = flag.Bool("d", false, "")
 var print_file_flag = flag.Bool("f", false, "")
 
 // Flag for max depth of subdirectories to search through
-var max_depth_flag = flag.Int("m", 1000, "")
+var max_depth_flag = flag.Int("md", 1000, "")
+
+// Flag for max number of language loc totals to print per directory
+var max_totals_flag = flag.Int("ml", 1000, "")
 
 // Flag to print version and exit
 var version_flag = flag.Bool("v", false, "")

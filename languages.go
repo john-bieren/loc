@@ -1,7 +1,7 @@
 package main
 
 // Languages and extensions recognized counted as code;
-// Sourced from github.com/boyter/scc with some removals
+// Sourced from github.com/boyter/scc with some exclusions
 var langauges = map[string]string{
 	".abap":           "ABAP",
 	".abnf":           "ABNF",
