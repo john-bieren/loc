@@ -103,7 +103,7 @@ func (d directory) printDirLoc() {
 	keys := sortKeys(d.loc_counts)
 	for i, file_type := range keys {
 		// Print language total even if -ml=0 if there's only one language
-		if i+1 > *max_totals_flag && len(d.loc_counts) != 1 {
+		if i+1 > *max_print_totals && len(d.loc_counts) != 1 {
 			break
 		}
 		fmt.Printf("%s%s: %s | %s\n", indent, file_type, addCommas(d.loc_counts[file_type]), addCommas(d.file_counts[file_type]))
@@ -120,7 +120,10 @@ func (d directory) printTreeLoc() {
 		if d.parents == 0 {
 			fmt.Println("\033[1m    loc - file\033[0m")
 		}
-		for _, child := range sortFiles(d.children) {
+		for i, child := range sortFiles(d.children) {
+			if i+1 > *max_print_files {
+				break
+			}
 			fmt.Printf("%s%s - %s\n", indent, addCommas(child.loc), child.name)
 		}
 	}
@@ -140,7 +143,10 @@ func (d directory) printFileLoc() {
 
 	// Print column labels
 	fmt.Println("\033[1m loc - file\033[0m")
-	for _, file := range sortFiles(files) {
+	for i, file := range sortFiles(files) {
+		if i+1 > *max_print_files {
+			break
+		}
 		fmt.Printf(" %s - %s\n", addCommas(file.loc), file.rel_path)
 	}
 }
@@ -162,7 +168,7 @@ func newDirectory(path string, num_parents int) *directory {
 		full_path:   path,
 		name:        filepath.Base(path),
 		parents:     num_parents,
-		search_subs: num_parents+1 <= *max_depth_flag,
+		search_subs: num_parents+1 <= *max_search_depth,
 		loc_counts:  make(map[string]int),
 		file_counts: make(map[string]int),
 	}
