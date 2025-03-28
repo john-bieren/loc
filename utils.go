@@ -92,7 +92,7 @@ func quickSort(source_map map[string]int, keys []string, low int, high int) {
 // Custom usage output for --help and relevant error messages
 func usage() {
 	fmt.Println("loc", version)
-	fmt.Println("Count lines of code (loc) in a directory by language")
+	fmt.Println("Count lines of code in a directory and its subdirectories by language")
 	fmt.Println("")
 	fmt.Println("Usage: loc [options] [path]")
 	fmt.Println("	Options must come before path")
