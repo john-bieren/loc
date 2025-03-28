@@ -89,15 +89,20 @@ func (d directory) printDirLoc() {
 		indent += " " // loc totals should have an extra space if dir names are printed
 	}
 
+	// Print column labels on first directory
+	if d.parents == 0 {
+		fmt.Printf("\033[1m%sLanguage: loc | files\033[0m\n", indent)
+	}
+
 	// Print loc total
 	if len(d.loc_counts) > 1 {
-		fmt.Printf("%s%d langs %s | %s\n", indent, len(d.loc_counts), addCommas(sumValues(d.loc_counts)), addCommas(sumValues(d.file_counts)))
+		fmt.Printf("%s%d langs: %s | %s\n", indent, len(d.loc_counts), addCommas(sumValues(d.loc_counts)), addCommas(sumValues(d.file_counts)))
 	}
 
 	// Print loc totals by file type
 	keys := sortKeys(d.loc_counts)
 	for _, file_type := range keys {
-		fmt.Printf("%s%s %s | %s\n", indent, file_type, addCommas(d.loc_counts[file_type]), addCommas(d.file_counts[file_type]))
+		fmt.Printf("%s%s: %s | %s\n", indent, file_type, addCommas(d.loc_counts[file_type]), addCommas(d.file_counts[file_type]))
 	}
 }
 
@@ -107,6 +112,10 @@ func (d directory) printTreeLoc() {
 
 	if *print_file_flag {
 		indent := strings.Repeat("    ", d.parents+1)
+		// Print column labels on first directory
+		if d.parents == 0 {
+			fmt.Println("\033[1m    loc - file\033[0m")
+		}
 		for _, child := range sortFiles(d.children) {
 			fmt.Printf("%s%s - %s\n", indent, addCommas(child.loc), child.name)
 		}
@@ -125,6 +134,8 @@ func (d directory) printFileLoc() {
 	var files []*file
 	files = d.appendFiles(files)
 
+	// Print column labels
+	fmt.Println("\033[1m loc - file\033[0m")
 	for _, file := range sortFiles(files) {
 		fmt.Printf(" %s - %s\n", addCommas(file.loc), file.rel_path)
 	}
