@@ -117,7 +117,7 @@ func (d directory) printTreeLoc() {
 	if *print_file_flag {
 		indent := strings.Repeat("    ", d.parents+1)
 		// Print column labels on first directory
-		if d.parents == 0 {
+		if d.parents == 0 && len(d.children) > 0 {
 			fmt.Println("\033[1m    loc - file\033[0m")
 		}
 		for i, child := range sortFiles(d.children) {
