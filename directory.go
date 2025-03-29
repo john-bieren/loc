@@ -46,13 +46,48 @@ func (d *directory) searchDir() {
 
 		if info.IsDir() {
 			if d.search_subs {
+				// check directory exclusions
+				var skip_dir bool
+				for excl := range strings.SplitSeq(*exclude_dirs_flag, ",") {
+					if entry.Name() == excl {
+						skip_dir = true
+					} else if full_path == excl {
+						skip_dir = true
+					}
+				}
+				if skip_dir {
+					continue
+				}
 				child := newDirectory(full_path, d.parents+1)
 				d.subdirectories = append(d.subdirectories, child)
 			}
 		} else {
+			// check file exclusions
+			var skip_file bool
+			for excl := range strings.SplitSeq(*exclude_files_flag, ",") {
+				if entry.Name() == excl {
+					skip_file = true
+				} else if full_path == excl {
+					skip_file = true
+				}
+			}
+			if skip_file {
+				continue
+			}
 			size := info.Size()
 			child := newFile(full_path, d.parents, size)
+
 			if child.is_code {
+				// check language exclusions
+				var skip_lang bool
+				for excl := range strings.SplitSeq(*exclude_langs_flag, ",") {
+					if child.file_type == excl {
+						skip_lang = true
+					}
+				}
+				if skip_lang {
+					continue
+				}
 				d.children = append(d.children, child)
 			}
 		}

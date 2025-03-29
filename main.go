@@ -12,6 +12,15 @@ const version = "v2.0.0"
 // Flag to print loc by directory
 var print_dir_flag = flag.Bool("d", false, "")
 
+// Flag for directories to exclude
+var exclude_dirs_flag = flag.String("ed", "", "")
+
+// Flag for files to exclude
+var exclude_files_flag = flag.String("ef", "", "")
+
+// Flag for languages to exclude
+var exclude_langs_flag = flag.String("el", "", "")
+
 // Flag to print loc by file
 var print_file_flag = flag.Bool("f", false, "")
 
