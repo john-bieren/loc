@@ -10,7 +10,6 @@ import (
 const version = "v2.0.0"
 
 func main() {
-	// Handle flags and arguments
 	flag.Usage = usage
 	flag.Parse()
 	args := flag.Args()
@@ -23,7 +22,6 @@ func main() {
 		os.Exit(0)
 	}
 
-	// Set the directory that will be searched
 	var dir_path string
 	if len(args) == 1 {
 		dir_path = args[0]
@@ -36,7 +34,6 @@ func main() {
 		}
 	}
 
-	// Main functionality
 	main_dir := newDirectory(dir_path, 0)
 	if len(main_dir.children)+len(main_dir.subdirectories) > 0 {
 		if *print_dir_flag {

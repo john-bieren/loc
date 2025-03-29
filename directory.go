@@ -46,7 +46,7 @@ func (d *directory) searchDir() {
 				if !*include_dot_dir_flag && strings.HasPrefix(entry_name, ".") {
 					continue
 				}
-				// check directory exclusions
+
 				var skip_dir bool
 				for excl := range strings.SplitSeq(*exclude_dirs_flag, ",") {
 					if entry_name == excl {
@@ -58,11 +58,11 @@ func (d *directory) searchDir() {
 				if skip_dir {
 					continue
 				}
+
 				child := newDirectory(full_path, d.parents+1)
 				d.subdirectories = append(d.subdirectories, child)
 			}
 		} else {
-			// check file exclusions
 			var skip_file bool
 			for excl := range strings.SplitSeq(*exclude_files_flag, ",") {
 				if entry_name == excl {
@@ -74,11 +74,10 @@ func (d *directory) searchDir() {
 			if skip_file {
 				continue
 			}
+
 			size := info.Size()
 			child := newFile(full_path, d.parents, size)
-
 			if child.is_code {
-				// check language exclusions
 				var skip_lang bool
 				for excl := range strings.SplitSeq(*exclude_langs_flag, ",") {
 					if child.file_type == excl {
@@ -88,6 +87,7 @@ func (d *directory) searchDir() {
 				if skip_lang {
 					continue
 				}
+
 				d.children = append(d.children, child)
 			}
 		}
@@ -124,18 +124,18 @@ func (d directory) printDirLoc() {
 	}
 	indent := strings.Repeat("    ", d.parents)
 
-	// Print directory name, if applicable
+	// print directory name, if applicable
 	if *print_dir_flag {
 		fmt.Printf("%s%s/\n", indent, d.name)
 		indent += " " // loc totals should have an extra space if dir names are printed
 	}
 
-	// Print column labels on first directory
+	// print column labels on first directory
 	if d.parents == 0 {
 		fmt.Printf("\033[1m%sLanguage: loc | bytes | files\033[0m\n", indent)
 	}
 
-	// Print loc total if multiple languages are present
+	// print loc total if multiple languages are present
 	if len(d.loc_counts) > 1 {
 		fmt.Printf(
 			"%s%d langs: %s | %s | %s\n",
@@ -146,7 +146,7 @@ func (d directory) printDirLoc() {
 		)
 	}
 
-	// Print loc totals by file type
+	// print loc totals by file type
 	var keys []string
 	switch *sort_column {
 	case "bytes":
@@ -157,7 +157,7 @@ func (d directory) printDirLoc() {
 		keys = sortKeys(d.loc_counts)
 	}
 	for i, file_type := range keys {
-		// Print language total even if -ml=0 if there's only one language
+		// print language total even if -ml=0 if there's only one language
 		if i+1 > *max_print_totals && len(d.loc_counts) != 1 {
 			break
 		}
@@ -176,11 +176,11 @@ func (d directory) printTreeLoc() {
 	d.printDirLoc()
 
 	if *print_file_flag {
-		indent := strings.Repeat("    ", d.parents+1)
-		// Print column labels on first directory
 		if d.parents == 0 && len(d.children) > 0 {
 			fmt.Println("\033[1m    loc | bytes - file\033[0m")
 		}
+
+		indent := strings.Repeat("    ", d.parents+1)
 		for i, child := range sortFiles(d.children, *sort_column) {
 			if i+1 > *max_print_files {
 				break
@@ -202,7 +202,6 @@ func (d directory) printFileLoc() {
 	var files []*file
 	files = d.appendFiles(files)
 
-	// Print column labels
 	fmt.Println("\033[1m loc | bytes - file\033[0m")
 	for i, file := range sortFiles(files, *sort_column) {
 		if i+1 > *max_print_files {
