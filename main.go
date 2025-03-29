@@ -9,39 +9,6 @@ import (
 
 const version = "v2.0.0"
 
-// Flag to print loc by directory
-var print_dir_flag = flag.Bool("d", false, "")
-
-// Flag for directories to exclude
-var exclude_dirs_flag = flag.String("ed", "", "")
-
-// Flag for files to exclude
-var exclude_files_flag = flag.String("ef", "", "")
-
-// Flag for languages to exclude
-var exclude_langs_flag = flag.String("el", "", "")
-
-// Flag to print loc by file
-var print_file_flag = flag.Bool("f", false, "")
-
-// Flag to include dot directories
-var include_dot_dir_flag = flag.Bool("id", false, "")
-
-// Flag for max depth of subdirectories to search through
-var max_search_depth = flag.Int("md", 1000, "")
-
-// Flag for max number of file loc totals to print per directory
-var max_print_files = flag.Int("mf", 1000000, "")
-
-// Flag for max number of language loc totals to print per directory
-var max_print_totals = flag.Int("ml", 1000, "")
-
-// Flag to pick which column to sort by
-var sort_column = flag.String("s", "loc", "")
-
-// Flag to print version and exit
-var version_flag = flag.Bool("v", false, "")
-
 func main() {
 	// Handle flags and arguments
 	flag.Usage = usage
