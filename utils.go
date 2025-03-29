@@ -53,9 +53,13 @@ func relPath(full_path string, parents int) string {
 }
 
 // Sort a slice of files by loc
-func sortFiles(slice []*file) []*file {
+func sortFiles(slice []*file, sort_by string) []*file {
 	sort.Slice(slice, func(i, j int) bool {
-		return slice[i].loc > slice[j].loc
+		if sort_by == "bytes" {
+			return slice[i].bytes > slice[j].bytes
+		} else {
+			return slice[i].loc > slice[j].loc
+		}
 	})
 	return slice
 }
@@ -114,8 +118,9 @@ func usage() {
 	fmt.Println("        -d        Print loc totals by directory")
 	fmt.Println("        -f        Print loc totals by file")
 	fmt.Println("            -mf int   Maximum number of file loc totals to print per directory")
-	fmt.Println("        -ml int   Maximum number of language loc totals to print per directory")
 	fmt.Println("        -md int   Maximum depth of subdirectories to search")
+	fmt.Println("        -ml int   Maximum number of language loc totals to print per directory")
+	fmt.Println("        -s str    Select how to sort results [\"loc\", \"bytes\", \"files\"] (defult: \"loc\")")
 	fmt.Println("        -v        Print version and exit")
 	os.Exit(0)
 }

@@ -102,17 +102,37 @@ func (d directory) printDirLoc() {
 
 	// Print loc total if multiple languages are present
 	if len(d.loc_counts) > 1 {
-		fmt.Printf("%s%d langs: %s | %s | %s\n", indent, len(d.loc_counts), addCommas(sumValues(d.loc_counts)), addCommas(sumValues(d.byte_counts)), addCommas(sumValues(d.file_counts)))
+		fmt.Printf(
+			"%s%d langs: %s | %s | %s\n",
+			indent, len(d.loc_counts),
+			addCommas(sumValues(d.loc_counts)),
+			addCommas(sumValues(d.byte_counts)),
+			addCommas(sumValues(d.file_counts)),
+		)
 	}
 
 	// Print loc totals by file type
-	keys := sortKeys(d.loc_counts)
+	var keys []string
+	switch *sort_column {
+	case "bytes":
+		keys = sortKeys(d.byte_counts)
+	case "files":
+		keys = sortKeys(d.file_counts)
+	default:
+		keys = sortKeys(d.loc_counts)
+	}
 	for i, file_type := range keys {
 		// Print language total even if -ml=0 if there's only one language
 		if i+1 > *max_print_totals && len(d.loc_counts) != 1 {
 			break
 		}
-		fmt.Printf("%s%s: %s | %s | %s\n", indent, file_type, addCommas(d.loc_counts[file_type]), addCommas(d.byte_counts[file_type]), addCommas(d.file_counts[file_type]))
+		fmt.Printf(
+			"%s%s: %s | %s | %s\n",
+			indent, file_type,
+			addCommas(d.loc_counts[file_type]),
+			addCommas(d.byte_counts[file_type]),
+			addCommas(d.file_counts[file_type]),
+		)
 	}
 }
 
@@ -126,7 +146,7 @@ func (d directory) printTreeLoc() {
 		if d.parents == 0 && len(d.children) > 0 {
 			fmt.Println("\033[1m    loc | bytes - file\033[0m")
 		}
-		for i, child := range sortFiles(d.children) {
+		for i, child := range sortFiles(d.children, *sort_column) {
 			if i+1 > *max_print_files {
 				break
 			}
@@ -149,7 +169,7 @@ func (d directory) printFileLoc() {
 
 	// Print column labels
 	fmt.Println("\033[1m loc | bytes - file\033[0m")
-	for i, file := range sortFiles(files) {
+	for i, file := range sortFiles(files, *sort_column) {
 		if i+1 > *max_print_files {
 			break
 		}
