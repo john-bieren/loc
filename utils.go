@@ -73,7 +73,19 @@ func sortKeys(source_map map[string]int) []string {
 // Quick sort implementation for sorting integer map values in descending order
 func quickSort(source_map map[string]int, keys []string, low int, high int) {
 	if low < high {
-		pivot := source_map[keys[low]]
+		// median of three to pick pivot value
+		mid := low + (high-low)/2
+		a, b, c := source_map[keys[high]], source_map[keys[mid]], source_map[keys[low]]
+		var p int
+		if (a > b) != (a > c) {
+			p = high
+		} else if (b > a) != (b > c) {
+			p = mid
+		} else {
+			p = low
+		}
+		pivot := source_map[keys[p]]
+		keys[p], keys[low] = keys[low], keys[p]
 		i := high
 
 		for j := high; j > low; j-- {
