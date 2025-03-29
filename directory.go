@@ -16,6 +16,7 @@ type directory struct {
 	children       []*file
 	loc_counts     map[string]int
 	file_counts    map[string]int
+	byte_counts    map[string]int
 }
 
 // Index children and subdirectories
@@ -49,7 +50,8 @@ func (d *directory) searchDir() {
 				d.subdirectories = append(d.subdirectories, child)
 			}
 		} else {
-			child := newFile(full_path, d.parents)
+			size := info.Size()
+			child := newFile(full_path, d.parents, size)
 			if child.is_code {
 				d.children = append(d.children, child)
 			}
@@ -62,6 +64,7 @@ func (d *directory) countDirLoc() {
 	for _, child := range d.children {
 		d.loc_counts[child.file_type] += child.loc
 		d.file_counts[child.file_type]++
+		d.byte_counts[child.file_type] += child.bytes
 	}
 
 	if d.search_subs {
@@ -71,6 +74,9 @@ func (d *directory) countDirLoc() {
 			}
 			for file_type, n := range sub.file_counts {
 				d.file_counts[file_type] += n
+			}
+			for file_type, b := range sub.byte_counts {
+				d.byte_counts[file_type] += b
 			}
 		}
 	}
@@ -91,12 +97,12 @@ func (d directory) printDirLoc() {
 
 	// Print column labels on first directory
 	if d.parents == 0 {
-		fmt.Printf("\033[1m%sLanguage: loc | files\033[0m\n", indent)
+		fmt.Printf("\033[1m%sLanguage: loc | bytes | files\033[0m\n", indent)
 	}
 
 	// Print loc total if multiple languages are present
 	if len(d.loc_counts) > 1 {
-		fmt.Printf("%s%d langs: %s | %s\n", indent, len(d.loc_counts), addCommas(sumValues(d.loc_counts)), addCommas(sumValues(d.file_counts)))
+		fmt.Printf("%s%d langs: %s | %s | %s\n", indent, len(d.loc_counts), addCommas(sumValues(d.loc_counts)), addCommas(sumValues(d.byte_counts)), addCommas(sumValues(d.file_counts)))
 	}
 
 	// Print loc totals by file type
@@ -106,7 +112,7 @@ func (d directory) printDirLoc() {
 		if i+1 > *max_print_totals && len(d.loc_counts) != 1 {
 			break
 		}
-		fmt.Printf("%s%s: %s | %s\n", indent, file_type, addCommas(d.loc_counts[file_type]), addCommas(d.file_counts[file_type]))
+		fmt.Printf("%s%s: %s | %s | %s\n", indent, file_type, addCommas(d.loc_counts[file_type]), addCommas(d.byte_counts[file_type]), addCommas(d.file_counts[file_type]))
 	}
 }
 
@@ -118,13 +124,13 @@ func (d directory) printTreeLoc() {
 		indent := strings.Repeat("    ", d.parents+1)
 		// Print column labels on first directory
 		if d.parents == 0 && len(d.children) > 0 {
-			fmt.Println("\033[1m    loc - file\033[0m")
+			fmt.Println("\033[1m    loc | bytes - file\033[0m")
 		}
 		for i, child := range sortFiles(d.children) {
 			if i+1 > *max_print_files {
 				break
 			}
-			fmt.Printf("%s%s - %s\n", indent, addCommas(child.loc), child.name)
+			fmt.Printf("%s%s | %s - %s\n", indent, addCommas(child.loc), addCommas(child.bytes), child.name)
 		}
 	}
 
@@ -142,12 +148,12 @@ func (d directory) printFileLoc() {
 	files = d.appendFiles(files)
 
 	// Print column labels
-	fmt.Println("\033[1m loc - file\033[0m")
+	fmt.Println("\033[1m loc | bytes - file\033[0m")
 	for i, file := range sortFiles(files) {
 		if i+1 > *max_print_files {
 			break
 		}
-		fmt.Printf(" %s - %s\n", addCommas(file.loc), file.rel_path)
+		fmt.Printf(" %s | %s - %s\n", addCommas(file.loc), addCommas(file.bytes), file.rel_path)
 	}
 }
 
@@ -171,6 +177,7 @@ func newDirectory(path string, num_parents int) *directory {
 		search_subs: num_parents+1 <= *max_search_depth,
 		loc_counts:  make(map[string]int),
 		file_counts: make(map[string]int),
+		byte_counts: make(map[string]int),
 	}
 	self.searchDir()
 	self.countDirLoc()

@@ -15,6 +15,7 @@ type file struct {
 	file_type string
 	is_code   bool
 	loc       int
+	bytes     int
 }
 
 // Count lines of code in a file
@@ -46,11 +47,12 @@ func (f *file) countFileLoc() {
 }
 
 // Constructor for instances of file struct
-func newFile(path string, dir_parents int) *file {
+func newFile(path string, dir_parents int, size int64) *file {
 	self := &file{
 		full_path: path,
 		rel_path:  relPath(path, dir_parents),
 		name:      filepath.Base(path),
+		bytes:     int(size),
 	}
 	self.file_type, self.is_code = langauges[filepath.Ext(path)]
 	if self.is_code {
