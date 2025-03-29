@@ -28,11 +28,8 @@ func (d *directory) searchDir() {
 	}
 
 	for _, entry := range entries {
-		if strings.HasPrefix(entry.Name(), ".") || strings.HasPrefix(entry.Name(), "__") {
-			continue
-		}
-
-		full_path := filepath.Join(d.full_path, entry.Name())
+		entry_name := entry.Name()
+		full_path := filepath.Join(d.full_path, entry_name)
 		info, err := os.Stat(full_path)
 		if err != nil {
 			// ignore errors from inaccessible dirs
@@ -46,10 +43,13 @@ func (d *directory) searchDir() {
 
 		if info.IsDir() {
 			if d.search_subs {
+				if !*include_dot_dir_flag && strings.HasPrefix(entry_name, ".") {
+					continue
+				}
 				// check directory exclusions
 				var skip_dir bool
 				for excl := range strings.SplitSeq(*exclude_dirs_flag, ",") {
-					if entry.Name() == excl {
+					if entry_name == excl {
 						skip_dir = true
 					} else if full_path == excl {
 						skip_dir = true
@@ -65,7 +65,7 @@ func (d *directory) searchDir() {
 			// check file exclusions
 			var skip_file bool
 			for excl := range strings.SplitSeq(*exclude_files_flag, ",") {
-				if entry.Name() == excl {
+				if entry_name == excl {
 					skip_file = true
 				} else if full_path == excl {
 					skip_file = true

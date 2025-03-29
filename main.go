@@ -24,6 +24,9 @@ var exclude_langs_flag = flag.String("el", "", "")
 // Flag to print loc by file
 var print_file_flag = flag.Bool("f", false, "")
 
+// Flag to include dot directories
+var include_dot_dir_flag = flag.Bool("id", false, "")
+
 // Flag for max depth of subdirectories to search through
 var max_search_depth = flag.Int("md", 1000, "")
 

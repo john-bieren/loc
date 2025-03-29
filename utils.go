@@ -121,6 +121,7 @@ func usage() {
 	fmt.Println("        -el str   Languages to exclude (i.e. \"HTML,Plain Text,Rust\")")
 	fmt.Println("        -f        Print loc totals by file")
 	fmt.Println("            -mf int   Maximum number of file loc totals to print per directory")
+	fmt.Println("        -id       Include dot directories")
 	fmt.Println("        -md int   Maximum depth of subdirectories to search")
 	fmt.Println("        -ml int   Maximum number of language loc totals to print per directory")
 	fmt.Println("        -s str    Select how to sort results [\"loc\", \"bytes\", \"files\"] (defult: \"loc\")")
