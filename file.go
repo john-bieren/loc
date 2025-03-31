@@ -29,7 +29,6 @@ func (f *file) countFileLoc() {
 
 	reader := bufio.NewReader(file)
 	end_of_file := false
-
 	for !end_of_file {
 		line, err := reader.ReadString('\n')
 		if err != nil {

@@ -39,7 +39,6 @@ func addCommas(num int) string {
 	for i, j := 0, len(result)-1; i < j; i, j = i+1, j-1 {
 		result[i], result[j] = result[j], result[i]
 	}
-
 	return string(result)
 }
 
@@ -118,7 +117,7 @@ func usage() {
 	fmt.Println("        -d        Print loc totals by directory")
 	fmt.Println("        -ed str   Directories to exclude (use name or full path, i.e. \"src,lib,C:/Users/user/loc\")")
 	fmt.Println("        -ef str   Files to exclude (use name or full path, i.e. \"index.js,utils.go,C:/Users/user/lib/main.py\")")
-	fmt.Println("        -el str   Languages to exclude (i.e. \"HTML,Plain Text,Rust\")")
+	fmt.Println("        -el str   Languages to exclude (i.e. \"HTML,Plain Text,JSON\")")
 	fmt.Println("        -f        Print loc totals by file")
 	fmt.Println("            -mf int   Maximum number of file loc totals to print per directory")
 	fmt.Println("        -id       Include dot directories")
