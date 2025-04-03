@@ -16,9 +16,16 @@ Ruby: 36 | 1,144 | 1
 Powershell: 28 | 939 | 2
 </code></pre>
 
+## Install
+
+0. Install [Go](https://go.dev/dl/)
+1. Clone the repository by running `git clone https://github.com/john-bieren/loc.git`
+2. Navigate to the project directory and compile the program by running `go build`
+3. Add the project directory to your PATH environment variable to use `loc` system-wide
+
 ## Usage
 
-This usage information can be found with ```loc --help```
+This usage information can be found with `loc --help`:
 
 ```
 Usage: loc [options] [path]
@@ -38,13 +45,6 @@ Options:
         -s str    Select how to sort results ["loc", "bytes", "files"] (defult: "loc")
         -v        Print version and exit
 ```
-
-## Install
-
-0. Install [Go](https://go.dev/dl/), make sure it's properly installed by running ```go version```
-1. Download the loc source files from the latest release
-2. Navigate to the project directory and compile the program by running ```go build```
-3. Add the directory containing the executable to your PATH environment variable
 
 ## Disclaimer
 
