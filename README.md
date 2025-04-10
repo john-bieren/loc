@@ -18,9 +18,14 @@ Powershell: 28 | 939 | 2
 
 ## Install
 
-0. Install [Go](https://go.dev/dl/)
-1. Clone the repository by running `git clone https://github.com/john-bieren/loc.git`
-2. Navigate to the project directory and compile the program by running `go build`
+1. Clone the repository:
+    ```
+    git clone https://github.com/john-bieren/loc.git
+    ```
+2. Navigate to the project directory and compile the program:
+    ```
+    go build
+    ```
 3. Add the project directory to your PATH environment variable to use `loc` system-wide
 
 ## Usage
