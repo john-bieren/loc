@@ -49,10 +49,9 @@ func (d *directory) searchDir() {
 
 				var skip_dir bool
 				for excl := range strings.SplitSeq(*exclude_dirs_flag, ",") {
-					if entry_name == excl {
+					if entry_name == excl || full_path == excl {
 						skip_dir = true
-					} else if full_path == excl {
-						skip_dir = true
+						break
 					}
 				}
 				if skip_dir {
@@ -65,10 +64,9 @@ func (d *directory) searchDir() {
 		} else {
 			var skip_file bool
 			for excl := range strings.SplitSeq(*exclude_files_flag, ",") {
-				if entry_name == excl {
+				if entry_name == excl || full_path == excl {
 					skip_file = true
-				} else if full_path == excl {
-					skip_file = true
+					break
 				}
 			}
 			if skip_file {
@@ -82,6 +80,7 @@ func (d *directory) searchDir() {
 				for excl := range strings.SplitSeq(*exclude_langs_flag, ",") {
 					if child.file_type == excl {
 						skip_lang = true
+						break
 					}
 				}
 				if skip_lang {
