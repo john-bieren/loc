@@ -51,7 +51,7 @@ func relPath(full_path string, parents int) string {
 	return rel_path
 }
 
-// Sort a slice of files by loc
+// Sort a slice of files by loc or bytes
 func sortFiles(slice []*file, sort_by string) []*file {
 	sort.Slice(slice, func(i, j int) bool {
 		if sort_by == "bytes" {
