@@ -7,6 +7,9 @@ import (
 	"strings"
 )
 
+// Track whether file column headers have been printed by printTreeLoc
+var tree_file_headers_printed bool
+
 type directory struct {
 	full_path      string
 	name           string
@@ -195,11 +198,12 @@ func (d directory) printTreeLoc() {
 	d.printDirLoc()
 
 	if *print_file_flag {
-		if d.parents == 0 && len(d.children) > 0 {
-			fmt.Println("\033[1m    loc | bytes - file\033[0m")
+		indent := strings.Repeat("    ", d.parents+1)
+		if !tree_file_headers_printed && len(d.children) > 0 {
+			fmt.Printf("\033[1m%sloc | bytes - file\033[0m\n", indent)
+			tree_file_headers_printed = true
 		}
 
-		indent := strings.Repeat("    ", d.parents+1)
 		for i, child := range sortFiles(d.children, *sort_column) {
 			if i+1 > *max_print_files {
 				break
