@@ -174,7 +174,7 @@ func (d directory) printDirLoc() {
 		if i+1 > *max_print_totals && len(d.loc_counts) != 1 {
 			break
 		}
-		if *percentages_flag {
+		if *percentages_flag && !(len(d.loc_counts) == 1 && d.parents == 0) {
 			fmt.Printf(
 				"%s%s: %.1f%% | %.1f%% | %.1f%%\n",
 				indent, file_type,
