@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"sort"
 	"strings"
 )
 
@@ -229,6 +230,17 @@ func (d directory) printTreeLoc() {
 	}
 
 	if d.search_subs {
+		// sort the subdirectories by the selected sort column
+		sort.Slice(d.subdirectories, func(i, j int) bool {
+			if *sort_column == "bytes" {
+				return sumValues(d.subdirectories[i].byte_counts) > sumValues(d.subdirectories[j].byte_counts)
+			} else if *sort_column == "files" {
+				return sumValues(d.subdirectories[i].file_counts) > sumValues(d.subdirectories[j].file_counts)
+			} else {
+				return sumValues(d.subdirectories[i].loc_counts) > sumValues(d.subdirectories[j].loc_counts)
+			}
+		})
+
 		for _, sub := range d.subdirectories {
 			sub.printTreeLoc()
 		}
