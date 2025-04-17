@@ -38,16 +38,17 @@ Usage: loc [options] [path]
          Path defaults to current working directory if no argument is given
 
 Options:
-        -d        Print loc totals by directory
+        -d        Print loc by directory
         -ed str   Directories to exclude (use name or full path, i.e. "src,lib,C:/Users/user/loc")
         -ef str   Files to exclude (use name or full path, i.e. "index.js,utils.go,C:/Users/user/lib/main.py")
         -el str   Languages to exclude (i.e. "HTML,Plain Text,JSON")
-        -f        Print loc totals by file
-            -mf int   Maximum number of file loc totals to print per directory
+        -f        Print loc by file
+             -mf int   Maximum number of files to print per directory
         -id       Include dot directories
         -md int   Maximum depth of subdirectories to search
         -ml int   Maximum number of language loc totals to print per directory
-        -s str    Select how to sort results ["loc", "bytes", "files"] (defult: "loc")
+        -p        Print loc as a percentage of overall total
+        -s str    Choose how to sort results ["loc", "bytes", "files"] (defult: "loc")
         -v        Print version and exit
 ```
 

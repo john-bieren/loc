@@ -24,13 +24,16 @@ var (
 	// Flag for max depth of subdirectories to search through
 	max_search_depth = flag.Int("md", 1000, "")
 
-	// Flag for max number of file loc totals to print per directory
+	// Flag for max number of files to print per directory
 	max_print_files = flag.Int("mf", 1000000, "")
 
 	// Flag for max number of language loc totals to print per directory
 	max_print_totals = flag.Int("ml", 1000, "")
 
-	// Flag to pick which column to sort by
+	// Flag to print loc as a percentage of overall total
+	percentages_flag = flag.Bool("p", false, "")
+
+	// Flag for which column to sort by
 	sort_column = flag.String("s", "loc", "")
 
 	// Flag to print version and exit

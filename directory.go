@@ -136,13 +136,23 @@ func (d directory) printDirLoc() {
 
 	// print loc total if multiple languages are present
 	if len(d.loc_counts) > 1 {
-		fmt.Printf(
-			"%s%d langs: %s | %s | %s\n",
-			indent, len(d.loc_counts),
-			addCommas(sumValues(d.loc_counts)),
-			addCommas(sumValues(d.byte_counts)),
-			addCommas(sumValues(d.file_counts)),
-		)
+		if *percentages_flag && d.parents > 0 {
+			fmt.Printf(
+				"%s%d langs: %.1f%% | %.1f%% | %.1f%%\n",
+				indent, len(d.loc_counts),
+				float64(sumValues(d.loc_counts))/total_loc*100,
+				float64(sumValues(d.byte_counts))/total_bytes*100,
+				float64(sumValues(d.file_counts))/total_files*100,
+			)
+		} else {
+			fmt.Printf(
+				"%s%d langs: %s | %s | %s\n",
+				indent, len(d.loc_counts),
+				addCommas(sumValues(d.loc_counts)),
+				addCommas(sumValues(d.byte_counts)),
+				addCommas(sumValues(d.file_counts)),
+			)
+		}
 	}
 
 	// print loc totals by file type
@@ -160,13 +170,23 @@ func (d directory) printDirLoc() {
 		if i+1 > *max_print_totals && len(d.loc_counts) != 1 {
 			break
 		}
-		fmt.Printf(
-			"%s%s: %s | %s | %s\n",
-			indent, file_type,
-			addCommas(d.loc_counts[file_type]),
-			addCommas(d.byte_counts[file_type]),
-			addCommas(d.file_counts[file_type]),
-		)
+		if *percentages_flag {
+			fmt.Printf(
+				"%s%s: %.1f%% | %.1f%% | %.1f%%\n",
+				indent, file_type,
+				float64(d.loc_counts[file_type])/total_loc*100,
+				float64(d.byte_counts[file_type])/total_bytes*100,
+				float64(d.file_counts[file_type])/total_files*100,
+			)
+		} else {
+			fmt.Printf(
+				"%s%s: %s | %s | %s\n",
+				indent, file_type,
+				addCommas(d.loc_counts[file_type]),
+				addCommas(d.byte_counts[file_type]),
+				addCommas(d.file_counts[file_type]),
+			)
+		}
 	}
 }
 
@@ -184,7 +204,23 @@ func (d directory) printTreeLoc() {
 			if i+1 > *max_print_files {
 				break
 			}
-			fmt.Printf("%s%s | %s - %s\n", indent, addCommas(child.loc), addCommas(child.bytes), child.name)
+			if *percentages_flag {
+				fmt.Printf(
+					"%s%.1f%% | %.1f%% - %s\n",
+					indent,
+					float64(child.loc)/total_loc*100,
+					float64(child.bytes)/total_bytes*100,
+					child.name,
+				)
+			} else {
+				fmt.Printf(
+					"%s%s | %s - %s\n",
+					indent,
+					addCommas(child.loc),
+					addCommas(child.bytes),
+					child.name,
+				)
+			}
 		}
 	}
 
@@ -206,7 +242,21 @@ func (d directory) printFileLoc() {
 		if i+1 > *max_print_files {
 			break
 		}
-		fmt.Printf(" %s | %s - %s\n", addCommas(file.loc), addCommas(file.bytes), file.rel_path)
+		if *percentages_flag {
+			fmt.Printf(
+				" %.1f%% | %.1f%% - %s\n",
+				float64(file.loc)/total_loc*100,
+				float64(file.bytes)/total_bytes*100,
+				file.rel_path,
+			)
+		} else {
+			fmt.Printf(
+				" %s | %s - %s\n",
+				addCommas(file.loc),
+				addCommas(file.bytes),
+				file.rel_path,
+			)
+		}
 	}
 }
 

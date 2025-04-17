@@ -7,7 +7,11 @@ import (
 	"os"
 )
 
-const version = "v2.0.1"
+const version = "v2.1.0 beta"
+
+var total_loc float64
+var total_bytes float64
+var total_files float64
 
 func main() {
 	flag.Usage = usage
@@ -35,6 +39,12 @@ func main() {
 	}
 
 	main_dir := newDirectory(dir_path, 0)
+	if *percentages_flag {
+		total_loc = float64(sumValues(main_dir.loc_counts))
+		total_bytes = float64(sumValues(main_dir.byte_counts))
+		total_files = float64(sumValues(main_dir.file_counts))
+	}
+
 	if len(main_dir.children)+len(main_dir.subdirectories) > 0 {
 		if *print_dir_flag {
 			main_dir.printTreeLoc()
