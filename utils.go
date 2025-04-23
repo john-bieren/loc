@@ -9,15 +9,6 @@ import (
 	"strings"
 )
 
-// Sum the integer values of a map
-func sumValues[k comparable](m map[k]int) int {
-	var sum int
-	for _, value := range m {
-		sum += value
-	}
-	return sum
-}
-
 // Convert integer to string with thousands separators
 func addCommas(num int) string {
 	str := strconv.Itoa(num)
@@ -40,6 +31,37 @@ func addCommas(num int) string {
 		result[i], result[j] = result[j], result[i]
 	}
 	return string(result)
+}
+
+func quickSort(source_map map[string]int, keys []string, low int, high int) {
+	// Quick sort implementation for sorting integer map values in descending order
+	if low < high {
+		// median of three to pick pivot value
+		mid := low + (high-low)/2
+		a, b, c := source_map[keys[high]], source_map[keys[mid]], source_map[keys[low]]
+		var p int
+		if (a > b) != (a > c) {
+			p = high
+		} else if (b > a) != (b > c) {
+			p = mid
+		} else {
+			p = low
+		}
+		pivot := source_map[keys[p]]
+		keys[p], keys[low] = keys[low], keys[p]
+		i := high
+
+		for j := high; j > low; j-- {
+			if source_map[keys[j]] < pivot {
+				keys[i], keys[j] = keys[j], keys[i]
+				i--
+			}
+		}
+		keys[i], keys[low] = keys[low], keys[i]
+
+		quickSort(source_map, keys, low, i-1)
+		quickSort(source_map, keys, i+1, high)
+	}
 }
 
 // Convert full path to relative path from main_dir
@@ -73,35 +95,13 @@ func sortKeys(source_map map[string]int) []string {
 	return keys
 }
 
-// Quick sort implementation for sorting integer map values in descending order
-func quickSort(source_map map[string]int, keys []string, low int, high int) {
-	if low < high {
-		// median of three to pick pivot value
-		mid := low + (high-low)/2
-		a, b, c := source_map[keys[high]], source_map[keys[mid]], source_map[keys[low]]
-		var p int
-		if (a > b) != (a > c) {
-			p = high
-		} else if (b > a) != (b > c) {
-			p = mid
-		} else {
-			p = low
-		}
-		pivot := source_map[keys[p]]
-		keys[p], keys[low] = keys[low], keys[p]
-		i := high
-
-		for j := high; j > low; j-- {
-			if source_map[keys[j]] < pivot {
-				keys[i], keys[j] = keys[j], keys[i]
-				i--
-			}
-		}
-		keys[i], keys[low] = keys[low], keys[i]
-
-		quickSort(source_map, keys, low, i-1)
-		quickSort(source_map, keys, i+1, high)
+// Sum the integer values of a map
+func sumValues[k comparable](m map[k]int) int {
+	var sum int
+	for _, value := range m {
+		sum += value
 	}
+	return sum
 }
 
 // Custom usage output for --help and relevant error messages
