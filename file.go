@@ -27,8 +27,9 @@ func (f *file) countFileLoc() {
 	}
 	defer file.Close()
 
+	com_chars, has_comments := single_line_comment_chars[f.file_type]
 	reader := bufio.NewReader(file)
-	end_of_file := false
+	var end_of_file, skip_line bool
 	for !end_of_file {
 		line, err := reader.ReadString('\n')
 		if err != nil {
@@ -39,9 +40,26 @@ func (f *file) countFileLoc() {
 				break
 			}
 		}
-		if strings.TrimSpace(line) != "" {
-			f.loc++
+		line = strings.TrimSpace(line)
+
+		if line == "" {
+			continue
 		}
+
+		if has_comments {
+			for _, char := range com_chars {
+				if strings.HasPrefix(line, char) {
+					skip_line = true
+					break
+				}
+			}
+			if skip_line {
+				skip_line = false
+				continue
+			}
+		}
+
+		f.loc++
 	}
 }
 

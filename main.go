@@ -7,11 +7,9 @@ import (
 	"os"
 )
 
-const version = "v2.1.0"
+const version = "v2.2.0 beta"
 
-var total_loc float64
-var total_bytes float64
-var total_files float64
+var total_loc, total_bytes, total_files float64
 
 func main() {
 	flag.Usage = usage

@@ -54,4 +54,4 @@ Options:
 
 ## Disclaimer
 
-This is my first project in Go. It's a personal project, and there are more advanced solutions, like [scc](https://github.com/boyter/scc), with more features and better methods for counting lines of code. This program counts any non-empty line as a line of code, including comments.
+I'm new to Go and this is just a personal project. There are more advanced solutions like [scc](https://github.com/boyter/scc) with more features and better methods for counting lines of code. This program counts docstrings and multi-line comments as lines of code.

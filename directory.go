@@ -171,7 +171,7 @@ func (d directory) printDirLoc() {
 	}
 	for i, file_type := range keys {
 		// print language total even if -ml=0 if there's only one language
-		if i+1 > *max_print_totals && len(d.loc_counts) != 1 {
+		if i+1 > *max_print_totals && len(d.loc_counts) > 1 {
 			break
 		}
 		if *percentages_flag && !(len(d.loc_counts) == 1 && d.parents == 0) {
