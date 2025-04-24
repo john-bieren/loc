@@ -5,7 +5,7 @@ A command line utility for recursively counting lines of code in a directory and
 ### Example output
 
 <pre>
-<code><b>Language: loc | bytes | files</b>
+<code><b>Language: loc | size | files</b>
 7 langs: 13,112 | 714,683 | 53
 Python: 12,206 | 684,094 | 44
 C++: 371 | 14,326 | 2
@@ -48,7 +48,7 @@ Options:
         -md int   Maximum depth of subdirectories to search
         -ml int   Maximum number of language loc totals to print per directory
         -p        Print loc as a percentage of overall total
-        -s str    Choose how to sort results ["loc", "bytes", "files"] (defult: "loc")
+        -s str    Choose how to sort results ["loc", "size", "files"] (defult: "loc")
         -v        Print version and exit
 ```
 

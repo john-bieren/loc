@@ -33,8 +33,21 @@ func addCommas(num int) string {
 	return string(result)
 }
 
+// Convert byte count into units
+func formatByteCount(byte_count int) string {
+	if byte_count <= 1_000 {
+		return fmt.Sprintf("%d b", byte_count)
+	} else if byte_count <= 1_000_000 {
+		return fmt.Sprintf("%.1f kb", float64(byte_count)/1_000)
+	} else if byte_count <= 1_000_000_000 {
+		return fmt.Sprintf("%.1f mb", float64(byte_count)/1_000_000)
+	} else {
+		return fmt.Sprintf("%.1f gb", float64(byte_count)/1_000_000_000)
+	}
+}
+
+// Quick sort implementation for sorting integer map values in descending order
 func quickSort(source_map map[string]int, keys []string, low int, high int) {
-	// Quick sort implementation for sorting integer map values in descending order
 	if low < high {
 		// median of three to pick pivot value
 		mid := low + (high-low)/2
@@ -73,10 +86,10 @@ func relPath(full_path string, parents int) string {
 	return rel_path
 }
 
-// Sort a slice of files by loc or bytes
+// Sort a slice of files by loc or size
 func sortFiles(slice []*file, sort_by string) []*file {
 	sort.Slice(slice, func(i, j int) bool {
-		if sort_by == "bytes" {
+		if sort_by == "size" {
 			return slice[i].bytes > slice[j].bytes
 		} else {
 			return slice[i].loc > slice[j].loc
@@ -124,7 +137,7 @@ func usage() {
 	fmt.Println("        -md int   Maximum depth of subdirectories to search")
 	fmt.Println("        -ml int   Maximum number of language loc totals to print per directory")
 	fmt.Println("        -p        Print loc as a percentage of overall total")
-	fmt.Println("        -s str    Choose how to sort results [\"loc\", \"bytes\", \"files\"] (defult: \"loc\")")
+	fmt.Println("        -s str    Choose how to sort results [\"loc\", \"size\", \"files\"] (defult: \"loc\")")
 	fmt.Println("        -v        Print version and exit")
 	os.Exit(0)
 }

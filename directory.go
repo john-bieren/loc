@@ -135,7 +135,7 @@ func (d directory) printDirLoc() {
 
 	// print column labels on first directory
 	if d.parents == 0 {
-		fmt.Printf("\033[1m%sLanguage: loc | bytes | files\033[0m\n", indent)
+		fmt.Printf("\033[1m%sLanguage: loc | size | files\033[0m\n", indent)
 	}
 
 	// print loc total if multiple languages are present
@@ -153,7 +153,7 @@ func (d directory) printDirLoc() {
 				"%s%d langs: %s | %s | %s\n",
 				indent, len(d.loc_counts),
 				addCommas(sumValues(d.loc_counts)),
-				addCommas(sumValues(d.byte_counts)),
+				formatByteCount(sumValues(d.byte_counts)),
 				addCommas(sumValues(d.file_counts)),
 			)
 		}
@@ -162,7 +162,7 @@ func (d directory) printDirLoc() {
 	// print loc totals by file type
 	var keys []string
 	switch *sort_column {
-	case "bytes":
+	case "size":
 		keys = sortKeys(d.byte_counts)
 	case "files":
 		keys = sortKeys(d.file_counts)
@@ -187,7 +187,7 @@ func (d directory) printDirLoc() {
 				"%s%s: %s | %s | %s\n",
 				indent, file_type,
 				addCommas(d.loc_counts[file_type]),
-				addCommas(d.byte_counts[file_type]),
+				formatByteCount(d.byte_counts[file_type]),
 				addCommas(d.file_counts[file_type]),
 			)
 		}
@@ -201,7 +201,7 @@ func (d directory) printTreeLoc() {
 	if *print_file_flag {
 		indent := strings.Repeat("    ", d.parents+1)
 		if !tree_file_headers_printed && len(d.children) > 0 {
-			fmt.Printf("\033[1m%sloc | bytes - file\033[0m\n", indent)
+			fmt.Printf("\033[1m%sloc | size - file\033[0m\n", indent)
 			tree_file_headers_printed = true
 		}
 
@@ -222,7 +222,7 @@ func (d directory) printTreeLoc() {
 					"%s%s | %s - %s\n",
 					indent,
 					addCommas(child.loc),
-					addCommas(child.bytes),
+					formatByteCount(child.bytes),
 					child.name,
 				)
 			}
@@ -232,7 +232,7 @@ func (d directory) printTreeLoc() {
 	if d.search_subs {
 		// sort the subdirectories by the selected sort column
 		sort.Slice(d.subdirectories, func(i, j int) bool {
-			if *sort_column == "bytes" {
+			if *sort_column == "size" {
 				return sumValues(d.subdirectories[i].byte_counts) > sumValues(d.subdirectories[j].byte_counts)
 			} else if *sort_column == "files" {
 				return sumValues(d.subdirectories[i].file_counts) > sumValues(d.subdirectories[j].file_counts)
@@ -253,7 +253,7 @@ func (d directory) printFileLoc() {
 	var files []*file
 	files = d.appendFiles(files)
 
-	fmt.Println("\033[1m loc | bytes - file\033[0m")
+	fmt.Println("\033[1m loc | size - file\033[0m")
 	for i, file := range sortFiles(files, *sort_column) {
 		if i+1 > *max_print_files {
 			break
@@ -269,7 +269,7 @@ func (d directory) printFileLoc() {
 			fmt.Printf(
 				" %s | %s - %s\n",
 				addCommas(file.loc),
-				addCommas(file.bytes),
+				formatByteCount(file.bytes),
 				file.rel_path,
 			)
 		}
