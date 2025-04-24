@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"runtime"
 	"sort"
 	"strconv"
 	"strings"
@@ -33,6 +34,23 @@ func addCommas(num int) string {
 	return string(result)
 }
 
+// Convert "." and ".." into full paths
+func convertSpecialPaths(dir_paths []string) []string {
+	cwd, err := os.Getwd()
+	if err != nil {
+		panic(fmt.Sprintln("Error getting cwd:", err))
+	}
+
+	for i, path := range dir_paths {
+		if path == "." {
+			dir_paths[i] = cwd
+		} else if path == ".." {
+			dir_paths[i] = parentDir(cwd)
+		}
+	}
+	return dir_paths
+}
+
 // Convert byte count into units
 func formatByteCount(byte_count int) string {
 	if byte_count <= 1_000 {
@@ -44,6 +62,18 @@ func formatByteCount(byte_count int) string {
 	} else {
 		return fmt.Sprintf("%.1f gb", float64(byte_count)/1_000_000_000)
 	}
+}
+
+// Return path to parent of given entry
+func parentDir(dir_path string) string {
+	dir_path = strings.ReplaceAll(dir_path, "\\", "/")
+	path_parts := strings.Split(dir_path, "/")
+	parent_path_parts := path_parts[:len(path_parts)-1]
+	parent_path := filepath.Join(parent_path_parts...)
+	if runtime.GOOS == "windows" {
+		parent_path = strings.ReplaceAll(parent_path, "C:", "C:\\")
+	}
+	return parent_path
 }
 
 // Quick sort implementation for sorting integer map values in descending order

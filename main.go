@@ -28,10 +28,10 @@ func main() {
 		cwd, err := os.Getwd()
 		dir_paths = []string{cwd}
 		if err != nil {
-			fmt.Println("Error getting cwd:", err)
-			return
+			panic(fmt.Sprintln("Error getting cwd:", err))
 		}
 	}
+	dir_paths = convertSpecialPaths(dir_paths)
 
 	var main_dir *directory
 	if len(dir_paths) == 1 {
@@ -49,17 +49,7 @@ func main() {
 			byte_counts: make(map[string]int),
 		}
 
-		for _, path := range args {
-			// "." has a parent but relPath can't find the parent's name without the full path
-			if path == "." {
-				var err error
-				path, err = os.Getwd()
-				if err != nil {
-					fmt.Println("Error getting cwd:", err)
-					return
-				}
-			}
-
+		for _, path := range dir_paths {
 			child := newDirectory(path, 1)
 			main_dir.subdirectories = append(main_dir.subdirectories, child)
 		}

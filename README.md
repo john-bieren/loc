@@ -54,4 +54,4 @@ Options:
 
 ## Disclaimer
 
-I'm new to Go and this is just a personal project. There are more advanced solutions like [scc](https://github.com/boyter/scc) with more features and better methods for counting lines of code. This program counts docstrings and multi-line comments as lines of code.
+I'm new to Go and this is just a personal project. There are more advanced solutions, like [scc](https://github.com/boyter/scc), with more features and better methods for counting lines of code. This program counts docstrings and multi-line comments as lines of code.
