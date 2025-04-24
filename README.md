@@ -1,6 +1,6 @@
 # loc
 
-A command line utility for recursively counting lines of code in a directory and its subdirectories by language.
+A command line utility for recursively counting lines of code in directories and their subdirectories by language.
 
 ### Example output
 
@@ -33,9 +33,9 @@ Powershell: 28 | 939 b | 2
 This usage information can be found with `loc --help`:
 
 ```
-Usage: loc [options] [path]
-         Options must come before path
-         Path defaults to current working directory if no argument is given
+Usage: loc [options] [paths]
+         Options must come before paths
+         Paths are the directories you wish to search (cwd by default)
 
 Options:
         -d        Print loc by directory

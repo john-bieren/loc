@@ -120,11 +120,11 @@ func sumValues[k comparable](m map[k]int) int {
 // Custom usage output for --help and relevant error messages
 func usage() {
 	fmt.Println("loc", version)
-	fmt.Println("Count lines of code in a directory and its subdirectories by language")
+	fmt.Println("Count lines of code in directories and their subdirectories by language")
 	fmt.Println("")
-	fmt.Println("Usage: loc [options] [path]")
-	fmt.Println("         Options must come before path")
-	fmt.Println("         Path defaults to current working directory if no argument is given")
+	fmt.Println("Usage: loc [options] [paths]")
+	fmt.Println("         Options must come before paths")
+	fmt.Println("         Paths are the directories you wish to search (cwd by default)")
 	fmt.Println("")
 	fmt.Println("Options:")
 	fmt.Println("        -d        Print loc by directory")

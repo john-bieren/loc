@@ -15,28 +15,58 @@ func main() {
 	flag.Usage = usage
 	flag.Parse()
 	args := flag.Args()
-	if len(args) > 1 {
-		fmt.Println("flags/arguments not properly formatted")
-		flag.Usage()
-	}
+
 	if *version_flag {
 		fmt.Println("loc", version)
 		os.Exit(0)
 	}
 
-	var dir_path string
-	if len(args) == 1 {
-		dir_path = args[0]
+	var dir_paths []string
+	if len(args) != 0 {
+		dir_paths = args
 	} else {
-		var err error
-		dir_path, err = os.Getwd()
+		cwd, err := os.Getwd()
+		dir_paths = []string{cwd}
 		if err != nil {
 			fmt.Println("Error getting cwd:", err)
 			return
 		}
 	}
 
-	main_dir := newDirectory(dir_path, 0)
+	var main_dir *directory
+	if len(dir_paths) == 1 {
+		main_dir = newDirectory(dir_paths[0], 0)
+	} else {
+		// increment search depth since the "total" directory isn't real but counts as a parent
+		*max_search_depth++
+
+		// create a fake directory to show totals across multiple directory args
+		main_dir = &directory{
+			name:        "total",
+			search_subs: true,
+			loc_counts:  make(map[string]int),
+			file_counts: make(map[string]int),
+			byte_counts: make(map[string]int),
+		}
+
+		for _, path := range args {
+			// "." has a parent but relPath can't find the parent's name without the full path
+			if path == "." {
+				var err error
+				path, err = os.Getwd()
+				if err != nil {
+					fmt.Println("Error getting cwd:", err)
+					return
+				}
+			}
+
+			child := newDirectory(path, 1)
+			main_dir.subdirectories = append(main_dir.subdirectories, child)
+		}
+
+		main_dir.countDirLoc()
+	}
+
 	if *percentages_flag {
 		total_loc = float64(sumValues(main_dir.loc_counts))
 		total_bytes = float64(sumValues(main_dir.byte_counts))
