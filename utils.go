@@ -188,6 +188,9 @@ func toAbsPath(dir_paths []string) []string {
 		} else if path == ".." {
 			dir_paths[i] = parentDir(cwd)
 		} else if !filepath.IsAbs(path) {
+			if strings.HasPrefix(path, "-") {
+				fmt.Printf("Warning: argument \"%s\" may be a misplaced flag, flags must come before arguments\n", path)
+			}
 			dir_paths[i] = filepath.Join(cwd, path)
 		}
 	}
