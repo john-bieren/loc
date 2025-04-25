@@ -103,8 +103,22 @@ func relPath(full_path string, parents int) string {
 	return rel_path
 }
 
+// Remove duplicate values from a slice
+func removeSliceDuplicates[T comparable](input_slice []T) []T {
+	values := make(map[T]bool)
+	unique_slice := []T{}
+	for _, item := range input_slice {
+		if _, exists := values[item]; !exists {
+			values[item] = true
+			unique_slice = append(unique_slice, item)
+		}
+	}
+	return unique_slice
+}
+
 // Make sure no directory will be counted twice
 func removeOverlappingDirs(dir_paths []string) []string {
+	dir_paths = removeSliceDuplicates(dir_paths)
 	var result []string
 	for i, i_path := range dir_paths {
 		keep_dir := true

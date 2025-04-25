@@ -31,8 +31,11 @@ func main() {
 			panic(fmt.Sprintln("Error getting cwd:", err))
 		}
 	}
+
 	dir_paths = toAbsPath(dir_paths)
-	dir_paths = removeOverlappingDirs(dir_paths)
+	if len(dir_paths) > 1 {
+		dir_paths = removeOverlappingDirs(dir_paths)
+	}
 
 	var main_dir *directory
 	if len(dir_paths) == 1 {
@@ -64,7 +67,7 @@ func main() {
 		total_files = float64(sumValues(main_dir.file_counts))
 	}
 
-	if len(main_dir.children)+len(main_dir.subdirectories) > 0 {
+	if len(main_dir.loc_counts) > 0 {
 		if *print_dir_flag {
 			main_dir.printTreeLoc()
 		} else {
