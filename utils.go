@@ -34,23 +34,6 @@ func addCommas(num int) string {
 	return string(result)
 }
 
-// Convert "." and ".." into full paths
-func convertSpecialPaths(dir_paths []string) []string {
-	cwd, err := os.Getwd()
-	if err != nil {
-		panic(fmt.Sprintln("Error getting cwd:", err))
-	}
-
-	for i, path := range dir_paths {
-		if path == "." {
-			dir_paths[i] = cwd
-		} else if path == ".." {
-			dir_paths[i] = parentDir(cwd)
-		}
-	}
-	return dir_paths
-}
-
 // Convert byte count into units
 func formatByteCount(byte_count int) string {
 	if byte_count <= 1_000 {
@@ -66,14 +49,19 @@ func formatByteCount(byte_count int) string {
 
 // Return path to parent of given entry
 func parentDir(dir_path string) string {
-	dir_path = strings.ReplaceAll(dir_path, "\\", "/")
-	path_parts := strings.Split(dir_path, "/")
+	path_parts := splitPath(dir_path)
 	parent_path_parts := path_parts[:len(path_parts)-1]
 	parent_path := filepath.Join(parent_path_parts...)
 	if runtime.GOOS == "windows" {
 		parent_path = strings.ReplaceAll(parent_path, "C:", "C:\\")
 	}
 	return parent_path
+}
+
+// Split filepath by slashes
+func splitPath(path string) []string {
+	path = strings.ReplaceAll(path, "\\", "/")
+	return strings.Split(path, "/")
 }
 
 // Quick sort implementation for sorting integer map values in descending order
@@ -109,11 +97,37 @@ func quickSort(source_map map[string]int, keys []string, low int, high int) {
 
 // Convert full path to relative path from main_dir
 func relPath(full_path string, parents int) string {
-	full_path = strings.ReplaceAll(full_path, "\\", "/")
-	path_parts := strings.Split(full_path, "/")
+	path_parts := splitPath(full_path)
 	rel_path_parts := path_parts[len(path_parts)-parents-1:]
 	rel_path := filepath.Join(rel_path_parts...)
 	return rel_path
+}
+
+// Make sure no directory will be counted twice
+func removeOverlappingDirs(dir_paths []string) []string {
+	var result []string
+	for i, i_path := range dir_paths {
+		keep_dir := true
+		for j, j_path := range dir_paths {
+			if i == j {
+				continue
+			}
+			// if one path is contained within another
+			if strings.Contains(i_path, j_path) {
+				// drop the path unless -md dictates that it won't be searched otherwise
+				i_split, j_split := splitPath(i_path), splitPath(j_path)
+				distance := len(i_split) - len(j_split)
+				if distance <= *max_search_depth {
+					keep_dir = false
+					break
+				}
+			}
+		}
+		if keep_dir {
+			result = append(result, i_path)
+		}
+	}
+	return result
 }
 
 // Sort a slice of files by loc or size
@@ -145,6 +159,25 @@ func sumValues[k comparable](m map[k]int) int {
 		sum += value
 	}
 	return sum
+}
+
+// Convert all paths to absolute paths
+func toAbsPath(dir_paths []string) []string {
+	cwd, err := os.Getwd()
+	if err != nil {
+		panic(fmt.Sprintln("Error getting cwd:", err))
+	}
+
+	for i, path := range dir_paths {
+		if path == "." {
+			dir_paths[i] = cwd
+		} else if path == ".." {
+			dir_paths[i] = parentDir(cwd)
+		} else if !filepath.IsAbs(path) {
+			dir_paths[i] = filepath.Join(cwd, path)
+		}
+	}
+	return dir_paths
 }
 
 // Custom usage output for --help and relevant error messages

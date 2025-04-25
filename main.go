@@ -31,7 +31,8 @@ func main() {
 			panic(fmt.Sprintln("Error getting cwd:", err))
 		}
 	}
-	dir_paths = convertSpecialPaths(dir_paths)
+	dir_paths = toAbsPath(dir_paths)
+	dir_paths = removeOverlappingDirs(dir_paths)
 
 	var main_dir *directory
 	if len(dir_paths) == 1 {
