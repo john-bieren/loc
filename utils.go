@@ -204,7 +204,7 @@ func usage() {
 	fmt.Println("")
 	fmt.Println("Usage: loc [options] [paths]")
 	fmt.Println("         Options must come before paths")
-	fmt.Println("         Paths are the directories you wish to search (cwd by default)")
+	fmt.Println("         Paths are the directories to search (cwd by default)")
 	fmt.Println("")
 	fmt.Println("Options:")
 	fmt.Println("        -d        Print loc by directory")

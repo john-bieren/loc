@@ -7,7 +7,7 @@ import (
 	"os"
 )
 
-const version = "v2.2.0 beta"
+const version = "v2.2.0"
 
 var total_loc, total_bytes, total_files float64
 
@@ -46,7 +46,6 @@ func main() {
 
 		// create a fake directory to show totals across multiple directory args
 		main_dir = &directory{
-			name:        "total",
 			search_subs: true,
 			loc_counts:  make(map[string]int),
 			file_counts: make(map[string]int),

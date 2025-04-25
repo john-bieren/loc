@@ -128,7 +128,7 @@ func (d directory) printDirLoc() {
 	indent := strings.Repeat("    ", d.parents)
 
 	// print directory name, if applicable
-	if *print_dir_flag {
+	if *print_dir_flag && d.parents > 0 {
 		fmt.Printf("%s%s/\n", indent, d.name)
 		indent += " " // loc totals should have an extra space if dir names are printed
 	}

@@ -35,7 +35,7 @@ This usage information can be found with `loc --help`:
 ```
 Usage: loc [options] [paths]
          Options must come before paths
-         Paths are the directories you wish to search (cwd by default)
+         Paths are the directories to search (cwd by default)
 
 Options:
         -d        Print loc by directory
