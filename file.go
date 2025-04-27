@@ -37,7 +37,7 @@ func (f *file) countFileLoc() {
 				end_of_file = true
 			} else {
 				fmt.Println("Error reading line:", err)
-				break
+				continue
 			}
 		}
 		line = strings.TrimSpace(line)

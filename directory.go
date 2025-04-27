@@ -36,13 +36,13 @@ func (d *directory) searchDir() {
 		full_path := filepath.Join(d.full_path, entry_name)
 		info, err := os.Stat(full_path)
 		if err != nil {
-			// ignore errors from inaccessible dirs
+			// specify errors from inaccessible entries, a common case
 			if os.IsNotExist(err) {
 				fmt.Println("Cannot access directory entry:", err)
-				continue
+			} else {
+				fmt.Println("Error checking directory entry:", err)
 			}
-			fmt.Println("Error checking directory entry:", err)
-			return
+			continue
 		}
 
 		if info.IsDir() {
