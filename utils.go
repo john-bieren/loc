@@ -208,6 +208,7 @@ func usage() {
 	fmt.Println("")
 	fmt.Println("Options:")
 	fmt.Println("        -d        Print loc by directory")
+	fmt.Println("             -mp int   Maximum depth of subdirectories to print (default: 1,000)")
 	fmt.Println("        -ed str   Directories to exclude (use name or full path, i.e. \"src,lib,C:/Users/user/loc\")")
 	fmt.Println("        -ef str   Files to exclude (use name or full path, i.e. \"index.js,utils.go,C:/Users/user/lib/main.py\")")
 	fmt.Println("        -el str   Languages to exclude (i.e. \"HTML,Plain Text,JSON\")")

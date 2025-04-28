@@ -30,6 +30,9 @@ var (
 	// Flag for max number of language loc totals to print per directory
 	max_print_totals = flag.Int("ml", 1_000, "")
 
+	// Flag for max depth of subdirectories to print
+	max_print_depth = flag.Int("mp", 1_000, "")
+
 	// Flag to print loc as a percentage of overall total
 	percentages_flag = flag.Bool("p", false, "")
 

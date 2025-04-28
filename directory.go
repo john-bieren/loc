@@ -229,7 +229,7 @@ func (d directory) printTreeLoc() {
 		}
 	}
 
-	if d.search_subs {
+	if d.search_subs && *max_print_depth >= d.parents+1 {
 		// sort the subdirectories by the selected sort column
 		sort.Slice(d.subdirectories, func(i, j int) bool {
 			if *sort_column == "size" {
