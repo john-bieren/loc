@@ -39,12 +39,14 @@ Usage: loc [options] [paths]
 
 Options:
         -d        Print loc by directory
+             -mp int   Maximum depth of subdirectories to print (default: 1,000)
         -ed str   Directories to exclude (use name or full path, i.e. "src,lib,C:/Users/user/loc")
         -ef str   Files to exclude (use name or full path, i.e. "index.js,utils.go,C:/Users/user/lib/main.py")
         -el str   Languages to exclude (i.e. "HTML,Plain Text,JSON")
         -f        Print loc by file
              -mf int   Maximum number of files to print per directory (default: 100,000)
         -id       Include dot directories
+        -il str   Languages to include, all others will be excluded (i.e. "Python,JavaScript,C++")
         -md int   Maximum depth of subdirectories to search (default: 1,000)
         -ml int   Maximum number of language loc totals to print per directory (default: 1,000)
         -p        Print loc as a percentage of overall total

@@ -52,7 +52,7 @@ func (d *directory) searchDir() {
 				}
 
 				var skip_dir bool
-				for excl := range strings.SplitSeq(*exclude_dirs_flag, ",") {
+				for _, excl := range exclude_dirs {
 					if entry_name == excl || full_path == excl {
 						skip_dir = true
 						break
@@ -67,7 +67,7 @@ func (d *directory) searchDir() {
 			}
 		} else {
 			var skip_file bool
-			for excl := range strings.SplitSeq(*exclude_files_flag, ",") {
+			for _, excl := range exclude_files {
 				if entry_name == excl || full_path == excl {
 					skip_file = true
 					break
@@ -80,17 +80,6 @@ func (d *directory) searchDir() {
 			size := info.Size()
 			child := newFile(full_path, d.parents, size)
 			if child.is_code {
-				var skip_lang bool
-				for excl := range strings.SplitSeq(*exclude_langs_flag, ",") {
-					if child.file_type == excl {
-						skip_lang = true
-						break
-					}
-				}
-				if skip_lang {
-					continue
-				}
-
 				d.children = append(d.children, child)
 			}
 		}
@@ -232,11 +221,12 @@ func (d directory) printTreeLoc() {
 	if d.search_subs && *max_print_depth >= d.parents+1 {
 		// sort the subdirectories by the selected sort column
 		sort.Slice(d.subdirectories, func(i, j int) bool {
-			if *sort_column == "size" {
+			switch *sort_column {
+			case "size":
 				return sumValues(d.subdirectories[i].byte_counts) > sumValues(d.subdirectories[j].byte_counts)
-			} else if *sort_column == "files" {
+			case "files":
 				return sumValues(d.subdirectories[i].file_counts) > sumValues(d.subdirectories[j].file_counts)
-			} else {
+			default:
 				return sumValues(d.subdirectories[i].loc_counts) > sumValues(d.subdirectories[j].loc_counts)
 			}
 		})

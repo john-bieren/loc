@@ -75,6 +75,22 @@ func newFile(path string, dir_parents int, size int64) *file {
 	if !self.is_code {
 		self.file_type, self.is_code = langauges[filepath.Ext(path)]
 	}
+
+	if len(include_langs) > 0 {
+		self.is_code = false
+		for _, incl := range include_langs {
+			if self.file_type == incl {
+				self.is_code = true
+			}
+		}
+	} else {
+		for _, excl := range exclude_langs {
+			if self.file_type == excl {
+				self.is_code = false
+			}
+		}
+	}
+
 	if self.is_code {
 		self.countFileLoc()
 	}

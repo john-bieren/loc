@@ -215,6 +215,7 @@ func usage() {
 	fmt.Println("        -f        Print loc by file")
 	fmt.Println("             -mf int   Maximum number of files to print per directory (default: 100,000)")
 	fmt.Println("        -id       Include dot directories")
+	fmt.Println("        -il str   Languages to include, all others will be excluded (i.e. \"Python,JavaScript,C++\")")
 	fmt.Println("        -md int   Maximum depth of subdirectories to search (default: 1,000)")
 	fmt.Println("        -ml int   Maximum number of language loc totals to print per directory (default: 1,000)")
 	fmt.Println("        -p        Print loc as a percentage of overall total")

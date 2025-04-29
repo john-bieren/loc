@@ -7,19 +7,16 @@ import (
 	"os"
 )
 
-const version = "v2.2.0"
+const version = "v2.3.0 beta"
 
 var total_loc, total_bytes, total_files float64
 
 func main() {
+	// Overwrite default usage function so custom message prints on --help or argument errors
 	flag.Usage = usage
 	flag.Parse()
 	args := flag.Args()
-
-	if *version_flag {
-		fmt.Println("loc", version)
-		os.Exit(0)
-	}
+	processFlags()
 
 	var dir_paths []string
 	if len(args) != 0 {
