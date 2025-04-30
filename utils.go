@@ -52,8 +52,9 @@ func parentDir(dir_path string) string {
 	path_parts := splitPath(dir_path)
 	parent_path_parts := path_parts[:len(path_parts)-1]
 	parent_path := filepath.Join(parent_path_parts...)
-	if runtime.GOOS == "windows" {
-		parent_path = strings.ReplaceAll(parent_path, "C:", "C:\\")
+	// the \ after the letter drive is not added by Join
+	if runtime.GOOS == "windows" && parent_path[1] == ':' {
+		parent_path = strings.Replace(parent_path, ":", ":\\", 1)
 	}
 	return parent_path
 }
