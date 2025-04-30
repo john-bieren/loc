@@ -7,7 +7,7 @@ import (
 	"os"
 )
 
-const version = "v2.3.0 beta"
+const version = "v3.0.0 beta"
 
 var total_loc, total_bytes, total_files float64
 

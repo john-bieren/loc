@@ -38,23 +38,23 @@ var (
 	// Parsed list of inputs for -il flag
 	include_langs []string
 
-	// Flag for max depth of subdirectories to search through
-	max_search_depth = flag.Int("md", 1_000, "")
-
 	// Flag for max number of files to print per directory
 	max_print_files = flag.Int("mf", 100_000, "")
 
 	// Flag for max number of language loc totals to print per directory
 	max_print_totals = flag.Int("ml", 1_000, "")
 
-	// Flag for max depth of subdirectories to print
-	max_print_depth = flag.Int("mp", 1_000, "")
-
 	// Flag to print loc as a percentage of overall total
 	percentages_flag = flag.Bool("p", false, "")
 
+	// Flag for max depth of subdirectories to print
+	max_print_depth = flag.Int("pd", 1_000, "")
+
 	// Flag for which column to sort by
 	sort_column = flag.String("s", "loc", "")
+
+	// Flag for max depth of subdirectories to search through
+	max_search_depth = flag.Int("sd", 1_000, "")
 
 	// Flag to print version and exit
 	version_flag = flag.Bool("v", false, "")
