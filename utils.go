@@ -197,31 +197,3 @@ func toAbsPath(dir_paths []string) []string {
 	}
 	return dir_paths
 }
-
-// Custom usage output for --help and relevant error messages
-func usage() {
-	fmt.Println("loc", version)
-	fmt.Println("Count lines of code in directories and their subdirectories by language")
-	fmt.Println("         Note: multi-line comments and non-comment docstrings are counted as lines of code")
-	fmt.Println("")
-	fmt.Println("Usage: loc [options] [dirs]")
-	fmt.Println("         Options must come before dirs")
-	fmt.Println("         Dirs are the names/paths of directories to search (cwd by default)")
-	fmt.Println("")
-	fmt.Println("Options:")
-	fmt.Println("        -d        Print loc by directory")
-	fmt.Println("             -pd int   Maximum depth of subdirectories to print (default: 1,000)")
-	fmt.Println("        -ed str   Directories to exclude (name or path, i.e. \"lib,src/utils,C:/Users/user/loc\")")
-	fmt.Println("        -ef str   Files to exclude (name or path, i.e. \"index.js,lib/main.go,/home/user/src/main.py\")")
-	fmt.Println("        -el str   Languages to exclude (i.e. \"HTML,Plain Text,JSON\")")
-	fmt.Println("        -f        Print loc by file")
-	fmt.Println("             -mf int   Maximum number of files to print per directory (default: 100,000)")
-	fmt.Println("        -id       Include dot directories (excluded by default)")
-	fmt.Println("        -il str   Languages to include, all others will be excluded (i.e. \"Python,JavaScript,C++\")")
-	fmt.Println("        -ml int   Maximum number of language loc totals to print per directory (default: 1,000)")
-	fmt.Println("        -p        Print loc as a percentage of overall total")
-	fmt.Println("        -s str    Choose how to sort results [\"loc\", \"size\", \"files\"] (default: \"loc\")")
-	fmt.Println("        -sd int   Maximum depth of subdirectories to search (default: 1,000)")
-	fmt.Println("        -v        Print version and exit")
-	os.Exit(0)
-}

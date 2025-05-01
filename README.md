@@ -40,18 +40,21 @@ Usage: loc [options] [dirs]
 Options:
         -d        Print loc by directory
              -pd int   Maximum depth of subdirectories to print (default: 1,000)
-        -ed str   Directories to exclude (name or path, i.e. "lib,src/utils,C:/Users/user/loc")
-        -ef str   Files to exclude (name or path, i.e. "index.js,lib/main.go,/home/user/src/main.py")
+        -ed str   Directories to exclude (i.e. "lib,src/utils")
+        -ef str   Files to exclude (i.e. "index.js,src/main.go")
         -el str   Languages to exclude (i.e. "HTML,Plain Text,JSON")
         -f        Print loc by file
              -mf int   Maximum number of files to print per directory (default: 100,000)
         -id       Include dot directories (excluded by default)
-        -il str   Languages to include, all others will be excluded (i.e. "Python,JavaScript,C++")
-        -ml int   Maximum number of language loc totals to print per directory (default: 1,000)
+        -il str   Languages to include, all others excluded (i.e. "Python,JavaScript,C")
+        -ml int   Maximum number of languages to print per directory (default: 1,000)
         -p        Print loc as a percentage of overall total
         -s str    Choose how to sort results ["loc", "size", "files"] (default: "loc")
         -sd int   Maximum depth of subdirectories to search (default: 1,000)
-        -v        Print version and exit
+
+        --help         Print this message and exit
+        --license      Print license information and exit
+        --version      Print version and exit
 ```
 
 ## Disclaimer
