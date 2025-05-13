@@ -1,4 +1,4 @@
-// Count the lines of code in a directory
+// Count lines of code in directories and their subdirectories by language
 package main
 
 import (

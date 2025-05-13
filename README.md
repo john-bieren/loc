@@ -26,7 +26,7 @@ Powershell: 28 | 939 b | 2
     ```
     go build
     ```
-3. Add the project directory to your PATH environment variable to use `loc` system-wide
+3. Add the project directory to your PATH environment variable to use loc system-wide
 
 ## Usage
 
@@ -51,12 +51,47 @@ Options:
         -p        Print loc as a percentage of overall total
         -s str    Choose how to sort results ["loc", "size", "files"] (default: "loc")
         -sd int   Maximum depth of subdirectories to search (default: 1,000)
-
-        --help         Print this message and exit
-        --license      Print license information and exit
-        --version      Print version and exit
 ```
 
-## Disclaimer
+## Limitations
 
-I'm new to Go, and this is just a personal project. There are more advanced programs, like [scc](https://github.com/boyter/scc), with more features and better methods for counting lines of code. This program counts multi-line comments and non-comment docstrings as lines of code.
+I'm new to Go, and this is just a personal project. As such, loc has some noteworthy limitations:
+* No concurrency, at least not yet.
+* Multi-line comments and non-comment docstrings are counted as as lines of code.
+* Language information comes from [scc](https://github.com/boyter/scc/blob/master/languages.json), this information can be updated with `refresh_languages.py`.
+* Files are assigned a language based only on their extension, resulting in a few conflicts where the language cannot be fully identified. `refresh_languages.py` resolves these conflicts by mapping extensions to "lang_1 or lang_2"
+
+There are similar, more advanced programs, like scc, with more features and better methods for counting lines of code.
+
+## Custom mappings
+
+loc uses three maps, located in `languages.go`, to store language information:
+* `extensions`, which maps extensions to languages
+* `filenames`, which maps specific file names to languages
+* `single_line_comment_chars`, which maps languages to a list of their single-line comment characters
+
+If you install from source and want to add/overwrite key-value pairs in these maps, `refresh_languages.py` can process these custom mappings. In the project directory, create a file named `custom_mappings.json` and list your mappings as shown below (shown are the custom mappings used in this repo):
+```JSON
+{
+    "extensions": {
+        "HC": "HolyC",
+        "hc": "HolyC",
+        "heex": "HEEx",
+        "json": "JSON",
+        "yaml": "YAML",
+        "yml": "YAML"
+    },
+    "filenames": {
+        "LICENCE": "License",
+        "LICENSE": "License",
+        "LICENCE.txt": "License",
+        "LICENSE.txt": "License",
+        "README": "README",
+        "README.md": "README"
+    },
+    "single_line_comment_chars": {
+        "HolyC": ["//"]
+    }
+}
+```
+`refresh_languages.py` will automatically use these mappings.

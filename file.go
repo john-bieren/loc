@@ -71,9 +71,9 @@ func newFile(path string, dir_parents int, size int64) *file {
 		name:      filepath.Base(path),
 		bytes:     int(size),
 	}
-	self.file_type, self.is_code = file_languages[self.name]
+	self.file_type, self.is_code = filenames[self.name]
 	if !self.is_code {
-		self.file_type, self.is_code = langauges[filepath.Ext(path)]
+		self.file_type, self.is_code = extensions[filepath.Ext(path)]
 	}
 
 	if len(include_langs) > 0 {
