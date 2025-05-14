@@ -157,8 +157,9 @@ func sortFiles(slice []*file, sort_by string) []*file {
 	return slice
 }
 
-// Make a sorted slice of keys from a map[string]int using quick sort
+// Make a slice of keys from a map[string]int sorted by value
 func sortKeys(source_map map[string]int) []string {
+	// extract keys from source map
 	var keys []string
 	for key := range source_map {
 		keys = append(keys, key)
@@ -168,7 +169,7 @@ func sortKeys(source_map map[string]int) []string {
 }
 
 // Sum the integer values of a map
-func sumValues[k comparable](m map[k]int) int {
+func sumMapValues[k comparable](m map[k]int) int {
 	var sum int
 	for _, value := range m {
 		sum += value

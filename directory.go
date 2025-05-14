@@ -133,17 +133,17 @@ func (d directory) printDirLoc() {
 			fmt.Printf(
 				"%s%d langs: %.1f%% | %.1f%% | %.1f%%\n",
 				indent, len(d.loc_counts),
-				float64(sumValues(d.loc_counts))/total_loc*100,
-				float64(sumValues(d.byte_counts))/total_bytes*100,
-				float64(sumValues(d.file_counts))/total_files*100,
+				float64(sumMapValues(d.loc_counts))/total_loc*100,
+				float64(sumMapValues(d.byte_counts))/total_bytes*100,
+				float64(sumMapValues(d.file_counts))/total_files*100,
 			)
 		} else {
 			fmt.Printf(
 				"%s%d langs: %s | %s | %s\n",
 				indent, len(d.loc_counts),
-				addCommas(sumValues(d.loc_counts)),
-				formatByteCount(sumValues(d.byte_counts)),
-				addCommas(sumValues(d.file_counts)),
+				addCommas(sumMapValues(d.loc_counts)),
+				formatByteCount(sumMapValues(d.byte_counts)),
+				addCommas(sumMapValues(d.file_counts)),
 			)
 		}
 	}
@@ -223,11 +223,11 @@ func (d directory) printTreeLoc() {
 		sort.Slice(d.subdirectories, func(i, j int) bool {
 			switch *sort_column {
 			case "size":
-				return sumValues(d.subdirectories[i].byte_counts) > sumValues(d.subdirectories[j].byte_counts)
+				return sumMapValues(d.subdirectories[i].byte_counts) > sumMapValues(d.subdirectories[j].byte_counts)
 			case "files":
-				return sumValues(d.subdirectories[i].file_counts) > sumValues(d.subdirectories[j].file_counts)
+				return sumMapValues(d.subdirectories[i].file_counts) > sumMapValues(d.subdirectories[j].file_counts)
 			default:
-				return sumValues(d.subdirectories[i].loc_counts) > sumValues(d.subdirectories[j].loc_counts)
+				return sumMapValues(d.subdirectories[i].loc_counts) > sumMapValues(d.subdirectories[j].loc_counts)
 			}
 		})
 

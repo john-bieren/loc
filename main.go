@@ -1,4 +1,5 @@
 //go:generate go run ./generator
+//go:generate gofmt -w languages.go
 
 package main
 
@@ -13,7 +14,7 @@ const version = "v3.0.0 beta"
 var total_loc, total_bytes, total_files float64
 
 func main() {
-	// Overwrite default usage function so custom message prints on --help or argument errors
+	// overwrite default usage function so custom message prints on --help or argument errors
 	flag.Usage = usage
 	flag.Parse()
 	args := flag.Args()
@@ -59,9 +60,9 @@ func main() {
 	}
 
 	if *percentages_flag {
-		total_loc = float64(sumValues(main_dir.loc_counts))
-		total_bytes = float64(sumValues(main_dir.byte_counts))
-		total_files = float64(sumValues(main_dir.file_counts))
+		total_loc = float64(sumMapValues(main_dir.loc_counts))
+		total_bytes = float64(sumMapValues(main_dir.byte_counts))
+		total_files = float64(sumMapValues(main_dir.file_counts))
 	}
 
 	if len(main_dir.loc_counts) > 0 {
