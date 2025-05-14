@@ -10,15 +10,14 @@ import (
 	"strings"
 )
 
-// Convert integer to string with thousands separators
+// addCommas converts an integer to a string with thousands separators.
 func addCommas(num int) string {
 	str := strconv.Itoa(num)
-
 	if len(str) <= 3 {
 		return str
 	}
 
-	// create backwards string with commas
+	// result is a reversed copy of str with commas.
 	var result []byte
 	for count, i := 0, len(str)-1; i >= 0; count, i = count+1, i-1 {
 		if count > 0 && count%3 == 0 {
@@ -34,7 +33,7 @@ func addCommas(num int) string {
 	return string(result)
 }
 
-// Convert byte count into units
+// formatByteCount converts a raw byte count into a string formatted in the relveant units.
 func formatByteCount(byte_count int) string {
 	if byte_count <= 1_000 {
 		return fmt.Sprintf("%d b", byte_count)
@@ -47,11 +46,12 @@ func formatByteCount(byte_count int) string {
 	}
 }
 
-// Return path to parent of given entry
+// parentDir returns the path to the parent of the given entry.
 func parentDir(dir_path string) string {
 	path_parts := splitPath(dir_path)
 	parent_path_parts := path_parts[:len(path_parts)-1]
 	parent_path := filepath.Join(parent_path_parts...)
+
 	// the \ after the letter drive is not added by Join
 	if runtime.GOOS == "windows" && parent_path[1] == ':' {
 		parent_path = strings.Replace(parent_path, ":", ":\\", 1)
@@ -59,13 +59,13 @@ func parentDir(dir_path string) string {
 	return parent_path
 }
 
-// Split filepath by slashes
+// splitPath splits a filepath by slashes.
 func splitPath(path string) []string {
 	path = strings.ReplaceAll(path, "\\", "/")
 	return strings.Split(path, "/")
 }
 
-// Quick sort implementation for sorting integer map values in descending order
+// quickSort is a quick sort implementation for sorting map keys by their integer values in descending order.
 func quickSort(source_map map[string]int, keys []string, low int, high int) {
 	if low < high {
 		// median of three to pick pivot value
@@ -96,7 +96,7 @@ func quickSort(source_map map[string]int, keys []string, low int, high int) {
 	}
 }
 
-// Convert full path to relative path from main_dir
+// relPath converts a full path into a path relative to main_dir.
 func relPath(full_path string, parents int) string {
 	path_parts := splitPath(full_path)
 	rel_path_parts := path_parts[len(path_parts)-parents-1:]
@@ -104,7 +104,7 @@ func relPath(full_path string, parents int) string {
 	return rel_path
 }
 
-// Remove duplicate values from a slice
+// removeSliceDuplicates removes duplicate values from a slice.
 func removeSliceDuplicates[T comparable](input_slice []T) []T {
 	values := make(map[T]bool)
 	unique_slice := []T{}
@@ -117,7 +117,7 @@ func removeSliceDuplicates[T comparable](input_slice []T) []T {
 	return unique_slice
 }
 
-// Make sure no directory will be counted twice
+// removeOverlappingDirs removes from a slice paths that are contained within other paths in the slice.
 func removeOverlappingDirs(dir_paths []string) []string {
 	dir_paths = removeSliceDuplicates(dir_paths)
 	var result []string
@@ -145,7 +145,7 @@ func removeOverlappingDirs(dir_paths []string) []string {
 	return result
 }
 
-// Sort a slice of files by loc or size
+// sortFiles sorts a slice of files by loc or size.
 func sortFiles(slice []*file, sort_by string) []*file {
 	sort.Slice(slice, func(i, j int) bool {
 		if sort_by == "size" {
@@ -157,9 +157,9 @@ func sortFiles(slice []*file, sort_by string) []*file {
 	return slice
 }
 
-// Make a slice of keys from a map[string]int sorted by value
+// sortKeys makes a slice of keys from a map[string]int, sorted by value.
 func sortKeys(source_map map[string]int) []string {
-	// extract keys from source map
+	// keys is a copy of source_map's keys.
 	var keys []string
 	for key := range source_map {
 		keys = append(keys, key)
@@ -168,7 +168,7 @@ func sortKeys(source_map map[string]int) []string {
 	return keys
 }
 
-// Sum the integer values of a map
+// sumMapValues sums the integer values of a map.
 func sumMapValues[k comparable](m map[k]int) int {
 	var sum int
 	for _, value := range m {
@@ -177,7 +177,7 @@ func sumMapValues[k comparable](m map[k]int) int {
 	return sum
 }
 
-// Convert all paths to absolute paths
+// toAbsPath converts the paths in a slice to absolute paths.
 func toAbsPath(dir_paths []string) []string {
 	cwd, err := os.Getwd()
 	if err != nil {

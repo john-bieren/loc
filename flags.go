@@ -9,60 +9,60 @@ import (
 )
 
 var (
-	// Flag to print loc by directory
+	// print_dir_flag is the value of the -d flag.
 	print_dir_flag = flag.Bool("d", false, "")
 
-	// Flag for directories to exclude
+	// exclude_dirs_flag is the value of the -ed flag.
 	exclude_dirs_flag = flag.String("ed", "", "")
-	// Parsed list of inputs for -ed flag
+	// exclude_dirs is the parsed list of inputs for -ed flag.
 	exclude_dirs []string
 
-	// Flag for files to exclude
+	// exclude_files_flag is the value of the -ef flag.
 	exclude_files_flag = flag.String("ef", "", "")
-	// Parsed list of inputs for -ef flag
+	// exclude_files is the parsed list of inputs for -ef flag.
 	exclude_files []string
 
-	// Flag for languages to exclude
+	// exclude_langs_flag is the value of the -el flag.
 	exclude_langs_flag = flag.String("el", "", "")
-	// Parsed list of inputs for -el flag
+	// exclude_langs is the parsed list of inputs for -el flag.
 	exclude_langs []string
 
-	// Flag to print loc by file
+	// print_file_flag is the value of the -f flag.
 	print_file_flag = flag.Bool("f", false, "")
 
-	// Flag to include dot directories
+	// include_dot_dir_flag is the value of the -id flag.
 	include_dot_dir_flag = flag.Bool("id", false, "")
 
-	// Flag for languages to include
+	// include_langs_flag is the value of the -il flag.
 	include_langs_flag = flag.String("il", "", "")
-	// Parsed list of inputs for -il flag
+	// include_langs is the parsed list of inputs for -il flag.
 	include_langs []string
 
-	// Flag for max number of files to print per directory
+	// max_print_files is the value of the -mf flag.
 	max_print_files = flag.Int("mf", 100_000, "")
 
-	// Flag for max number of language loc totals to print per directory
+	// max_print_totals is  the value of the -ml flag.
 	max_print_totals = flag.Int("ml", 1_000, "")
 
-	// Flag to print loc as a percentage of overall total
+	// percentages_flag is the value of the -p flag.
 	percentages_flag = flag.Bool("p", false, "")
 
-	// Flag for max depth of subdirectories to print
+	// max_print_depth is the value of the -pd flag.
 	max_print_depth = flag.Int("pd", 1_000, "")
 
-	// Flag for which column to sort by
+	// sort_column is the value of the -s flag.
 	sort_column = flag.String("s", "loc", "")
 
-	// Flag for max depth of subdirectories to search through
+	// max_search_depth is the value of the -sd flag.
 	max_search_depth = flag.Int("sd", 1_000, "")
 
-	// Flag to print license information and exit
+	// license_flag is the value of the --license flag.
 	license_flag = flag.Bool("license", false, "")
 
-	// Flag to print version and exit
+	// version_flag is the value of the --version flag.
 	version_flag = flag.Bool("version", false, "")
 
-	// Line-by-line text for usage function output
+	// usage_message is the line-by-line text for usage function output.
 	usage_message = []string{
 		fmt.Sprintf("loc %s", version),
 		"Count lines of code in directories and their subdirectories by language",
@@ -92,7 +92,7 @@ var (
 		"        --version      Print version and exit",
 	}
 
-	// Line-by-line text for --license output
+	// license_message is the line-by-line text for --license output.
 	license_message = []string{
 		"Source code can be found at github.com/john-bieren/loc",
 		"loc is licensed under the MIT license",
@@ -125,7 +125,7 @@ var (
 	}
 )
 
-// Run exit flags, parse list flags, check for invalid inputs
+// processFlags runs exit flags, parses list flags, and checks for invalid inputs.
 func processFlags() {
 	if *version_flag {
 		fmt.Println("loc", version)
@@ -157,7 +157,7 @@ func processFlags() {
 	}
 }
 
-// Custom usage output for --help and relevant error messages
+// usage is a custom usage output for --help and relevant error messages
 func usage() {
 	for _, line := range usage_message {
 		fmt.Println(line)

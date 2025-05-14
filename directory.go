@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-// Track whether file column headers have been printed by printTreeLoc
+// tree_file_headers_printed tracks whether file column headers have been printed by printTreeLoc.
 var tree_file_headers_printed bool
 
 type directory struct {
@@ -23,7 +23,7 @@ type directory struct {
 	byte_counts    map[string]int
 }
 
-// Index children and subdirectories
+// searchDir indexes the directory's children and subdirectories.
 func (d *directory) searchDir() {
 	entries, err := os.ReadDir(d.full_path)
 	if err != nil {
@@ -86,7 +86,7 @@ func (d *directory) searchDir() {
 	}
 }
 
-// Count lines of code for each language in all indexed children
+// countDirLoc counts the lines of code for each language in all indexed children.
 func (d *directory) countDirLoc() {
 	for _, child := range d.children {
 		d.loc_counts[child.file_type] += child.loc
@@ -109,7 +109,7 @@ func (d *directory) countDirLoc() {
 	}
 }
 
-// Print loc by file type for directory
+// printDirLoc prints loc by file type for the directory.
 func (d directory) printDirLoc() {
 	if len(d.loc_counts) == 0 {
 		return
@@ -183,7 +183,7 @@ func (d directory) printDirLoc() {
 	}
 }
 
-// Print loc by file type for directory and subdirectories, include files if -f used
+// printTreeLoc prints loc by file type for the directory and its subdirectories, includes files if -f used.
 func (d directory) printTreeLoc() {
 	d.printDirLoc()
 
@@ -237,9 +237,9 @@ func (d directory) printTreeLoc() {
 	}
 }
 
-// Print loc by file for all files counted
+// printFileLoc prints loc by file for all files counted.
 func (d directory) printFileLoc() {
-	// collect all children to sort them
+	// files is a slice of the directory's children used to sort them.
 	var files []*file
 	files = d.appendFiles(files)
 
@@ -266,7 +266,7 @@ func (d directory) printFileLoc() {
 	}
 }
 
-// Append files from d.children to input slice
+// appendFiles appends files from d.children to input slice.
 func (d directory) appendFiles(files []*file) []*file {
 	files = append(files, d.children...)
 	if d.search_subs {
@@ -277,7 +277,7 @@ func (d directory) appendFiles(files []*file) []*file {
 	return files
 }
 
-// Constructor for instances of directory struct
+// newDirectory is the constructor for instances of the directory struct.
 func newDirectory(path string, num_parents int) *directory {
 	self := &directory{
 		full_path:   path,

@@ -13,6 +13,7 @@ const version = "v3.0.0 beta"
 
 var total_loc, total_bytes, total_files float64
 
+// main is loc's entry point
 func main() {
 	// overwrite default usage function so custom message prints on --help or argument errors
 	flag.Usage = usage

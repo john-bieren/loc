@@ -18,7 +18,7 @@ type file struct {
 	bytes     int
 }
 
-// Count lines of code in a file
+// countFileLoc counts the lines of code in a file.
 func (f *file) countFileLoc() {
 	file, err := os.Open(f.full_path)
 	if err != nil {
@@ -63,7 +63,7 @@ func (f *file) countFileLoc() {
 	}
 }
 
-// Constructor for instances of file struct
+// newFile is the constructor for instances of the file struct.
 func newFile(path string, dir_parents int, size int64) *file {
 	self := &file{
 		full_path: path,
