@@ -1,4 +1,5 @@
-// Count lines of code in directories and their subdirectories by language
+//go:generate go run ./generator
+
 package main
 
 import (
