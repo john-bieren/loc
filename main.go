@@ -46,15 +46,15 @@ func main() {
 
 		// create a fake directory to show totals across multiple directory args
 		main_dir = &directory{
-			search_subs: true,
-			loc_counts:  make(map[string]int),
-			file_counts: make(map[string]int),
-			byte_counts: make(map[string]int),
+			search_subdirs: true,
+			loc_counts:     make(map[string]int),
+			file_counts:    make(map[string]int),
+			byte_counts:    make(map[string]int),
 		}
 
 		for _, path := range dir_paths {
-			child := newDirectory(path, 1)
-			main_dir.subdirectories = append(main_dir.subdirectories, child)
+			subdir := newDirectory(path, 1)
+			main_dir.subdirectories = append(main_dir.subdirectories, subdir)
 		}
 
 		main_dir.countDirLoc()

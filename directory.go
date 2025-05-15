@@ -15,15 +15,15 @@ type directory struct {
 	full_path      string
 	name           string
 	parents        int
-	search_subs    bool
+	search_subdirs bool
 	subdirectories []*directory
-	children       []*file
+	files          []*file
 	loc_counts     map[string]int
 	file_counts    map[string]int
 	byte_counts    map[string]int
 }
 
-// searchDir indexes the directory's children and subdirectories.
+// searchDir indexes the directory's files and subdirectories.
 func (d *directory) searchDir() {
 	entries, err := os.ReadDir(d.full_path)
 	if err != nil {
@@ -46,7 +46,7 @@ func (d *directory) searchDir() {
 		}
 
 		if info.IsDir() {
-			if d.search_subs {
+			if d.search_subdirs {
 				if !*include_dot_dir_flag && strings.HasPrefix(entry_name, ".") {
 					continue
 				}
@@ -62,8 +62,8 @@ func (d *directory) searchDir() {
 					continue
 				}
 
-				child := newDirectory(full_path, d.parents+1)
-				d.subdirectories = append(d.subdirectories, child)
+				subdir := newDirectory(full_path, d.parents+1)
+				d.subdirectories = append(d.subdirectories, subdir)
 			}
 		} else {
 			var skip_file bool
@@ -78,31 +78,31 @@ func (d *directory) searchDir() {
 			}
 
 			size := info.Size()
-			child := newFile(full_path, d.parents, size)
-			if child.is_code {
-				d.children = append(d.children, child)
+			file := newFile(full_path, d.parents, size)
+			if file.is_code {
+				d.files = append(d.files, file)
 			}
 		}
 	}
 }
 
-// countDirLoc counts the lines of code for each language in all indexed children.
+// countDirLoc counts the lines of code for each language in all indexed files.
 func (d *directory) countDirLoc() {
-	for _, child := range d.children {
-		d.loc_counts[child.file_type] += child.loc
-		d.file_counts[child.file_type]++
-		d.byte_counts[child.file_type] += child.bytes
+	for _, file := range d.files {
+		d.loc_counts[file.file_type] += file.loc
+		d.file_counts[file.file_type]++
+		d.byte_counts[file.file_type] += file.bytes
 	}
 
-	if d.search_subs {
-		for _, sub := range d.subdirectories {
-			for file_type, loc := range sub.loc_counts {
+	if d.search_subdirs {
+		for _, subdir := range d.subdirectories {
+			for file_type, loc := range subdir.loc_counts {
 				d.loc_counts[file_type] += loc
 			}
-			for file_type, n := range sub.file_counts {
+			for file_type, n := range subdir.file_counts {
 				d.file_counts[file_type] += n
 			}
-			for file_type, b := range sub.byte_counts {
+			for file_type, b := range subdir.byte_counts {
 				d.byte_counts[file_type] += b
 			}
 		}
@@ -189,12 +189,12 @@ func (d directory) printTreeLoc() {
 
 	if *print_file_flag {
 		indent := strings.Repeat("    ", d.parents+1)
-		if !tree_file_headers_printed && len(d.children) > 0 {
+		if !tree_file_headers_printed && len(d.files) > 0 {
 			fmt.Printf("\033[1m%sloc | size - file\033[0m\n", indent)
 			tree_file_headers_printed = true
 		}
 
-		for i, child := range sortFiles(d.children, *sort_column) {
+		for i, file := range sortFiles(d.files, *sort_column) {
 			if i+1 > *max_print_files {
 				break
 			}
@@ -202,23 +202,23 @@ func (d directory) printTreeLoc() {
 				fmt.Printf(
 					"%s%.1f%% | %.1f%% - %s\n",
 					indent,
-					float64(child.loc)/total_loc*100,
-					float64(child.bytes)/total_bytes*100,
-					child.name,
+					float64(file.loc)/total_loc*100,
+					float64(file.bytes)/total_bytes*100,
+					file.name,
 				)
 			} else {
 				fmt.Printf(
 					"%s%s | %s - %s\n",
 					indent,
-					addCommas(child.loc),
-					formatByteCount(child.bytes),
-					child.name,
+					addCommas(file.loc),
+					formatByteCount(file.bytes),
+					file.name,
 				)
 			}
 		}
 	}
 
-	if d.search_subs && *max_print_depth >= d.parents+1 {
+	if d.search_subdirs && *max_print_depth >= d.parents+1 {
 		// sort the subdirectories by the selected sort column
 		sort.Slice(d.subdirectories, func(i, j int) bool {
 			switch *sort_column {
@@ -231,15 +231,15 @@ func (d directory) printTreeLoc() {
 			}
 		})
 
-		for _, sub := range d.subdirectories {
-			sub.printTreeLoc()
+		for _, subdir := range d.subdirectories {
+			subdir.printTreeLoc()
 		}
 	}
 }
 
 // printFileLoc prints loc by file for all files counted.
 func (d directory) printFileLoc() {
-	// files is a slice of the directory's children used to sort them.
+	// files is a slice of the directory's files used to sort them.
 	var files []*file
 	files = d.appendFiles(files)
 
@@ -266,12 +266,12 @@ func (d directory) printFileLoc() {
 	}
 }
 
-// appendFiles appends files from d.children to input slice.
+// appendFiles appends files from d.files to input slice.
 func (d directory) appendFiles(files []*file) []*file {
-	files = append(files, d.children...)
-	if d.search_subs {
-		for _, sub := range d.subdirectories {
-			files = sub.appendFiles(files)
+	files = append(files, d.files...)
+	if d.search_subdirs {
+		for _, subdir := range d.subdirectories {
+			files = subdir.appendFiles(files)
 		}
 	}
 	return files
@@ -280,13 +280,13 @@ func (d directory) appendFiles(files []*file) []*file {
 // newDirectory is the constructor for instances of the directory struct.
 func newDirectory(path string, num_parents int) *directory {
 	self := &directory{
-		full_path:   path,
-		name:        filepath.Base(path),
-		parents:     num_parents,
-		search_subs: num_parents+1 <= *max_search_depth,
-		loc_counts:  make(map[string]int),
-		file_counts: make(map[string]int),
-		byte_counts: make(map[string]int),
+		full_path:      path,
+		name:           filepath.Base(path),
+		parents:        num_parents,
+		search_subdirs: num_parents+1 <= *max_search_depth,
+		loc_counts:     make(map[string]int),
+		file_counts:    make(map[string]int),
+		byte_counts:    make(map[string]int),
 	}
 	self.searchDir()
 	self.countDirLoc()
