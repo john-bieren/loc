@@ -61,6 +61,9 @@ var (
 	// max_search_depth is the value of the -sd flag.
 	max_search_depth = flag.Int("sd", 1_000, "")
 
+	// suppress_warnings is the value of the -q flag.
+	suppress_warnings = flag.Bool("q", false, "")
+
 	// license_flag is the value of the --license flag.
 	license_flag = flag.Bool("license", false, "")
 
@@ -92,6 +95,7 @@ var (
 		"        -p        Print loc as a percentage of overall total",
 		"        -s  str   Choose how to sort results [\"loc\", \"size\", \"files\"] (default: \"loc\")",
 		"        -sd int   Maximum depth of subdirectories to search (default: 1,000)",
+		"        -q        Suppress non-critical error messages",
 		"        --help         Print this message and exit",
 		"        --license      Print license information and exit",
 		"        --version      Print version and exit",

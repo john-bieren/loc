@@ -2,7 +2,6 @@ package main
 
 import (
 	"bufio"
-	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
@@ -22,7 +21,7 @@ type file struct {
 func (f *file) countFileLoc() {
 	file, err := os.Open(f.full_path)
 	if err != nil {
-		fmt.Println("Error opening file:", err)
+		warn("Error opening file:", err)
 		return
 	}
 	defer file.Close()
@@ -36,7 +35,7 @@ func (f *file) countFileLoc() {
 			if err.Error() == "EOF" {
 				end_of_file = true
 			} else {
-				fmt.Println("Error reading line:", err)
+				warn("Error reading line:", err)
 				continue
 			}
 		}

@@ -27,7 +27,7 @@ type directory struct {
 func (d *directory) searchDir() {
 	entries, err := os.ReadDir(d.full_path)
 	if err != nil {
-		fmt.Println("Error reading directory:", err)
+		warn("Error reading directory:", err)
 		return
 	}
 
@@ -38,9 +38,9 @@ func (d *directory) searchDir() {
 		if err != nil {
 			// specify errors from inaccessible entries, a common case
 			if os.IsNotExist(err) {
-				fmt.Println("Cannot access directory entry:", err)
+				warn("Cannot access directory entry:", err)
 			} else {
-				fmt.Println("Error checking directory entry:", err)
+				warn("Error checking directory entry:", err)
 			}
 			continue
 		}

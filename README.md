@@ -51,6 +51,7 @@ Options:
         -p        Print loc as a percentage of overall total
         -s  str   Choose how to sort results ["loc", "size", "files"] (default: "loc")
         -sd int   Maximum depth of subdirectories to search (default: 1,000)
+        -q        Suppress non-critical error messages
 ```
 
 ## Limitations

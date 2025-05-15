@@ -190,3 +190,10 @@ func toAbsPath(path string) string {
 	}
 	return path
 }
+
+// warn prints the message for a non-critical error if -q is not used.
+func warn(message string, err error) {
+	if !*suppress_warnings {
+		fmt.Println(message, err)
+	}
+}
