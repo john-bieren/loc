@@ -39,7 +39,7 @@ func main() {
 	}
 
 	main_dir := newDirectory(dir_path, 0)
-	if len(main_dir.children) > 0 {
+	if len(main_dir.children_loc) > 0 {
 		if *print_dir_flag {
 			main_dir.printTreeLoc()
 		} else {
