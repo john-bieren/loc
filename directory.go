@@ -120,7 +120,7 @@ func (d *directory) countDirLoc() {
 }
 
 // printDirLoc prints loc by file type for the directory.
-func (d directory) printDirLoc() {
+func (d *directory) printDirLoc() {
 	if len(d.loc_counts) == 0 {
 		return
 	}
@@ -194,7 +194,7 @@ func (d directory) printDirLoc() {
 }
 
 // printTreeLoc prints loc by file type for the directory and its subdirectories, includes files if -f used.
-func (d directory) printTreeLoc() {
+func (d *directory) printTreeLoc() {
 	d.printDirLoc()
 
 	if *print_file_flag {
@@ -248,7 +248,7 @@ func (d directory) printTreeLoc() {
 }
 
 // printFileLoc prints loc by file for all files counted.
-func (d directory) printFileLoc() {
+func (d *directory) printFileLoc() {
 	// files is a slice of the directory's files used to sort them.
 	var files []*file
 	files = d.appendFiles(files)
@@ -277,7 +277,7 @@ func (d directory) printFileLoc() {
 }
 
 // appendFiles appends files from d.files to input slice.
-func (d directory) appendFiles(files []*file) []*file {
+func (d *directory) appendFiles(files []*file) []*file {
 	files = append(files, d.files...)
 	if d.search_subdirs {
 		for _, subdir := range d.subdirectories {
