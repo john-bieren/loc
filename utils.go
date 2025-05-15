@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"os"
 	"path/filepath"
 	"runtime"
 	"sort"
@@ -179,11 +178,6 @@ func sumMapValues[k comparable](m map[k]int) int {
 
 // toAbsPath converts a path into an absolute path.
 func toAbsPath(path string) string {
-	cwd, err := os.Getwd()
-	if err != nil {
-		panic(fmt.Sprintln("Error getting cwd:", err))
-	}
-
 	if path == "." {
 		path = cwd
 	} else if path == ".." {

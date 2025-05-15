@@ -11,10 +11,17 @@ import (
 
 const version = "v3.0.0 beta"
 
+var cwd string
 var total_loc, total_bytes, total_files float64
 
 // main is loc's entry point
 func main() {
+	var err error
+	cwd, err = os.Getwd()
+	if err != nil {
+		panic(fmt.Sprintln("Error getting cwd:", err))
+	}
+
 	// overwrite default usage function so custom message prints on --help or argument errors
 	flag.Usage = usage
 	flag.Parse()
@@ -25,11 +32,7 @@ func main() {
 	if len(args) != 0 {
 		dir_paths = args
 	} else {
-		cwd, err := os.Getwd()
 		dir_paths = []string{cwd}
-		if err != nil {
-			panic(fmt.Sprintln("Error getting cwd:", err))
-		}
 	}
 
 	// convert paths to absolute paths
