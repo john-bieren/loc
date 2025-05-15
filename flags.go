@@ -80,19 +80,18 @@ var (
 		"Options:",
 		"        -d        Print loc by directory",
 		"             -pd int   Maximum depth of subdirectories to print (default: 1,000)",
-		"        -ed str   Directories to exclude (name or relative path, i.e. \"lib,src/utils\")",
-		"        -ef str   Files to exclude (name or relative path, i.e. \"index.js,src/main.go\")",
+		"        -ed str   Directories to exclude (name or path, i.e. \"lib,src/utils\")",
+		"        -ef str   Files to exclude (name or path, i.e. \"index.js,src/main.go\")",
 		"        -el str   Languages to exclude (i.e. \"HTML,Plain Text,JSON\")",
 		"        -f        Print loc by file",
 		"             -mf int   Maximum number of files to print per directory (default: 100,000)",
 		"        -id       Include dot directories (excluded by default)",
-		"        -if str   Files to include (name or relative path, i.e. \"main.py,src/main.c\")",
+		"        -if str   Files to include (name or path, i.e. \"main.py,src/main.c\")",
 		"        -il str   Languages to include, all others excluded (i.e. \"Python,JavaScript,C\")",
 		"        -ml int   Maximum number of languages to print per directory (default: 1,000)",
 		"        -p        Print loc as a percentage of overall total",
 		"        -s  str   Choose how to sort results [\"loc\", \"size\", \"files\"] (default: \"loc\")",
 		"        -sd int   Maximum depth of subdirectories to search (default: 1,000)",
-		"",
 		"        --help         Print this message and exit",
 		"        --license      Print license information and exit",
 		"        --version      Print version and exit",
@@ -146,16 +145,16 @@ func processFlags() {
 	}
 
 	if *exclude_dirs_flag != "" {
-		exclude_dirs = strings.Split(*exclude_dirs_flag, ",")
+		exclude_dirs = standardizeSeparators(strings.Split(*exclude_dirs_flag, ","))
 	}
 	if *exclude_files_flag != "" {
-		exclude_files = strings.Split(*exclude_files_flag, ",")
+		exclude_files = standardizeSeparators(strings.Split(*exclude_files_flag, ","))
 	}
 	if *exclude_langs_flag != "" {
 		exclude_langs = strings.Split(*exclude_langs_flag, ",")
 	}
 	if *include_files_flag != "" {
-		include_files = strings.Split(*include_files_flag, ",")
+		include_files = standardizeSeparators(strings.Split(*include_files_flag, ","))
 	}
 	if *include_langs_flag != "" {
 		include_langs = strings.Split(*include_langs_flag, ",")
@@ -166,7 +165,31 @@ func processFlags() {
 	}
 }
 
-// usage is a custom usage output for --help and relevant error messages
+// standardizeSeparators corrects path separators in a slice of paths.
+func standardizeSeparators(input []string) []string {
+	var result []string
+	windows := string(os.PathSeparator) == "\\"
+	for _, path := range input {
+		if windows {
+			// use OS-specific path separators
+			path = strings.ReplaceAll(path, "/", "\\")
+			// ensure that the only trailing/leading separator is a single leading one,
+			// as this path will match to entries which contain it as a suffix.
+			// "-ed lib" would exclude a dir named "my_lib", "\lib" does not.
+			path = strings.Trim(path, "\\")
+			path = fmt.Sprintf("\\%s", path)
+			result = append(result, path)
+		} else {
+			path = strings.ReplaceAll(path, "\\", "/")
+			path = strings.Trim(path, "/")
+			path = fmt.Sprintf("/%s", path)
+			result = append(result, path)
+		}
+	}
+	return result
+}
+
+// usage is a custom usage output for --help and relevant error messages.
 func usage() {
 	for _, line := range usage_message {
 		fmt.Println(line)
