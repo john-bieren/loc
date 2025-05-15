@@ -104,9 +104,10 @@ func (w *writer) gatherLanguageInfo() (map[string]string, map[string]string, map
 					current_mapping, ok := extension_mappings[ext]
 					if ok {
 						// sort languages alphabetically for deterministic output
-						langs := []string{current_mapping, language}
+						langs := strings.Split(current_mapping, " or ")
+						langs = append(langs, language)
 						sort.Strings(langs)
-						extension_mappings[ext] = fmt.Sprintf("%s or %s", langs[0], langs[1])
+						extension_mappings[ext] = strings.Join(langs, " or ")
 					} else {
 						extension_mappings[ext] = language
 					}
