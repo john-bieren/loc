@@ -177,24 +177,22 @@ func sumMapValues[k comparable](m map[k]int) int {
 	return sum
 }
 
-// toAbsPath converts the paths in a slice to absolute paths.
-func toAbsPath(dir_paths []string) []string {
+// toAbsPath converts a path into an absolute path.
+func toAbsPath(path string) string {
 	cwd, err := os.Getwd()
 	if err != nil {
 		panic(fmt.Sprintln("Error getting cwd:", err))
 	}
 
-	for i, path := range dir_paths {
-		if path == "." {
-			dir_paths[i] = cwd
-		} else if path == ".." {
-			dir_paths[i] = parentDir(cwd)
-		} else if !filepath.IsAbs(path) {
-			if strings.HasPrefix(path, "-") {
-				fmt.Printf("Warning: argument \"%s\" may be a misplaced flag, flags must come before arguments\n", path)
-			}
-			dir_paths[i] = filepath.Join(cwd, path)
+	if path == "." {
+		path = cwd
+	} else if path == ".." {
+		path = parentDir(cwd)
+	} else if !filepath.IsAbs(path) {
+		if strings.HasPrefix(path, "-") {
+			fmt.Printf("Warning: argument \"%s\" may be a misplaced flag, flags must come before arguments\n", path)
 		}
+		path = filepath.Join(cwd, path)
 	}
-	return dir_paths
+	return path
 }

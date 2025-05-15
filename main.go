@@ -32,7 +32,12 @@ func main() {
 		}
 	}
 
-	dir_paths = toAbsPath(dir_paths)
+	// convert paths to absolute paths
+	for i, path := range dir_paths {
+		dir_paths[i] = toAbsPath(path)
+	}
+
+	// make sure each dir is only counted once
 	if len(dir_paths) > 1 {
 		dir_paths = removeOverlappingDirs(dir_paths)
 	}

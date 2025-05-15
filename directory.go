@@ -53,7 +53,7 @@ func (d *directory) searchDir() {
 
 				var skip_dir bool
 				for _, excl := range exclude_dirs {
-					if entry_name == excl || full_path == excl {
+					if entry_name == excl || full_path == toAbsPath(excl) {
 						skip_dir = true
 						break
 					}
@@ -67,10 +67,20 @@ func (d *directory) searchDir() {
 			}
 		} else {
 			var skip_file bool
-			for _, excl := range exclude_files {
-				if entry_name == excl || full_path == excl {
-					skip_file = true
-					break
+			if len(include_files) > 0 {
+				skip_file = true
+				for _, incl := range include_files {
+					if entry_name == incl || full_path == toAbsPath(incl) {
+						skip_file = false
+						break
+					}
+				}
+			} else {
+				for _, excl := range exclude_files {
+					if entry_name == excl || full_path == toAbsPath(excl) {
+						skip_file = true
+						break
+					}
 				}
 			}
 			if skip_file {

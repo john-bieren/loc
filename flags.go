@@ -14,17 +14,17 @@ var (
 
 	// exclude_dirs_flag is the value of the -ed flag.
 	exclude_dirs_flag = flag.String("ed", "", "")
-	// exclude_dirs is the parsed list of inputs for -ed flag.
+	// exclude_dirs is the parsed list of inputs for the -ed flag.
 	exclude_dirs []string
 
 	// exclude_files_flag is the value of the -ef flag.
 	exclude_files_flag = flag.String("ef", "", "")
-	// exclude_files is the parsed list of inputs for -ef flag.
+	// exclude_files is the parsed list of inputs for the -ef flag.
 	exclude_files []string
 
 	// exclude_langs_flag is the value of the -el flag.
 	exclude_langs_flag = flag.String("el", "", "")
-	// exclude_langs is the parsed list of inputs for -el flag.
+	// exclude_langs is the parsed list of inputs for the -el flag.
 	exclude_langs []string
 
 	// print_file_flag is the value of the -f flag.
@@ -33,9 +33,14 @@ var (
 	// include_dot_dir_flag is the value of the -id flag.
 	include_dot_dir_flag = flag.Bool("id", false, "")
 
+	// include_files_flag is the value of the -if flag.
+	include_files_flag = flag.String("if", "", "")
+	// include_files is the parsed list of inputs for the -if flag.
+	include_files []string
+
 	// include_langs_flag is the value of the -il flag.
 	include_langs_flag = flag.String("il", "", "")
-	// include_langs is the parsed list of inputs for -il flag.
+	// include_langs is the parsed list of inputs for the -il flag.
 	include_langs []string
 
 	// max_print_files is the value of the -mf flag.
@@ -75,16 +80,17 @@ var (
 		"Options:",
 		"        -d        Print loc by directory",
 		"             -pd int   Maximum depth of subdirectories to print (default: 1,000)",
-		"        -ed str   Directories to exclude (i.e. \"lib,src/utils\")",
-		"        -ef str   Files to exclude (i.e. \"index.js,src/main.go\")",
+		"        -ed str   Directories to exclude (name or relative path, i.e. \"lib,src/utils\")",
+		"        -ef str   Files to exclude (name or relative path, i.e. \"index.js,src/main.go\")",
 		"        -el str   Languages to exclude (i.e. \"HTML,Plain Text,JSON\")",
 		"        -f        Print loc by file",
 		"             -mf int   Maximum number of files to print per directory (default: 100,000)",
 		"        -id       Include dot directories (excluded by default)",
+		"        -if str   Files to include (name or relative path, i.e. \"main.py,src/main.c\")",
 		"        -il str   Languages to include, all others excluded (i.e. \"Python,JavaScript,C\")",
 		"        -ml int   Maximum number of languages to print per directory (default: 1,000)",
 		"        -p        Print loc as a percentage of overall total",
-		"        -s str    Choose how to sort results [\"loc\", \"size\", \"files\"] (default: \"loc\")",
+		"        -s  str   Choose how to sort results [\"loc\", \"size\", \"files\"] (default: \"loc\")",
 		"        -sd int   Maximum depth of subdirectories to search (default: 1,000)",
 		"",
 		"        --help         Print this message and exit",
@@ -147,6 +153,9 @@ func processFlags() {
 	}
 	if *exclude_langs_flag != "" {
 		exclude_langs = strings.Split(*exclude_langs_flag, ",")
+	}
+	if *include_files_flag != "" {
+		include_files = strings.Split(*include_files_flag, ",")
 	}
 	if *include_langs_flag != "" {
 		include_langs = strings.Split(*include_langs_flag, ",")
