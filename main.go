@@ -14,7 +14,7 @@ const version = "v3.0.0 beta"
 var cwd string
 var total_loc, total_bytes, total_files float64
 
-// main is loc's entry point
+// main is loc's entry point.
 func main() {
 	var err error
 	cwd, err = os.Getwd()
@@ -22,7 +22,7 @@ func main() {
 		panic(fmt.Sprintln("Error getting cwd:", err))
 	}
 
-	// overwrite default usage function so custom message prints on --help or argument errors
+	// overwrite default usage function so custom message prints on --help and argument errors
 	flag.Usage = usage
 	flag.Parse()
 	args := flag.Args()
@@ -35,7 +35,6 @@ func main() {
 		dir_paths = []string{cwd}
 	}
 
-	// convert paths to absolute paths
 	for i, path := range dir_paths {
 		dir_paths[i] = toAbsPath(path)
 	}
@@ -49,7 +48,7 @@ func main() {
 	if len(dir_paths) == 1 {
 		main_dir = newDirectory(dir_paths[0], 0)
 	} else {
-		// increment search depth since the "total" directory isn't real but counts as a parent
+		// increment search depth since this main_dir isn't real but counts as a parent
 		*max_search_depth++
 
 		// create a fake directory to show totals across multiple directory args

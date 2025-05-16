@@ -169,17 +169,19 @@ func processFlags() {
 	}
 }
 
-// standardizeSeparators corrects path separators in a slice of paths.
+/*
+standardizeSeparators corrects path separators in a slice of paths.
+This includes using the proper separators for the user's OS, and ensuring that
+there is a leading separator, as these paths will match to entries which
+contain them as a suffix. For example, "-ed lib" would exclude a directory
+named "my_lib", while changing "lib" to "/lib" prevents this.
+*/
 func standardizeSeparators(input []string) []string {
 	var result []string
 	windows := string(os.PathSeparator) == "\\"
 	for _, path := range input {
 		if windows {
-			// use OS-specific path separators
 			path = strings.ReplaceAll(path, "/", "\\")
-			// ensure that the only trailing/leading separator is a single leading one,
-			// as this path will match to entries which contain it as a suffix.
-			// "-ed lib" would exclude a dir named "my_lib", "\lib" does not.
 			path = strings.Trim(path, "\\")
 			path = fmt.Sprintf("\\%s", path)
 			result = append(result, path)

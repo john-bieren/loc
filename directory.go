@@ -276,15 +276,15 @@ func (d *directory) printFileLoc() {
 	}
 }
 
-// appendFiles appends files from d.files to input slice.
-func (d *directory) appendFiles(files []*file) []*file {
-	files = append(files, d.files...)
+// appendFiles appends the contents of d.files to the input slice.
+func (d *directory) appendFiles(input []*file) []*file {
+	input = append(input, d.files...)
 	if d.search_subdirs {
 		for _, subdir := range d.subdirectories {
-			files = subdir.appendFiles(files)
+			input = subdir.appendFiles(input)
 		}
 	}
-	return files
+	return input
 }
 
 // newDirectory is the constructor for instances of the directory struct.

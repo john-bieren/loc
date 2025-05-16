@@ -52,6 +52,9 @@ Options:
         -s  str   Choose how to sort results ["loc", "size", "files"] (default: "loc")
         -sd int   Maximum depth of subdirectories to search (default: 1,000)
         -q        Suppress non-critical error messages
+        --help         Print this message and exit
+        --license      Print license information and exit
+        --version      Print version and exit
 ```
 
 ## Limitations
