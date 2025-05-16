@@ -30,19 +30,18 @@ func main() {
 
 	var dir_paths []string
 	if len(args) != 0 {
-		dir_paths = args
+		// add each directory argument as an absolute path
+		for _, path := range args {
+			dir_paths = append(dir_paths, toAbsPath(path))
+		}
+		// make sure each directory is only counted once
+		if len(dir_paths) > 1 {
+			dir_paths = removeOverlappingDirs(dir_paths)
+		}
 	} else {
 		dir_paths = []string{cwd}
 	}
 
-	for i, path := range dir_paths {
-		dir_paths[i] = toAbsPath(path)
-	}
-
-	// make sure each dir is only counted once
-	if len(dir_paths) > 1 {
-		dir_paths = removeOverlappingDirs(dir_paths)
-	}
 
 	var main_dir *directory
 	if len(dir_paths) == 1 {
