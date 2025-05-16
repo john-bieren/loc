@@ -17,17 +17,17 @@ var (
 
 	// exclude_dirs_flag is the value of the -ed flag.
 	exclude_dirs_flag = flag.String("ed", "", "")
-	// exclude_dirs is the parsed list of inputs for the -ed flag.
+	// exclude_dirs is a slice of the parsed inputs for the -ed flag.
 	exclude_dirs []string
 
 	// exclude_files_flag is the value of the -ef flag.
 	exclude_files_flag = flag.String("ef", "", "")
-	// exclude_files is the parsed list of inputs for the -ef flag.
+	// exclude_files is a slice of the parsed inputs for the -ef flag.
 	exclude_files []string
 
 	// exclude_langs_flag is the value of the -el flag.
 	exclude_langs_flag = flag.String("el", "", "")
-	// exclude_langs is the parsed list of inputs for the -el flag.
+	// exclude_langs is a slice of the parsed inputs for the -el flag.
 	exclude_langs []string
 
 	// print_file_flag is the value of the -f flag.
@@ -35,12 +35,12 @@ var (
 
 	// include_files_flag is the value of the -if flag.
 	include_files_flag = flag.String("if", "", "")
-	// include_files is the parsed list of inputs for the -if flag.
+	// include_files is a slice of the parsed inputs for the -if flag.
 	include_files []string
 
 	// include_langs_flag is the value of the -il flag.
 	include_langs_flag = flag.String("il", "", "")
-	// include_langs is the parsed list of inputs for the -il flag.
+	// include_langs is a slice of the parsed inputs for the -il flag.
 	include_langs []string
 
 	// max_print_files is the value of the -mf flag.
@@ -134,7 +134,7 @@ var (
 	}
 )
 
-// processFlags runs exit flags, parses list flags, and checks for invalid inputs.
+// processFlags runs exit flags, parses string flags, and checks for invalid inputs.
 func processFlags() {
 	if *version_flag {
 		fmt.Println("loc", version)

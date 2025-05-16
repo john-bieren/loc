@@ -129,7 +129,7 @@ func (d *directory) printDirLoc() {
 	// print directory name, if applicable
 	if *print_dir_flag && d.parents > 0 {
 		fmt.Printf("%s%s/\n", indent, d.name)
-		indent += " " // loc totals should have an extra space if dir names are printed
+		indent += " " // loc totals should have an extra space if directory names are printed
 	}
 
 	// print column labels on first directory
@@ -158,7 +158,7 @@ func (d *directory) printDirLoc() {
 		}
 	}
 
-	// print loc totals by file type
+	// keys is a slice of the file type keys sorted by their sort_column values.
 	var keys []string
 	switch *sort_column {
 	case "size":
@@ -168,6 +168,7 @@ func (d *directory) printDirLoc() {
 	default:
 		keys = sortKeys(d.loc_counts)
 	}
+	// print loc totals by file type
 	for i, file_type := range keys {
 		// print language total even if -ml=0 if there's only one language
 		if i+1 > *max_print_totals && len(d.loc_counts) > 1 {

@@ -12,7 +12,8 @@ import (
 	"strings"
 )
 
-var langauges_url = "https://raw.githubusercontent.com/boyter/scc/refs/heads/master/languages.json"
+// languages_url is the link to the raw languages.json file in scc's github repository.
+var languages_url = "https://raw.githubusercontent.com/boyter/scc/refs/heads/master/languages.json"
 
 type writer struct {
 	languages_info  map[string]map[string]any
@@ -24,7 +25,7 @@ type writer struct {
 // loadFiles loads languages.json from scc and custom_mappings.json from user.
 func (w *writer) loadFiles() {
 	// load languages.json
-	resp, err := http.Get(langauges_url)
+	resp, err := http.Get(languages_url)
 	if err != nil {
 		panic(fmt.Sprintln("Error accessing languages.json:", err))
 	}
@@ -261,7 +262,7 @@ func newWriter() *writer {
 	return self
 }
 
-// sortKeys creates a sorted list of a map's string keys.
+// sortKeys creates a sorted slice of a map's string keys.
 func sortKeys[k any](source_map map[string]k) []string {
 	var sorted_keys []string
 	for key := range source_map {

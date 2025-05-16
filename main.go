@@ -9,8 +9,10 @@ import (
 	"os"
 )
 
+// version is the current version of loc.
 const version = "v3.0.0 beta"
 
+// cwd is the current working directory.
 var cwd string
 var total_loc, total_bytes, total_files float64
 
@@ -28,6 +30,7 @@ func main() {
 	args := flag.Args()
 	processFlags()
 
+	// dir_paths is a slice of the absolute paths to the directories in the user's arguments.
 	var dir_paths []string
 	if len(args) != 0 {
 		// add each directory argument as an absolute path
@@ -42,7 +45,7 @@ func main() {
 		dir_paths = []string{cwd}
 	}
 
-
+	// main_dir is the "root" directory from which files and subdirectories are indexed.
 	var main_dir *directory
 	if len(dir_paths) == 1 {
 		main_dir = newDirectory(dir_paths[0], 0)
