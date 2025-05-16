@@ -18,6 +18,12 @@ Powershell: 28 | 939 b | 2
 
 ## Install
 
+### Binary releases
+
+Binaries for Windows and Linux on x86_64 are [available](https://github.com/john-bieren/loc/releases) starting from v3.0.0.
+
+### Build from source
+
 1. Clone the repository:
     ```
     git clone https://github.com/john-bieren/loc.git
