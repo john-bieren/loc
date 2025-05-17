@@ -162,9 +162,12 @@ func (w *writer) generateExtensionsMap(extension_mappings map[string]string) {
 	w.file_lines = append(w.file_lines, "\nvar extensions = map[string]string{")
 	for _, extension := range sortKeys(extension_mappings) {
 		language := extension_mappings[extension]
-		new_line := fmt.Sprintf("\n\t\".%s\": \"%s\",", extension, language)
-		w.file_lines = append(w.file_lines, new_line)
-		w.languages_used[language] = struct{}{}
+		// skip custom mappings to blank strings
+		if language != "" {
+			new_line := fmt.Sprintf("\n\t\".%s\": \"%s\",", extension, language)
+			w.file_lines = append(w.file_lines, new_line)
+			w.languages_used[language] = struct{}{}
+		}
 	}
 	w.file_lines = append(w.file_lines, "\n}\n")
 }
@@ -189,9 +192,12 @@ func (w *writer) generateFilenamesMap(filename_mappings map[string]string) {
 	w.file_lines = append(w.file_lines, "\nvar filenames = map[string]string{")
 	for _, filename := range sortKeys(filename_mappings) {
 		language := filename_mappings[filename]
-		new_line := fmt.Sprintf("\n\t\"%s\": \"%s\",", filename, language)
-		w.file_lines = append(w.file_lines, new_line)
-		w.languages_used[language] = struct{}{}
+		// skip custom mappings to blank strings
+		if language != "" {
+			new_line := fmt.Sprintf("\n\t\"%s\": \"%s\",", filename, language)
+			w.file_lines = append(w.file_lines, new_line)
+			w.languages_used[language] = struct{}{}
+		}
 	}
 	w.file_lines = append(w.file_lines, "\n}\n")
 }
