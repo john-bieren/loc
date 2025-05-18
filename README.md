@@ -23,19 +23,20 @@ This usage information can be found by running `loc --help`:
 ```
 Usage: loc [options] [dirs]
          Options must come before dirs
+         Option flags cannot be combined (e.g. use -d -f instead of -df)
          Dirs are the names/paths of directories to search (cwd by default)
 
 Options:
         -d        Print loc by directory
              -pd int   Maximum depth of subdirectories to print (default: 1,000)
         --dot     Include dot directories (excluded by default)
-        -ed str   Directories to exclude (name or path, i.e. "lib,src/utils")
-        -ef str   Files to exclude (name or path, i.e. "index.js,src/main.go")
-        -el str   Languages to exclude (i.e. "HTML,Plain Text,JSON")
+        -ed str   Directories to exclude (name or path, e.g. "lib,src/utils")
+        -ef str   Files to exclude (name or path, e.g. "index.js,src/main.go")
+        -el str   Languages to exclude (e.g. "HTML,Plain Text,JSON")
         -f        Print loc by file
              -mf int   Maximum number of files to print per directory (default: 100,000)
-        -if str   Files to include (name or path, i.e. "main.py,src/main.c")
-        -il str   Languages to include, all others excluded (i.e. "Python,JavaScript,C")
+        -if str   Files to include (name or path, e.g. "main.py,src/main.c")
+        -il str   Languages to include, all others excluded (e.g. "Python,JavaScript,C")
         -ml int   Maximum number of languages to print per directory (default: 1,000)
         -p        Print loc as a percentage of overall total
         -s  str   Choose how to sort results ["loc", "size", "files"] (default: "loc")
