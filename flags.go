@@ -83,13 +83,13 @@ var (
 		"",
 		"Options:",
 		"        -d        Print loc by directory",
-		"             -pd int   Maximum depth of subdirectories to print (default: 1,000)",
+		"            -pd int   Maximum depth of subdirectories to print (default: 1,000)",
 		"        --dot     Include dot directories (excluded by default)",
 		"        -ed str   Directories to exclude (name or path, e.g. \"lib,src/utils\")",
 		"        -ef str   Files to exclude (name or path, e.g. \"index.js,src/main.go\")",
 		"        -el str   Languages to exclude (e.g. \"HTML,Plain Text,JSON\")",
 		"        -f        Print loc by file",
-		"             -mf int   Maximum number of files to print per directory (default: 100,000)",
+		"            -mf int   Maximum number of files to print per directory (default: 100,000)",
 		"        -if str   Files to include (name or path, e.g. \"main.py,src/main.c\")",
 		"        -il str   Languages to include, all others excluded (e.g. \"Python,JavaScript,C\")",
 		"        -ml int   Maximum number of languages to print per directory (default: 1,000)",
@@ -97,9 +97,9 @@ var (
 		"        -s  str   Choose how to sort results [\"loc\", \"size\", \"files\"] (default: \"loc\")",
 		"        -sd int   Maximum depth of subdirectories to search (default: 1,000)",
 		"        -q        Suppress non-critical error messages",
-		"        --help         Print this message and exit",
-		"        --license      Print license information and exit",
-		"        --version      Print version and exit",
+		"        --help    Print this message and exit",
+		"        --license   Print license information and exit",
+		"        --version   Print version and exit",
 	}
 
 	// license_message is the line-by-line text for --license output.
