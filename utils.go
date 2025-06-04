@@ -65,7 +65,7 @@ func splitPath(path string) []string {
 }
 
 // quickSort is a quick sort implementation for sorting map keys by their integer values in descending order.
-func quickSort(source_map map[string]int, keys []string, low int, high int) {
+func quickSort(source_map map[string]int, keys []string, low, high int) {
 	if low < high {
 		// median of three to pick pivot value
 		mid := low + (high-low)/2

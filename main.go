@@ -10,7 +10,7 @@ import (
 )
 
 // version is the current version of loc.
-const version = "v3.0.1"
+const version = "v3.0.2-beta"
 
 // cwd is the current working directory.
 var cwd string
@@ -24,11 +24,11 @@ func main() {
 		panic(fmt.Sprintln("Error getting cwd:", err))
 	}
 
-	// overwrite default usage function so custom message prints on --help and argument errors
+	// overwrite default usage function to print custom message
 	flag.Usage = usage
 	flag.Parse()
-	args := flag.Args()
 	processFlags()
+	args := flag.Args()
 
 	// dir_paths is a slice of the absolute paths to the directories in the user's arguments.
 	var dir_paths []string

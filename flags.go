@@ -70,7 +70,38 @@ var (
 	// version_flag is the value of the --version flag.
 	version_flag = flag.Bool("version", false, "")
 
-	// usage_message is the line-by-line text for usage function output.
+	// license_message is the line-by-line output of the --license flag.
+	license_message = []string{
+		"Source code can be found at github.com/john-bieren/loc",
+		"loc is licensed under the MIT license",
+		"Copyright (c) 2025 John Bieren",
+		"",
+		"Languages, extensions, and comment characters sourced from github.com/boyter/scc",
+		"scc is licensed under the MIT license",
+		"Copyright (c) 2021 Ben Boyter",
+		"",
+		"Full text of the MIT license:",
+		"",
+		"Permission is hereby granted, free of charge, to any person obtaining a copy",
+		"of this software and associated documentation files (the \"Software\"), to deal",
+		"in the Software without restriction, including without limitation the rights",
+		"to use, copy, modify, merge, publish, distribute, sublicense, and/or sell",
+		"copies of the Software, and to permit persons to whom the Software is",
+		"furnished to do so, subject to the following conditions:",
+		"",
+		"The above copyright notice and this permission notice shall be included in all",
+		"copies or substantial portions of the Software.",
+		"",
+		"THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR",
+		"IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,",
+		"FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE",
+		"AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER",
+		"LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,",
+		"OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE",
+		"SOFTWARE.",
+	}
+
+	// usage_message is the line-by-line output of usage().
 	usage_message = []string{
 		fmt.Sprintf("loc %s", version),
 		"Count lines of code in directories and their subdirectories by language",
@@ -100,38 +131,6 @@ var (
 		"        --help    Print this message and exit",
 		"        --license   Print license information and exit",
 		"        --version   Print version and exit",
-	}
-
-	// license_message is the line-by-line text for --license output.
-	license_message = []string{
-		"Source code can be found at github.com/john-bieren/loc",
-		"loc is licensed under the MIT license",
-		"Copyright (c) 2025 John Bieren",
-		"",
-		"Languages, extensions, and comment characters sourced from github.com/boyter/scc",
-		"scc is licensed under the MIT license",
-		"Copyright (c) 2021 Ben Boyter",
-		"",
-		"",
-		"MIT license",
-		"",
-		"Permission is hereby granted, free of charge, to any person obtaining a copy",
-		"of this software and associated documentation files (the \"Software\"), to deal",
-		"in the Software without restriction, including without limitation the rights",
-		"to use, copy, modify, merge, publish, distribute, sublicense, and/or sell",
-		"copies of the Software, and to permit persons to whom the Software is",
-		"furnished to do so, subject to the following conditions:",
-		"",
-		"The above copyright notice and this permission notice shall be included in all",
-		"copies or substantial portions of the Software.",
-		"",
-		"THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR",
-		"IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,",
-		"FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE",
-		"AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER",
-		"LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,",
-		"OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE",
-		"SOFTWARE.",
 	}
 )
 
