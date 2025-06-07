@@ -158,7 +158,7 @@ func (d *directory) printDirLoc() {
 		}
 	}
 
-	// keys is a slice of the file type keys sorted by their sort_column values.
+	// keys contains the file type keys sorted by their sort_column values.
 	var keys []string
 	switch *sort_column {
 	case "size":
@@ -250,7 +250,7 @@ func (d *directory) printTreeLoc() {
 
 // printFileLoc prints loc by file for all files counted.
 func (d *directory) printFileLoc() {
-	// files is a slice of the directory's files used to sort them.
+	// files contains the directory's files and is used to sort them.
 	var files []*file
 	files = d.appendFiles(files)
 

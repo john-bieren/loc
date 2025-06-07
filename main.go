@@ -30,7 +30,7 @@ func main() {
 	processFlags()
 	args := flag.Args()
 
-	// dir_paths is a slice of the absolute paths to the directories in the user's arguments.
+	// dir_paths contains the absolute paths to the directories in the user's arguments.
 	var dir_paths []string
 	if len(args) != 0 {
 		// add each directory argument as an absolute path
