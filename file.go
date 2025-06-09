@@ -8,32 +8,32 @@ import (
 )
 
 type file struct {
-	full_path string
-	rel_path  string
-	name      string
-	file_type string
-	is_code   bool
-	loc       int
-	bytes     int
+	fullPath string
+	relPath  string
+	name     string
+	fileType string
+	isCode   bool
+	loc      int
+	bytes    int
 }
 
 // countFileLoc counts the lines of code in a file.
 func (f *file) countFileLoc() {
-	file, err := os.Open(f.full_path)
+	file, err := os.Open(f.fullPath)
 	if err != nil {
 		warn("Error opening file:", err)
 		return
 	}
 	defer file.Close()
 
-	com_chars, has_comments := single_line_comment_chars[f.file_type]
+	comChars, hasComments := singleLineCommentChars[f.fileType]
 	reader := bufio.NewReader(file)
-	var end_of_file, skip_line bool
-	for !end_of_file {
+	var endOfFile, skipLine bool
+	for !endOfFile {
 		line, err := reader.ReadString('\n')
 		if err != nil {
 			if err.Error() == "EOF" {
-				end_of_file = true
+				endOfFile = true
 			} else {
 				warn("Error reading line:", err)
 				continue
@@ -45,15 +45,15 @@ func (f *file) countFileLoc() {
 			continue
 		}
 
-		if has_comments {
-			for _, char := range com_chars {
+		if hasComments {
+			for _, char := range comChars {
 				if strings.HasPrefix(line, char) {
-					skip_line = true
+					skipLine = true
 					break
 				}
 			}
-			if skip_line {
-				skip_line = false
+			if skipLine {
+				skipLine = false
 				continue
 			}
 		}
@@ -63,34 +63,34 @@ func (f *file) countFileLoc() {
 }
 
 // newFile is the constructor for instances of the file struct.
-func newFile(path string, dir_parents int, size int64) *file {
+func newFile(path string, dirParents int, size int64) *file {
 	self := &file{
-		full_path: path,
-		rel_path:  relPath(path, dir_parents),
-		name:      filepath.Base(path),
-		bytes:     int(size),
+		fullPath: path,
+		relPath:  relPath(path, dirParents),
+		name:     filepath.Base(path),
+		bytes:    int(size),
 	}
-	self.file_type, self.is_code = filenames[self.name]
-	if !self.is_code {
-		self.file_type, self.is_code = extensions[filepath.Ext(path)]
+	self.fileType, self.isCode = filenames[self.name]
+	if !self.isCode {
+		self.fileType, self.isCode = extensions[filepath.Ext(path)]
 	}
 
-	if len(include_langs) > 0 {
-		self.is_code = false
-		for _, incl := range include_langs {
-			if self.file_type == incl {
-				self.is_code = true
+	if len(includeLangs) > 0 {
+		self.isCode = false
+		for _, incl := range includeLangs {
+			if self.fileType == incl {
+				self.isCode = true
 			}
 		}
 	} else {
-		for _, excl := range exclude_langs {
-			if self.file_type == excl {
-				self.is_code = false
+		for _, excl := range excludeLangs {
+			if self.fileType == excl {
+				self.isCode = false
 			}
 		}
 	}
 
-	if self.is_code {
+	if self.isCode {
 		self.countFileLoc()
 	}
 	return self

@@ -14,7 +14,7 @@ const version = "v3.0.2-beta"
 
 // cwd is the current working directory.
 var cwd string
-var total_loc, total_bytes, total_files float64
+var totalLoc, totalBytes, totalFiles float64
 
 // main is loc's entry point.
 func main() {
@@ -30,58 +30,58 @@ func main() {
 	processFlags()
 	args := flag.Args()
 
-	// dir_paths contains the absolute paths to the directories in the user's arguments.
-	var dir_paths []string
-	if len(args) != 0 {
+	// dirPaths contains the absolute paths to the directories in the user's arguments.
+	var dirPaths []string
+	if len(args) == 0 {
+		dirPaths = []string{cwd}
+	} else {
 		// add each directory argument as an absolute path
 		for _, path := range args {
-			dir_paths = append(dir_paths, toAbsPath(path))
+			dirPaths = append(dirPaths, toAbsPath(path))
 		}
 		// make sure each directory is only counted once
-		if len(dir_paths) > 1 {
-			dir_paths = removeOverlappingDirs(dir_paths)
+		if len(dirPaths) > 1 {
+			dirPaths = removeOverlappingDirs(dirPaths)
 		}
-	} else {
-		dir_paths = []string{cwd}
 	}
 
-	// main_dir is the "root" directory from which files and subdirectories are indexed.
-	var main_dir *directory
-	if len(dir_paths) == 1 {
-		main_dir = newDirectory(dir_paths[0], 0)
+	// mainDir is the "root" directory from which files and subdirectories are indexed.
+	var mainDir *directory
+	if len(dirPaths) == 1 {
+		mainDir = newDirectory(dirPaths[0], 0)
 	} else {
-		// increment search depth since this main_dir isn't real but counts as a parent
-		*max_search_depth++
+		// increment search depth since this mainDir isn't real but counts as a parent
+		*maxSearchDepth++
 
 		// create a fake directory to show totals across multiple directory args
-		main_dir = &directory{
-			search_subdirs: true,
-			loc_counts:     make(map[string]int),
-			file_counts:    make(map[string]int),
-			byte_counts:    make(map[string]int),
+		mainDir = &directory{
+			searchSubdirs: true,
+			locCounts:     make(map[string]int),
+			fileCounts:    make(map[string]int),
+			byteCounts:    make(map[string]int),
 		}
 
-		for _, path := range dir_paths {
+		for _, path := range dirPaths {
 			subdir := newDirectory(path, 1)
-			main_dir.subdirectories = append(main_dir.subdirectories, subdir)
+			mainDir.subdirectories = append(mainDir.subdirectories, subdir)
 		}
 
-		main_dir.countDirLoc()
+		mainDir.countDirLoc()
 	}
 
-	if *percentages_flag {
-		total_loc = float64(sumMapValues(main_dir.loc_counts))
-		total_bytes = float64(sumMapValues(main_dir.byte_counts))
-		total_files = float64(sumMapValues(main_dir.file_counts))
+	if *percentagesFlag {
+		totalLoc = float64(sumMapValues(mainDir.locCounts))
+		totalBytes = float64(sumMapValues(mainDir.byteCounts))
+		totalFiles = float64(sumMapValues(mainDir.fileCounts))
 	}
 
-	if len(main_dir.loc_counts) > 0 {
-		if *print_dir_flag {
-			main_dir.printTreeLoc()
+	if len(mainDir.locCounts) > 0 {
+		if *printDirFlag {
+			mainDir.printTreeLoc()
 		} else {
-			main_dir.printDirLoc()
-			if *print_file_flag {
-				main_dir.printFileLoc()
+			mainDir.printDirLoc()
+			if *printFileFlag {
+				mainDir.printFileLoc()
 			}
 		}
 	} else {

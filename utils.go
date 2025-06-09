@@ -33,29 +33,29 @@ func addCommas(num int) string {
 }
 
 // formatByteCount converts a raw byte count into a string formatted in the relveant units.
-func formatByteCount(byte_count int) string {
-	if byte_count <= 1_000 {
-		return fmt.Sprintf("%d b", byte_count)
-	} else if byte_count <= 1_000_000 {
-		return fmt.Sprintf("%.1f kb", float64(byte_count)/1_000)
-	} else if byte_count <= 1_000_000_000 {
-		return fmt.Sprintf("%.1f mb", float64(byte_count)/1_000_000)
+func formatByteCount(byteCount int) string {
+	if byteCount <= 1_000 {
+		return fmt.Sprintf("%d b", byteCount)
+	} else if byteCount <= 1_000_000 {
+		return fmt.Sprintf("%.1f kb", float64(byteCount)/1_000)
+	} else if byteCount <= 1_000_000_000 {
+		return fmt.Sprintf("%.1f mb", float64(byteCount)/1_000_000)
 	} else {
-		return fmt.Sprintf("%.1f gb", float64(byte_count)/1_000_000_000)
+		return fmt.Sprintf("%.1f gb", float64(byteCount)/1_000_000_000)
 	}
 }
 
 // parentDir returns the path to the parent of the given entry.
-func parentDir(dir_path string) string {
-	path_parts := splitPath(dir_path)
-	parent_path_parts := path_parts[:len(path_parts)-1]
-	parent_path := filepath.Join(parent_path_parts...)
+func parentDir(dirPath string) string {
+	pathParts := splitPath(dirPath)
+	parentPathParts := pathParts[:len(pathParts)-1]
+	parentPath := filepath.Join(parentPathParts...)
 
 	// the \ after the letter drive is not added by Join
-	if runtime.GOOS == "windows" && parent_path[1] == ':' {
-		parent_path = strings.Replace(parent_path, ":", ":\\", 1)
+	if runtime.GOOS == "windows" && parentPath[1] == ':' {
+		parentPath = strings.Replace(parentPath, ":", ":\\", 1)
 	}
-	return parent_path
+	return parentPath
 }
 
 // splitPath splits a filepath by slashes.
@@ -65,11 +65,11 @@ func splitPath(path string) []string {
 }
 
 // quickSort is a quick sort implementation for sorting map keys by their integer values in descending order.
-func quickSort(source_map map[string]int, keys []string, low, high int) {
+func quickSort(sourceMap map[string]int, keys []string, low, high int) {
 	if low < high {
 		// median of three to pick pivot value
 		mid := low + (high-low)/2
-		a, b, c := source_map[keys[high]], source_map[keys[mid]], source_map[keys[low]]
+		a, b, c := sourceMap[keys[high]], sourceMap[keys[mid]], sourceMap[keys[low]]
 		var p int
 		if (a > b) != (a > c) {
 			p = high
@@ -78,76 +78,75 @@ func quickSort(source_map map[string]int, keys []string, low, high int) {
 		} else {
 			p = low
 		}
-		pivot := source_map[keys[p]]
+		pivot := sourceMap[keys[p]]
 		keys[p], keys[low] = keys[low], keys[p]
 		i := high
 
 		for j := high; j > low; j-- {
-			if source_map[keys[j]] < pivot {
+			if sourceMap[keys[j]] < pivot {
 				keys[i], keys[j] = keys[j], keys[i]
 				i--
 			}
 		}
 		keys[i], keys[low] = keys[low], keys[i]
 
-		quickSort(source_map, keys, low, i-1)
-		quickSort(source_map, keys, i+1, high)
+		quickSort(sourceMap, keys, low, i-1)
+		quickSort(sourceMap, keys, i+1, high)
 	}
 }
 
-// relPath converts a full path into a path relative to main_dir.
-func relPath(full_path string, parents int) string {
-	path_parts := splitPath(full_path)
-	rel_path_parts := path_parts[len(path_parts)-parents-1:]
-	rel_path := filepath.Join(rel_path_parts...)
-	return rel_path
+// relPath converts a full path into a path relative to mainDir.
+func relPath(fullPath string, parents int) string {
+	pathParts := splitPath(fullPath)
+	relPathParts := pathParts[len(pathParts)-parents-1:]
+	return filepath.Join(relPathParts...)
 }
 
 // removeSliceDuplicates removes duplicate values from a slice.
-func removeSliceDuplicates[T comparable](input_slice []T) []T {
+func removeSliceDuplicates[T comparable](inputSlice []T) []T {
 	values := make(map[T]bool)
-	unique_slice := []T{}
-	for _, item := range input_slice {
+	uniqueSlice := []T{}
+	for _, item := range inputSlice {
 		if _, exists := values[item]; !exists {
 			values[item] = true
-			unique_slice = append(unique_slice, item)
+			uniqueSlice = append(uniqueSlice, item)
 		}
 	}
-	return unique_slice
+	return uniqueSlice
 }
 
 // removeOverlappingDirs removes from a slice paths that are contained within other paths in the slice.
-func removeOverlappingDirs(dir_paths []string) []string {
-	dir_paths = removeSliceDuplicates(dir_paths)
+func removeOverlappingDirs(dirPaths []string) []string {
+	dirPaths = removeSliceDuplicates(dirPaths)
 	var result []string
-	for i, i_path := range dir_paths {
-		keep_dir := true
-		for j, j_path := range dir_paths {
+	for i, iPath := range dirPaths {
+		keepDir := true
+		for j, jPath := range dirPaths {
 			if i == j {
 				continue
 			}
 			// if one path is contained within another
-			if strings.Contains(i_path, j_path) {
+			if strings.Contains(iPath, jPath) {
 				// drop the path unless -md dictates that it won't be searched otherwise
-				i_split, j_split := splitPath(i_path), splitPath(j_path)
-				distance := len(i_split) - len(j_split)
-				if distance <= *max_search_depth {
-					keep_dir = false
+				iSplit, jSplit := splitPath(iPath), splitPath(jPath)
+				distance := len(iSplit) - len(jSplit)
+				if distance <= *maxSearchDepth {
+					keepDir = false
 					break
 				}
 			}
 		}
-		if keep_dir {
-			result = append(result, i_path)
+		if keepDir {
+			result = append(result, iPath)
 		}
 	}
 	return result
 }
 
 // sortFiles sorts a slice of files by loc or size.
-func sortFiles(slice []*file, sort_by string) []*file {
+func sortFiles(slice []*file, sortBy string) []*file {
 	sort.Slice(slice, func(i, j int) bool {
-		if sort_by == "size" {
+		if sortBy == "size" {
 			return slice[i].bytes > slice[j].bytes
 		} else {
 			return slice[i].loc > slice[j].loc
@@ -157,13 +156,13 @@ func sortFiles(slice []*file, sort_by string) []*file {
 }
 
 // sortKeys makes a slice of keys from a map[string]int, sorted by value.
-func sortKeys(source_map map[string]int) []string {
-	// keys is a copy of source_map's keys.
+func sortKeys(sourceMap map[string]int) []string {
+	// keys is a copy of sourceMap's keys.
 	var keys []string
-	for key := range source_map {
+	for key := range sourceMap {
 		keys = append(keys, key)
 	}
-	quickSort(source_map, keys, 0, len(keys)-1)
+	quickSort(sourceMap, keys, 0, len(keys)-1)
 	return keys
 }
 
@@ -193,7 +192,7 @@ func toAbsPath(path string) string {
 
 // warn prints the message for a non-critical error if -q is not used.
 func warn(message string, err error) {
-	if !*suppress_warnings {
+	if !*suppressWarningsFlag {
 		fmt.Println(message, err)
 	}
 }

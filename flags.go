@@ -9,69 +9,69 @@ import (
 )
 
 var (
-	// print_dir_flag is the value of the -d flag.
-	print_dir_flag = flag.Bool("d", false, "")
+	// printDirFlag is the value of the -d flag.
+	printDirFlag = flag.Bool("d", false, "")
 
-	// include_dot_dir_flag is the value of the --dot flag.
-	include_dot_dir_flag = flag.Bool("dot", false, "")
+	// includeDotDirFlag is the value of the --dot flag.
+	includeDotDirFlag = flag.Bool("dot", false, "")
 
-	// exclude_dirs_flag is the value of the -ed flag.
-	exclude_dirs_flag = flag.String("ed", "", "")
-	// exclude_dirs contains the parsed inputs for the -ed flag.
-	exclude_dirs []string
+	// excludeDirsFlag is the value of the -ed flag.
+	excludeDirsFlag = flag.String("ed", "", "")
+	// excludeDirs contains the parsed inputs for the -ed flag.
+	excludeDirs []string
 
-	// exclude_files_flag is the value of the -ef flag.
-	exclude_files_flag = flag.String("ef", "", "")
-	// exclude_files contains the parsed inputs for the -ef flag.
-	exclude_files []string
+	// excludeFilesFlag is the value of the -ef flag.
+	excludeFilesFlag = flag.String("ef", "", "")
+	// excludeFiles contains the parsed inputs for the -ef flag.
+	excludeFiles []string
 
-	// exclude_langs_flag is the value of the -el flag.
-	exclude_langs_flag = flag.String("el", "", "")
-	// exclude_langs contains the parsed inputs for the -el flag.
-	exclude_langs []string
+	// excludeLangsFlag is the value of the -el flag.
+	excludeLangsFlag = flag.String("el", "", "")
+	// excludeLangs contains the parsed inputs for the -el flag.
+	excludeLangs []string
 
-	// print_file_flag is the value of the -f flag.
-	print_file_flag = flag.Bool("f", false, "")
+	// printFileFlag is the value of the -f flag.
+	printFileFlag = flag.Bool("f", false, "")
 
-	// include_files_flag is the value of the -if flag.
-	include_files_flag = flag.String("if", "", "")
-	// include_files contains the parsed inputs for the -if flag.
-	include_files []string
+	// includeFilesFlag is the value of the -if flag.
+	includeFilesFlag = flag.String("if", "", "")
+	// includeFiles contains the parsed inputs for the -if flag.
+	includeFiles []string
 
-	// include_langs_flag is the value of the -il flag.
-	include_langs_flag = flag.String("il", "", "")
-	// include_langs contains the parsed inputs for the -il flag.
-	include_langs []string
+	// includeLangsFlag is the value of the -il flag.
+	includeLangsFlag = flag.String("il", "", "")
+	// includeLangs contains the parsed inputs for the -il flag.
+	includeLangs []string
 
-	// max_print_files is the value of the -mf flag.
-	max_print_files = flag.Int("mf", 100_000, "")
+	// maxFilesPrint is the value of the -mf flag.
+	maxFilesPrint = flag.Int("mf", 100_000, "")
 
-	// max_print_totals is  the value of the -ml flag.
-	max_print_totals = flag.Int("ml", 1_000, "")
+	// maxTotalsPrint is the value of the -ml flag.
+	maxTotalsPrint = flag.Int("ml", 1_000, "")
 
-	// percentages_flag is the value of the -p flag.
-	percentages_flag = flag.Bool("p", false, "")
+	// percentagesFlag is the value of the -p flag.
+	percentagesFlag = flag.Bool("p", false, "")
 
-	// max_print_depth is the value of the -pd flag.
-	max_print_depth = flag.Int("pd", 1_000, "")
+	// maxPrintDepth is the value of the -pd flag.
+	maxPrintDepth = flag.Int("pd", 1_000, "")
 
-	// sort_column is the value of the -s flag.
-	sort_column = flag.String("s", "loc", "")
+	// suppressWarningsFlag is the value of the -q flag.
+	suppressWarningsFlag = flag.Bool("q", false, "")
 
-	// max_search_depth is the value of the -sd flag.
-	max_search_depth = flag.Int("sd", 1_000, "")
+	// sortColumn is the value of the -s flag.
+	sortColumn = flag.String("s", "loc", "")
 
-	// suppress_warnings is the value of the -q flag.
-	suppress_warnings = flag.Bool("q", false, "")
+	// maxSearchDepth is the value of the -sd flag.
+	maxSearchDepth = flag.Int("sd", 1_000, "")
 
-	// license_flag is the value of the --license flag.
-	license_flag = flag.Bool("license", false, "")
+	// licenseFlag is the value of the --license flag.
+	licenseFlag = flag.Bool("license", false, "")
 
-	// version_flag is the value of the --version flag.
-	version_flag = flag.Bool("version", false, "")
+	// versionFlag is the value of the --version flag.
+	versionFlag = flag.Bool("version", false, "")
 
-	// license_message is the line-by-line output of the --license flag.
-	license_message = []string{
+	// licenseMessage is the line-by-line output of the --license flag.
+	licenseMessage = []string{
 		"Source code can be found at github.com/john-bieren/loc",
 		"loc is licensed under the MIT license",
 		"Copyright (c) 2025 John Bieren",
@@ -101,8 +101,8 @@ var (
 		"SOFTWARE.",
 	}
 
-	// usage_message is the line-by-line output of usage().
-	usage_message = []string{
+	// usageMessage is the line-by-line output of usage().
+	usageMessage = []string{
 		fmt.Sprintf("loc %s", version),
 		"Count lines of code in directories and their subdirectories by language",
 		"         Note: multi-line comments and non-comment docstrings are counted as lines of code",
@@ -136,36 +136,36 @@ var (
 
 // processFlags runs exit flags, parses string flags, and checks for invalid inputs.
 func processFlags() {
-	if *version_flag {
+	if *versionFlag {
 		fmt.Println("loc", version)
 		os.Exit(0)
 	}
 
-	if *license_flag {
-		for _, line := range license_message {
+	if *licenseFlag {
+		for _, line := range licenseMessage {
 			fmt.Println(line)
 		}
 		os.Exit(0)
 	}
 
-	if *exclude_dirs_flag != "" {
-		exclude_dirs = standardizeSeparators(strings.Split(*exclude_dirs_flag, ","))
+	if *excludeDirsFlag != "" {
+		excludeDirs = standardizeSeparators(strings.Split(*excludeDirsFlag, ","))
 	}
-	if *exclude_files_flag != "" {
-		exclude_files = standardizeSeparators(strings.Split(*exclude_files_flag, ","))
+	if *excludeFilesFlag != "" {
+		excludeFiles = standardizeSeparators(strings.Split(*excludeFilesFlag, ","))
 	}
-	if *exclude_langs_flag != "" {
-		exclude_langs = strings.Split(*exclude_langs_flag, ",")
+	if *excludeLangsFlag != "" {
+		excludeLangs = strings.Split(*excludeLangsFlag, ",")
 	}
-	if *include_files_flag != "" {
-		include_files = standardizeSeparators(strings.Split(*include_files_flag, ","))
+	if *includeFilesFlag != "" {
+		includeFiles = standardizeSeparators(strings.Split(*includeFilesFlag, ","))
 	}
-	if *include_langs_flag != "" {
-		include_langs = strings.Split(*include_langs_flag, ",")
+	if *includeLangsFlag != "" {
+		includeLangs = strings.Split(*includeLangsFlag, ",")
 	}
 
-	if !slices.Contains([]string{"loc", "size", "files"}, *sort_column) {
-		fmt.Printf("-s input \"%s\" is invalid, defaulting to \"loc\"\n", *sort_column)
+	if !slices.Contains([]string{"loc", "size", "files"}, *sortColumn) {
+		fmt.Printf("-s input \"%s\" is invalid, defaulting to \"loc\"\n", *sortColumn)
 	}
 }
 
@@ -197,7 +197,7 @@ func standardizeSeparators(input []string) []string {
 
 // usage is a custom usage output for --help and relevant error messages.
 func usage() {
-	for _, line := range usage_message {
+	for _, line := range usageMessage {
 		fmt.Println(line)
 	}
 	os.Exit(0)
