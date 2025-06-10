@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"slices"
 	"sort"
 	"strings"
 )
@@ -101,17 +102,9 @@ func (d *directory) searchDir() {
 
 			// check for matches with included/excluded languages
 			if len(includeLangs) > 0 {
-				for _, incl := range includeLangs {
-					if fileType == incl {
-						skipFile = true
-					}
-				}
+				skipFile = !slices.Contains(includeLangs, fileType)
 			} else {
-				for _, excl := range excludeLangs {
-					if fileType == excl {
-						skipFile = false
-					}
-				}
+				skipFile = slices.Contains(excludeLangs, fileType)
 			}
 			if skipFile {
 				continue
