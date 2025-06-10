@@ -68,6 +68,7 @@ func (d *directory) searchDir() {
 			}
 		} else {
 			var skipFile bool
+			// check for matches with included/excluded files
 			if len(includeFiles) > 0 {
 				skipFile = true
 				for _, incl := range includeFiles {
@@ -88,11 +89,37 @@ func (d *directory) searchDir() {
 				continue
 			}
 
-			size := info.Size()
-			file := newFile(fullPath, d.parents, size)
-			if file.isCode {
-				d.files = append(d.files, file)
+			// determine file's language by file name
+			fileType, isCode := filenames[entryName]
+			if !isCode {
+				// determine file's language by file extension
+				fileType, isCode = extensions[filepath.Ext(entryName)]
 			}
+			if !isCode {
+				continue
+			}
+
+			// check for matches with included/excluded languages
+			if len(includeLangs) > 0 {
+				for _, incl := range includeLangs {
+					if fileType == incl {
+						skipFile = true
+					}
+				}
+			} else {
+				for _, excl := range excludeLangs {
+					if fileType == excl {
+						skipFile = false
+					}
+				}
+			}
+			if skipFile {
+				continue
+			}
+
+			size := info.Size()
+			file := newFile(fullPath, fileType, d.parents, size)
+			d.files = append(d.files, file)
 		}
 	}
 }

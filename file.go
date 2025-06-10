@@ -12,9 +12,8 @@ type file struct {
 	relPath  string
 	name     string
 	fileType string
-	isCode   bool
-	loc      int
 	bytes    int
+	loc      int
 }
 
 // countFileLoc counts the lines of code in a file.
@@ -63,35 +62,14 @@ func (f *file) countFileLoc() {
 }
 
 // newFile is the constructor for instances of the file struct.
-func newFile(path string, dirParents int, size int64) *file {
+func newFile(path, lang string, dirParents int, size int64) *file {
 	self := &file{
 		fullPath: path,
 		relPath:  relPath(path, dirParents),
 		name:     filepath.Base(path),
+		fileType: lang,
 		bytes:    int(size),
 	}
-	self.fileType, self.isCode = filenames[self.name]
-	if !self.isCode {
-		self.fileType, self.isCode = extensions[filepath.Ext(path)]
-	}
-
-	if len(includeLangs) > 0 {
-		self.isCode = false
-		for _, incl := range includeLangs {
-			if self.fileType == incl {
-				self.isCode = true
-			}
-		}
-	} else {
-		for _, excl := range excludeLangs {
-			if self.fileType == excl {
-				self.isCode = false
-			}
-		}
-	}
-
-	if self.isCode {
-		self.countFileLoc()
-	}
+	self.countFileLoc()
 	return self
 }
