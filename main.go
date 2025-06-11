@@ -10,7 +10,7 @@ import (
 )
 
 // version is the current version of loc.
-const version = "v3.0.2-beta"
+const version = "v3.1.0-alpha"
 
 // cwd is the current working directory.
 var cwd string

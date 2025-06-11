@@ -35,6 +35,7 @@ Options:
         -el <str>  Languages to exclude (e.g. "HTML,Plain Text,JSON")
         -f         Print loc by file
             -mf <int>  Maximum number of files to print per directory (default: 100,000)
+        -fr <int>  Number of file-reading goroutines (default: system-specific)
         -if <str>  Files to include (name or path, e.g. "main.py,src/main.c")
         -il <str>  Languages to include, all others excluded (e.g. "Python,JavaScript,C")
         -ml <int>  Maximum number of languages to print per directory (default: 1,000)

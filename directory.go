@@ -7,6 +7,7 @@ import (
 	"slices"
 	"sort"
 	"strings"
+	"sync"
 )
 
 // treeFileHeadersPrinted tracks whether file column headers have been printed by printTreeLoc.
@@ -32,6 +33,10 @@ func (d *directory) searchDir() {
 		warn("Error reading directory:", err)
 		return
 	}
+
+	var wg sync.WaitGroup
+	var mu sync.Mutex
+	semaphore := make(chan struct{}, *maxFileReaders)
 
 	for _, entry := range entries {
 		entryName := entry.Name()
@@ -68,53 +73,64 @@ func (d *directory) searchDir() {
 				d.subdirectories = append(d.subdirectories, subdir)
 			}
 		} else {
-			var skipFile bool
-			// check for matches with included/excluded files
-			if len(includeFiles) > 0 {
-				skipFile = true
-				for _, incl := range includeFiles {
-					if strings.HasSuffix(fullPath, incl) {
-						skipFile = false
-						break
+			// process files concurrently
+			wg.Add(1)
+			go func() {
+				defer wg.Done()
+				semaphore <- struct{}{}
+				defer func() { <-semaphore }()
+
+				var skipFile bool
+				// check for matches with included/excluded files
+				if len(includeFiles) > 0 {
+					skipFile = true
+					for _, incl := range includeFiles {
+						if strings.HasSuffix(fullPath, incl) {
+							skipFile = false
+							break
+						}
+					}
+				} else {
+					for _, excl := range excludeFiles {
+						if strings.HasSuffix(fullPath, excl) {
+							skipFile = true
+							break
+						}
 					}
 				}
-			} else {
-				for _, excl := range excludeFiles {
-					if strings.HasSuffix(fullPath, excl) {
-						skipFile = true
-						break
-					}
+				if skipFile {
+					return
 				}
-			}
-			if skipFile {
-				continue
-			}
 
-			// determine file's language by file name
-			fileType, isCode := filenames[entryName]
-			if !isCode {
-				// determine file's language by file extension
-				fileType, isCode = extensions[filepath.Ext(entryName)]
-			}
-			if !isCode {
-				continue
-			}
+				// determine file's language by file name
+				fileType, isCode := filenames[entryName]
+				if !isCode {
+					// determine file's language by file extension
+					fileType, isCode = extensions[filepath.Ext(entryName)]
+				}
+				if !isCode {
+					return
+				}
 
-			// check for matches with included/excluded languages
-			if len(includeLangs) > 0 {
-				skipFile = !slices.Contains(includeLangs, fileType)
-			} else {
-				skipFile = slices.Contains(excludeLangs, fileType)
-			}
-			if skipFile {
-				continue
-			}
+				// check for matches with included/excluded languages
+				if len(includeLangs) > 0 {
+					skipFile = !slices.Contains(includeLangs, fileType)
+				} else {
+					skipFile = slices.Contains(excludeLangs, fileType)
+				}
+				if skipFile {
+					return
+				}
 
-			size := info.Size()
-			file := newFile(fullPath, fileType, d.parents, size)
-			d.files = append(d.files, file)
+				size := info.Size()
+				file := newFile(fullPath, fileType, d.parents, size)
+				mu.Lock()
+				d.files = append(d.files, file)
+				mu.Unlock()
+			}()
 		}
 	}
+	wg.Wait()
 }
 
 // countDirLoc counts the lines of code for each language in all indexed files.

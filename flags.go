@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"runtime"
 	"slices"
 	"strings"
 )
@@ -32,6 +33,9 @@ var (
 
 	// printFileFlag is the value of the -f flag.
 	printFileFlag = flag.Bool("f", false, "")
+
+	// maxFileReaders is the value of the -fr flag.
+	maxFileReaders = flag.Int("fr", runtime.NumCPU(), "")
 
 	// includeFilesFlag is the value of the -if flag.
 	includeFilesFlag = flag.String("if", "", "")
@@ -121,6 +125,7 @@ var (
 		"        -el <str>  Languages to exclude (e.g. \"HTML,Plain Text,JSON\")",
 		"        -f         Print loc by file",
 		"            -mf <int>  Maximum number of files to print per directory (default: 100,000)",
+		fmt.Sprintf("        -fr <int>  Number of file-reading goroutines (default: %d)", *maxFileReaders),
 		"        -if <str>  Files to include (name or path, e.g. \"main.py,src/main.c\")",
 		"        -il <str>  Languages to include, all others excluded (e.g. \"Python,JavaScript,C\")",
 		"        -ml <int>  Maximum number of languages to print per directory (default: 1,000)",
@@ -166,6 +171,11 @@ func processFlags() {
 
 	if !slices.Contains([]string{"loc", "size", "files"}, *sortColumn) {
 		fmt.Printf("-s input \"%s\" is invalid, defaulting to \"loc\"\n", *sortColumn)
+	}
+
+	if *maxFileReaders < 1 {
+		fmt.Printf("-fr input %d is invalid, defaulting to 1\n", *maxFileReaders)
+		*maxFileReaders = 1
 	}
 }
 
