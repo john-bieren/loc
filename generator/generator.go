@@ -80,11 +80,11 @@ func generateText() []string {
 	// fileLines contains the lines of languages.go.
 	fileLines := []string{"package main\n", doNotEditText}
 
-	// langsUsed the languages which appear as values in the extensions and filenames maps.
+	// langsUsed contains the languages which appear as values in the extensions and fileNames maps.
 	langsUsed := make(map[string]struct{})
-	extensionMappings, filenameMappings, singleCharMappings := gatherLanguageInfo()
+	extensionMappings, fileNameMappings, singleCharMappings := gatherLanguageInfo()
 	fileLines, langsUsed = generateExtensionsMap(fileLines, langsUsed, extensionMappings)
-	fileLines, langsUsed = generateFilenamesMap(fileLines, langsUsed, filenameMappings)
+	fileLines, langsUsed = generateFileNamesMap(fileLines, langsUsed, fileNameMappings)
 	fileLines = generateSingleCharsMap(fileLines, langsUsed, singleCharMappings)
 	return fileLines
 }
@@ -92,7 +92,7 @@ func generateText() []string {
 // gatherLanguageInfo loads relevant information from languages.json into maps.
 func gatherLanguageInfo() (map[string]string, map[string]string, map[string][]any) {
 	extensionMappings := make(map[string]string)
-	filenameMappings := make(map[string]string)
+	fileNameMappings := make(map[string]string)
 	singleCharMappings := make(map[string][]any)
 
 	for language, info := range languagesInfo {
@@ -120,16 +120,16 @@ func gatherLanguageInfo() (map[string]string, map[string]string, map[string][]an
 			}
 		}
 
-		// process filenames
-		filenames, ok := info["filenames"].([]any)
-		// no warning because filenames are optional in languages.json
+		// process file names
+		fileNames, ok := info["filenames"].([]any)
+		// no warning because file names are optional in languages.json
 		if ok {
-			for _, file := range filenames {
+			for _, file := range fileNames {
 				file, ok := file.(string)
 				if !ok {
-					fmt.Println("Error reading filenames for", language)
+					fmt.Println("Error reading file names for", language)
 				} else {
-					filenameMappings[file] = language
+					fileNameMappings[file] = language
 				}
 			}
 		}
@@ -143,7 +143,7 @@ func gatherLanguageInfo() (map[string]string, map[string]string, map[string][]an
 		}
 	}
 
-	return extensionMappings, filenameMappings, singleCharMappings
+	return extensionMappings, fileNameMappings, singleCharMappings
 }
 
 // generateExtensionsMap generates the definition for the extensions map.
@@ -181,33 +181,33 @@ func generateExtensionsMap(
 	return fileLines, langsUsed
 }
 
-// generateFilenamesMap generates the definition for the filenames map.
-func generateFilenamesMap(
+// generateFileNamesMap generates the definition for the fileNames map.
+func generateFileNamesMap(
 	fileLines []string,
 	langsUsed map[string]struct{},
-	filenameMappings map[string]string,
+	fileNameMappings map[string]string,
 ) ([]string, map[string]struct{}) {
-	// create union of filenameMappings and customMappings, record languages referenced
-	customFilenames, ok := customMappings["filenames"]
+	// create union of fileNameMappings and customMappings, record languages referenced
+	customFileNames, ok := customMappings["fileNames"]
 	if ok {
-		for filename, language := range customFilenames {
+		for fileName, language := range customFileNames {
 			language, ok := language.(string)
 			if !ok {
-				fmt.Println("Error reading custom filenames for", language)
+				fmt.Println("Error reading custom file names for", language)
 			} else {
-				filenameMappings[filename] = language
+				fileNameMappings[fileName] = language
 			}
 		}
 	}
 
 	// record file lines
-	fileLines = append(fileLines, "\n// filenames is the map of specific file names recognized as a particular language.")
-	fileLines = append(fileLines, "\nvar filenames = map[string]string{")
-	for _, filename := range sortKeys(filenameMappings) {
-		language := filenameMappings[filename]
+	fileLines = append(fileLines, "\n// fileNames is the map of specific file names recognized as a particular language.")
+	fileLines = append(fileLines, "\nvar fileNames = map[string]string{")
+	for _, fileName := range sortKeys(fileNameMappings) {
+		language := fileNameMappings[fileName]
 		// skip custom mappings to blank strings
 		if language != "" {
-			newLine := fmt.Sprintf("\n\t\"%s\": \"%s\",", filename, language)
+			newLine := fmt.Sprintf("\n\t\"%s\": \"%s\",", fileName, language)
 			fileLines = append(fileLines, newLine)
 			langsUsed[language] = struct{}{}
 		}

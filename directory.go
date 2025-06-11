@@ -103,7 +103,7 @@ func (d *directory) searchDir() {
 				}
 
 				// determine file's language by file name
-				fileType, isCode := filenames[entryName]
+				fileType, isCode := fileNames[entryName]
 				if !isCode {
 					// determine file's language by file extension
 					fileType, isCode = extensions[filepath.Ext(entryName)]
