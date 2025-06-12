@@ -80,6 +80,16 @@ func (d *directory) searchDir() {
 				semaphore <- struct{}{}
 				defer func() { <-semaphore }()
 
+				// determine file's language by file name
+				fileType, isCode := fileNames[entryName]
+				if !isCode {
+					// determine file's language by file extension
+					fileType, isCode = extensions[filepath.Ext(entryName)]
+				}
+				if !isCode {
+					return
+				}
+
 				var skipFile bool
 				// check for matches with included/excluded files
 				if len(includeFiles) > 0 {
@@ -99,16 +109,6 @@ func (d *directory) searchDir() {
 					}
 				}
 				if skipFile {
-					return
-				}
-
-				// determine file's language by file name
-				fileType, isCode := fileNames[entryName]
-				if !isCode {
-					// determine file's language by file extension
-					fileType, isCode = extensions[filepath.Ext(entryName)]
-				}
-				if !isCode {
 					return
 				}
 
