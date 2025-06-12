@@ -38,7 +38,7 @@ func loadFiles() {
 	// load languages.json
 	resp, err := http.Get(languagesUrl)
 	if err != nil {
-		panic(fmt.Sprintln("Error accessing languages.json:", err))
+		panic(fmt.Sprintln("Error getting languages.json:", err))
 	}
 	defer resp.Body.Close()
 

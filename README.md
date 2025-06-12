@@ -40,7 +40,7 @@ Options:
         -il <str>  Languages to include, all others excluded (e.g. "Python,JavaScript,C")
         -ml <int>  Maximum number of languages to print per directory (default: 1,000)
         -p         Print loc as a percentage of overall total
-        -s  <str>  Choose how to sort results ["loc", "size", "files"] (default: "loc")
+        -s  <str>  How to sort results ["loc", "size", "files"] (default: "loc")
         -sd <int>  Maximum depth of subdirectories to search (default: 1,000)
         -q         Suppress non-critical error messages
         --help     Print this message and exit
@@ -77,8 +77,8 @@ On Windows, loc may be slowed down significantly by Windows Defender's real-time
 ## Limitations
 
 I'm new to Go, and this is just a personal project. As such, loc has some notable limitations:
-* No concurrency, at least not yet.
 * Multi-line comments and non-comment docstrings are counted as lines of code.
+* Traversal of directory trees is not concurrent, though file processing is.
 * Files are assigned a language based only on their extension, resulting in a few conflicts where extensions belong to multiple languages. These conflicts are resolved by mapping the extensions to "lang_1 or lang_2", unless applicable custom mappings are used.
 
 There are similar, more advanced programs, like [scc](https://github.com/boyter/scc), with more features and better methods for counting lines of code.

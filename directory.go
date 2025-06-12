@@ -10,9 +10,11 @@ import (
 	"sync"
 )
 
-// treeFileHeadersPrinted tracks whether file column headers have been printed by printTreeLoc.
-// These must be printed once but will not print on the first directory if it has no files.
-var treeFileHeadersPrinted bool
+/*
+fileHeadersPrinted tracks whether file column headers have been printed by printTreeLoc.
+These must be printed once but will not print until the first directory which contains files.
+*/
+var fileHeadersPrinted bool
 
 type directory struct {
 	fullPath       string
@@ -237,9 +239,9 @@ func (d *directory) printTreeLoc() {
 
 	if *printFileFlag {
 		indent := strings.Repeat("    ", d.parents+1)
-		if !treeFileHeadersPrinted && len(d.files) > 0 {
+		if !fileHeadersPrinted && len(d.files) > 0 {
 			fmt.Printf("\033[1m%sloc | size - file\033[0m\n", indent)
-			treeFileHeadersPrinted = true
+			fileHeadersPrinted = true
 		}
 
 		for i, file := range sortFiles(d.files, *sortColumn) {

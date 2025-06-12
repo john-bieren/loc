@@ -130,7 +130,7 @@ var (
 		"        -il <str>  Languages to include, all others excluded (e.g. \"Python,JavaScript,C\")",
 		"        -ml <int>  Maximum number of languages to print per directory (default: 1,000)",
 		"        -p         Print loc as a percentage of overall total",
-		"        -s  <str>  Choose how to sort results [\"loc\", \"size\", \"files\"] (default: \"loc\")",
+		"        -s  <str>  How to sort results [\"loc\", \"size\", \"files\"] (default: \"loc\")",
 		"        -sd <int>  Maximum depth of subdirectories to search (default: 1,000)",
 		"        -q         Suppress non-critical error messages",
 		"        --help     Print this message and exit",
@@ -170,6 +170,7 @@ func processFlags() {
 	}
 
 	if !slices.Contains([]string{"loc", "size", "files"}, *sortColumn) {
+		// "loc" is already the default option when sorting results
 		fmt.Printf("-s input \"%s\" is invalid, defaulting to \"loc\"\n", *sortColumn)
 	}
 
