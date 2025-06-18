@@ -73,70 +73,68 @@ var (
 
 	// versionFlag is the value of the --version flag.
 	versionFlag = flag.Bool("version", false, "")
+)
 
-	// licenseMessage is the line-by-line output of the --license flag.
-	licenseMessage = []string{
-		"Source code can be found at github.com/john-bieren/loc",
-		"loc is licensed under the MIT license",
-		"Copyright (c) 2025 John Bieren",
-		"",
-		"Languages, extensions, and comment characters sourced from github.com/boyter/scc",
-		"scc is licensed under the MIT license",
-		"Copyright (c) 2021 Ben Boyter",
-		"",
-		"Full text of the MIT license:",
-		"",
-		"Permission is hereby granted, free of charge, to any person obtaining a copy",
-		"of this software and associated documentation files (the \"Software\"), to deal",
-		"in the Software without restriction, including without limitation the rights",
-		"to use, copy, modify, merge, publish, distribute, sublicense, and/or sell",
-		"copies of the Software, and to permit persons to whom the Software is",
-		"furnished to do so, subject to the following conditions:",
-		"",
-		"The above copyright notice and this permission notice shall be included in all",
-		"copies or substantial portions of the Software.",
-		"",
-		"THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR",
-		"IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,",
-		"FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE",
-		"AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER",
-		"LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,",
-		"OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE",
-		"SOFTWARE.",
-	}
+const (
+	// licenseMessage is the output of the --license flag.
+	licenseMessage = `Source code can be found at github.com/john-bieren/loc
+loc is licensed under the MIT license
+Copyright (c) 2025 John Bieren
 
-	// usageMessage is the line-by-line output of usage().
-	usageMessage = []string{
-		fmt.Sprintf("loc %s", version),
-		"Count lines of code in directories and their subdirectories by language",
-		"         Note: multi-line comments and non-comment docstrings are counted as lines of code",
-		"",
-		"Usage: loc [options] [dirs]",
-		"         Options must come before dirs",
-		"         Option flags cannot be combined (e.g. use -d -f instead of -df)",
-		"         Dirs are the names/paths of directories to search (cwd by default)",
-		"",
-		"Options:",
-		"        -d         Print loc by directory",
-		"            -pd <int>  Maximum depth of subdirectories to print (default: 1,000)",
-		"        --dot      Include dot directories (excluded by default)",
-		"        -ed <str>  Directories to exclude (name or path, e.g. \"lib,src/utils\")",
-		"        -ef <str>  Files to exclude (name or path, e.g. \"index.js,src/main.go\")",
-		"        -el <str>  Languages to exclude (e.g. \"HTML,Plain Text,JSON\")",
-		"        -f         Print loc by file",
-		"            -mf <int>  Maximum number of files to print per directory (default: 100,000)",
-		fmt.Sprintf("        -fr <int>  Number of file-reading goroutines (default: %d)", *maxFileReaders),
-		"        -if <str>  Files to include (name or path, e.g. \"main.py,src/main.c\")",
-		"        -il <str>  Languages to include, all others excluded (e.g. \"Python,JavaScript,C\")",
-		"        -ml <int>  Maximum number of languages to print per directory (default: 1,000)",
-		"        -p         Print loc as a percentage of overall total",
-		"        -q         Suppress non-critical error messages",
-		"        -s  <str>  How to sort results [\"loc\", \"size\", \"files\"] (default: \"loc\")",
-		"        -sd <int>  Maximum depth of subdirectories to search (default: 1,000)",
-		"        --help     Print this message and exit",
-		"        --license  Print license information and exit",
-		"        --version  Print version and exit",
-	}
+Languages, extensions, and comment characters sourced from github.com/boyter/scc
+scc is licensed under the MIT license
+Copyright (c) 2021 Ben Boyter
+
+Full text of the MIT license:
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.`
+
+	// usageMessage is the output of usage().
+	usageMessage = `loc %s
+Count lines of code in directories and their subdirectories by language
+         Note: multi-line comments and non-comment docstrings are counted as lines of code
+
+Usage: loc [options] [dirs]
+         Options must come before dirs
+         Option flags cannot be combined (e.g. use -d -f instead of -df)
+         Dirs are the names/paths of directories to search (cwd by default)
+
+Options:
+        -d         Print loc by directory
+            -pd <int>  Maximum depth of subdirectories to print (default: 1,000)
+        --dot      Include dot directories (excluded by default)
+        -ed <str>  Directories to exclude (name or path, e.g. "lib,src/utils")
+        -ef <str>  Files to exclude (name or path, e.g. "index.js,src/main.go")
+        -el <str>  Languages to exclude (e.g. "HTML,Plain Text,JSON")
+        -f         Print loc by file
+            -mf <int>  Maximum number of files to print per directory (default: 100,000)
+        -fr <int>  Number of file-reading goroutines (default: %d)
+        -if <str>  Files to include (name or path, e.g. "main.py,src/main.c")
+        -il <str>  Languages to include, all others excluded (e.g. "Python,JavaScript,C")
+        -ml <int>  Maximum number of languages to print per directory (default: 1,000)
+        -p         Print loc as a percentage of overall total
+        -q         Suppress non-critical error messages
+        -s  <str>  How to sort results ["loc", "size", "files"] (default: "loc")
+        -sd <int>  Maximum depth of subdirectories to search (default: 1,000)
+        --help     Print this message and exit
+        --license  Print license information and exit
+        --version  Print version and exit`
 )
 
 // processFlags runs exit flags, parses string flags, and checks for invalid inputs.
@@ -147,9 +145,7 @@ func processFlags() {
 	}
 
 	if *licenseFlag {
-		for _, line := range licenseMessage {
-			fmt.Println(line)
-		}
+		fmt.Println(licenseMessage)
 		os.Exit(0)
 	}
 
@@ -208,8 +204,6 @@ func standardizeSeparators(input []string) []string {
 
 // usage is a custom usage output for --help and relevant error messages.
 func usage() {
-	for _, line := range usageMessage {
-		fmt.Println(line)
-	}
+	fmt.Printf(usageMessage, version, *maxFileReaders)
 	os.Exit(0)
 }
