@@ -51,17 +51,11 @@ func parentDir(dirPath string) string {
 	parentPathParts := pathParts[:len(pathParts)-1]
 	parentPath := filepath.Join(parentPathParts...)
 
-	// the \ after the letter drive is not added by Join
+	// the \ after the drive letter is not added by Join
 	if runtime.GOOS == "windows" && parentPath[1] == ':' {
 		parentPath = strings.Replace(parentPath, ":", ":\\", 1)
 	}
 	return parentPath
-}
-
-// splitPath splits a filepath by slashes.
-func splitPath(path string) []string {
-	path = strings.ReplaceAll(path, "\\", "/")
-	return strings.Split(path, "/")
 }
 
 // quickSort is a quick sort implementation for sorting map keys by their integer values in descending order.
@@ -93,13 +87,6 @@ func quickSort(sourceMap map[string]int, keys []string, low, high int) {
 		quickSort(sourceMap, keys, low, i-1)
 		quickSort(sourceMap, keys, i+1, high)
 	}
-}
-
-// relPath converts a full path into a path relative to mainDir.
-func relPath(fullPath string, parents int) string {
-	pathParts := splitPath(fullPath)
-	relPathParts := pathParts[len(pathParts)-parents-1:]
-	return filepath.Join(relPathParts...)
 }
 
 // removeSliceDuplicates removes duplicate values from a slice.
@@ -164,6 +151,12 @@ func sortKeys(sourceMap map[string]int) []string {
 	}
 	quickSort(sourceMap, keys, 0, len(keys)-1)
 	return keys
+}
+
+// splitPath splits a filepath by slashes.
+func splitPath(path string) []string {
+	path = strings.ReplaceAll(path, "\\", "/")
+	return strings.Split(path, "/")
 }
 
 // sumMapValues sums the integer values of a map.

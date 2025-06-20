@@ -55,9 +55,10 @@ func main() {
 
 		// create a fake directory to show totals across multiple directory args
 		mainDir = &directory{
-			locCounts:  make(map[string]int),
-			fileCounts: make(map[string]int),
-			byteCounts: make(map[string]int),
+			printSubdirs: 1 <= *maxPrintDepth,
+			locCounts:    make(map[string]int),
+			fileCounts:   make(map[string]int),
+			byteCounts:   make(map[string]int),
 		}
 
 		for _, path := range dirPaths {

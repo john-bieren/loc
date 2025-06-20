@@ -18,7 +18,6 @@ var fileHeadersPrinted bool
 
 type directory struct {
 	fullPath       string
-	name           string
 	parents        int
 	printSubdirs   bool
 	subdirectories []*directory
@@ -226,7 +225,7 @@ func (d *directory) printLocSummary() {
 
 	// print directory name, if applicable
 	if *printDirFlag && d.parents > 0 {
-		fmt.Printf("%s%s/\n", indent, d.name)
+		fmt.Printf("%s%s/\n", indent, filepath.Base(d.fullPath))
 		indent += " " // loc totals should have an extra space if directory names are printed
 	}
 
@@ -305,7 +304,6 @@ func (d *directory) appendAllFiles(input []*file) []*file {
 func newDirectory(path string, parents int) *directory {
 	self := &directory{
 		fullPath:     path,
-		name:         filepath.Base(path),
 		parents:      parents,
 		printSubdirs: parents+1 <= *maxPrintDepth,
 		locCounts:    make(map[string]int),

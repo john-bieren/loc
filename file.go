@@ -3,13 +3,11 @@ package main
 import (
 	"bufio"
 	"os"
-	"path/filepath"
 	"strings"
 )
 
 type file struct {
 	fullPath string
-	name     string
 	fileType string
 	bytes    int
 	loc      int
@@ -64,7 +62,6 @@ func (f *file) countFileLoc() {
 func newFile(path, lang string, size int64) *file {
 	self := &file{
 		fullPath: path,
-		name:     filepath.Base(path),
 		fileType: lang,
 		bytes:    int(size),
 	}
