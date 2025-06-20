@@ -174,6 +174,10 @@ func processFlags() {
 		fmt.Printf("-fr input %d is invalid, defaulting to 1\n", *maxFileReaders)
 		*maxFileReaders = 1
 	}
+
+	if !*printDirFlag {
+		*maxPrintDepth = 0
+	}
 }
 
 /*

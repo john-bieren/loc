@@ -10,7 +10,7 @@ import (
 )
 
 // version is the current version of loc.
-const version = "v3.1.1-beta"
+const version = "v3.2.0-beta"
 
 // cwd is the current working directory.
 var cwd string
@@ -55,10 +55,9 @@ func main() {
 
 		// create a fake directory to show totals across multiple directory args
 		mainDir = &directory{
-			searchSubdirs: true,
-			locCounts:     make(map[string]int),
-			fileCounts:    make(map[string]int),
-			byteCounts:    make(map[string]int),
+			locCounts:  make(map[string]int),
+			fileCounts: make(map[string]int),
+			byteCounts: make(map[string]int),
 		}
 
 		for _, path := range dirPaths {
@@ -69,22 +68,16 @@ func main() {
 		mainDir.countDirLoc()
 	}
 
+	if len(mainDir.locCounts) == 0 {
+		fmt.Println("No code files found")
+		return
+	}
+
 	if *percentagesFlag {
 		totalLoc = float64(sumMapValues(mainDir.locCounts))
 		totalBytes = float64(sumMapValues(mainDir.byteCounts))
 		totalFiles = float64(sumMapValues(mainDir.fileCounts))
 	}
 
-	if len(mainDir.locCounts) > 0 {
-		if *printDirFlag {
-			mainDir.printTreeLoc()
-		} else {
-			mainDir.printDirLoc()
-			if *printFileFlag {
-				mainDir.printFileLoc()
-			}
-		}
-	} else {
-		fmt.Println("No code files found")
-	}
+	mainDir.printTreeLoc()
 }
