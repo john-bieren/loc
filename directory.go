@@ -75,54 +75,54 @@ func (d *directory) searchDir() {
 				d.subdirectories = append(d.subdirectories, subdir)
 			}
 		} else {
+			// determine file's language by file name
+			fileType, isCode := fileNames[entryName]
+			if !isCode {
+				// determine file's language by file extension
+				fileType, isCode = extensions[filepath.Ext(entryName)]
+			}
+			if !isCode {
+				continue
+			}
+
+			var skipFile bool
+			// check for matches with included/excluded files
+			if len(includeFiles) > 0 {
+				skipFile = true
+				for _, incl := range includeFiles {
+					if strings.HasSuffix(fullPath, incl) {
+						skipFile = false
+						break
+					}
+				}
+			} else {
+				for _, excl := range excludeFiles {
+					if strings.HasSuffix(fullPath, excl) {
+						skipFile = true
+						break
+					}
+				}
+			}
+			if skipFile {
+				continue
+			}
+
+			// check for matches with included/excluded languages
+			if len(includeLangs) > 0 {
+				skipFile = !slices.Contains(includeLangs, fileType)
+			} else {
+				skipFile = slices.Contains(excludeLangs, fileType)
+			}
+			if skipFile {
+				continue
+			}
+
 			// process files concurrently
 			wg.Add(1)
 			go func() {
 				defer wg.Done()
 				semaphore <- struct{}{}
 				defer func() { <-semaphore }()
-
-				// determine file's language by file name
-				fileType, isCode := fileNames[entryName]
-				if !isCode {
-					// determine file's language by file extension
-					fileType, isCode = extensions[filepath.Ext(entryName)]
-				}
-				if !isCode {
-					return
-				}
-
-				var skipFile bool
-				// check for matches with included/excluded files
-				if len(includeFiles) > 0 {
-					skipFile = true
-					for _, incl := range includeFiles {
-						if strings.HasSuffix(fullPath, incl) {
-							skipFile = false
-							break
-						}
-					}
-				} else {
-					for _, excl := range excludeFiles {
-						if strings.HasSuffix(fullPath, excl) {
-							skipFile = true
-							break
-						}
-					}
-				}
-				if skipFile {
-					return
-				}
-
-				// check for matches with included/excluded languages
-				if len(includeLangs) > 0 {
-					skipFile = !slices.Contains(includeLangs, fileType)
-				} else {
-					skipFile = slices.Contains(excludeLangs, fileType)
-				}
-				if skipFile {
-					return
-				}
 
 				size := info.Size()
 				file := newFile(fullPath, fileType, size)
