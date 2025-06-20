@@ -177,13 +177,28 @@ func (d *directory) printTreeLoc() {
 			if i+1 > *maxFilesPrint {
 				break
 			}
+
+			var fileName string
+			if d.fullPath == "" { // if d is a fake mainDir (see main function)
+				// d.subdirectories is equivalent to dirPaths
+				for _, subdir := range d.subdirectories {
+					if strings.Contains(file.fullPath, subdir.fullPath) {
+						// return relative path as if mainDir is real
+						fileName = strings.Replace(file.fullPath, parentDir(subdir.fullPath), "", 1)
+						break
+					}
+				}
+			} else {
+				fileName = strings.Replace(file.fullPath, d.fullPath, "", 1)
+			}
+
 			if *percentagesFlag {
 				fmt.Printf(
 					"%s%.1f%% | %.1f%% - %s\n",
 					indent,
 					float64(file.loc)/totalLoc*100,
 					float64(file.bytes)/totalBytes*100,
-					strings.Replace(file.fullPath, d.fullPath, "", 1)[1:], // remove leading slash
+					fileName[1:], // remove leading slash
 				)
 			} else {
 				fmt.Printf(
@@ -191,7 +206,7 @@ func (d *directory) printTreeLoc() {
 					indent,
 					addCommas(file.loc),
 					formatByteCount(file.bytes),
-					strings.Replace(file.fullPath, d.fullPath, "", 1)[1:], // remove leading slash
+					fileName[1:], // remove leading slash
 				)
 			}
 		}
