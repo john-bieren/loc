@@ -13,7 +13,7 @@ import (
 )
 
 // languagesUrl is the link to the raw languages.json file in scc's github repository.
-var languagesUrl = "https://raw.githubusercontent.com/boyter/scc/refs/heads/master/languages.json"
+const languagesUrl = "https://raw.githubusercontent.com/boyter/scc/refs/heads/master/languages.json"
 
 // languagesInfo is the map version of languages.json.
 var languagesInfo map[string]map[string]any

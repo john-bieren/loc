@@ -189,19 +189,17 @@ named "my_lib", while changing "lib" to "/lib" prevents this.
 */
 func standardizeSeparators(input []string) []string {
 	var result []string
-	windows := string(os.PathSeparator) == "\\"
 	for _, path := range input {
-		if windows {
+		if pathSeparator == "\\" {
 			path = strings.ReplaceAll(path, "/", "\\")
 			path = strings.Trim(path, "\\")
 			path = fmt.Sprintf("\\%s", path)
-			result = append(result, path)
 		} else {
 			path = strings.ReplaceAll(path, "\\", "/")
 			path = strings.Trim(path, "/")
 			path = fmt.Sprintf("/%s", path)
-			result = append(result, path)
 		}
+		result = append(result, path)
 	}
 	return result
 }

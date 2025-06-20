@@ -182,7 +182,8 @@ func (d *directory) printTreeLoc() {
 			if d.fullPath == "" { // if d is a fake mainDir (see main function)
 				// d.subdirectories is equivalent to dirPaths
 				for _, subdir := range d.subdirectories {
-					if strings.Contains(file.fullPath, subdir.fullPath) {
+					// add trailing slash in case one dir's name contains another's
+					if strings.Contains(file.fullPath, subdir.fullPath+pathSeparator) {
 						// return relative path as if mainDir is real
 						fileName = strings.Replace(file.fullPath, parentDir(subdir.fullPath), "", 1)
 						break
@@ -198,7 +199,7 @@ func (d *directory) printTreeLoc() {
 					indent,
 					float64(file.loc)/totalLoc*100,
 					float64(file.bytes)/totalBytes*100,
-					fileName[1:], // remove leading slash
+					strings.TrimPrefix(fileName, pathSeparator),
 				)
 			} else {
 				fmt.Printf(
@@ -206,7 +207,7 @@ func (d *directory) printTreeLoc() {
 					indent,
 					addCommas(file.loc),
 					formatByteCount(file.bytes),
-					fileName[1:], // remove leading slash
+					strings.TrimPrefix(fileName, pathSeparator),
 				)
 			}
 		}

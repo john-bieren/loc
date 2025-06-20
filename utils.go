@@ -9,6 +9,9 @@ import (
 	"strings"
 )
 
+// pathSeparator is the OS-specific slash character used in paths.
+const pathSeparator = string(filepath.Separator)
+
 // addCommas converts an integer to a string with thousands separators.
 func addCommas(num int) string {
 	str := strconv.Itoa(num)
@@ -112,9 +115,9 @@ func removeOverlappingDirs(dirPaths []string) []string {
 			if i == j {
 				continue
 			}
-			// if one path is contained within another
-			if strings.Contains(iPath, jPath) {
-				// drop the path unless -md dictates that it won't be searched otherwise
+			// if iPath descends from jPath
+			if strings.Contains(iPath+pathSeparator, jPath+pathSeparator) {
+				// drop iPath unless -md dictates that it won't be searched otherwise
 				iSplit, jSplit := splitPath(iPath), splitPath(jPath)
 				distance := len(iSplit) - len(jSplit)
 				if distance <= *maxSearchDepth {
