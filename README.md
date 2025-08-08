@@ -30,14 +30,15 @@ Options:
         -d         Print loc by directory
             -pd <int>  Maximum depth of subdirectories to print (default: 1,000)
         --dot      Include dot directories (excluded by default)
-        -ed <str>  Directories to exclude (name or path, e.g. "lib,src/utils")
+        -ed <str>  Directories to exclude (name or path, e.g. "scripts,src/utils")
         -ef <str>  Files to exclude (name or path, e.g. "index.js,src/main.go")
         -el <str>  Languages to exclude (e.g. "HTML,Plain Text,JSON")
         -f         Print loc by file
             -mf <int>  Maximum number of files to print per directory (default: 100,000)
         -fr <int>  Number of file-reading goroutines (default: system-specific)
-        -if <str>  Files to include (name or path, e.g. "main.py,src/main.c")
-        -il <str>  Languages to include, all others excluded (e.g. "Python,JavaScript,C")
+        -id <str>  Directories to include, excluding others (name or path, e.g. "build,src/lib")
+        -if <str>  Files to include, excluding others (name or path, e.g. "main.py,src/main.c")
+        -il <str>  Languages to include, excluding others (e.g. "Python,JavaScript,C")
         -ml <int>  Maximum number of languages to print per directory (default: 1,000)
         -p         Print loc as a percentage of overall total
         -q         Suppress non-critical error messages
@@ -64,7 +65,7 @@ Binaries for Windows and Linux on x86_64 are [available](https://github.com/john
     ```
     go generate
     ```
-    See the [custom mappings](https://github.com/john-bieren/loc?tab=readme-ov-file#custom-mappings) section for more information on `languages.go`.
+    See the [custom mappings](https://github.com/john-bieren/loc?tab=readme-ov-file#custom-mappings) section for more information about `languages.go`.
 3. Compile the program:
     ```
     go build

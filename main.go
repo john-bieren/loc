@@ -10,7 +10,7 @@ import (
 )
 
 // version is the current version of loc.
-const version = "v3.2.0"
+const version = "v3.3.0-alpha"
 
 // cwd is the current working directory.
 var cwd string
@@ -48,7 +48,7 @@ func main() {
 	// mainDir is the "root" directory from which files and subdirectories are indexed.
 	var mainDir *directory
 	if len(dirPaths) == 1 {
-		mainDir = newDirectory(dirPaths[0], 0)
+		mainDir = newDirectory(dirPaths[0], 0, false)
 	} else {
 		// increment search depth since this mainDir isn't real but counts as a parent
 		*maxSearchDepth++
@@ -62,7 +62,7 @@ func main() {
 		}
 
 		for _, path := range dirPaths {
-			subdir := newDirectory(path, 1)
+			subdir := newDirectory(path, 1, false)
 			mainDir.subdirectories = append(mainDir.subdirectories, subdir)
 		}
 

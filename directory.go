@@ -19,6 +19,7 @@ var fileHeadersPrinted bool
 type directory struct {
 	fullPath       string
 	parents        int
+	countLoc       bool
 	printSubdirs   bool
 	subdirectories []*directory
 	files          []*file
@@ -70,10 +71,10 @@ func (d *directory) searchDir() {
 					continue
 				}
 
-				subdir := newDirectory(fullPath, d.parents+1)
+				subdir := newDirectory(fullPath, d.parents+1, d.countLoc)
 				d.subdirectories = append(d.subdirectories, subdir)
 			}
-		} else {
+		} else if d.countLoc {
 			// determine file's language by file name
 			fileType, isCode := fileNames[entryName]
 			if !isCode {
@@ -317,15 +318,29 @@ func (d *directory) appendAllFiles(input []*file) []*file {
 }
 
 // newDirectory is the constructor for instances of the directory struct.
-func newDirectory(path string, parents int) *directory {
+func newDirectory(path string, numParents int, parentCountLoc bool) *directory {
 	self := &directory{
 		fullPath:     path,
-		parents:      parents,
-		printSubdirs: parents+1 <= *maxPrintDepth,
+		parents:      numParents,
+		printSubdirs: numParents+1 <= *maxPrintDepth,
 		locCounts:    make(map[string]int),
 		fileCounts:   make(map[string]int),
 		byteCounts:   make(map[string]int),
 	}
+
+	// check whether files should be counted according to includeDirs
+	if len(includeDirs) == 0 || parentCountLoc {
+		self.countLoc = true
+	} else {
+		self.countLoc = false
+		for _, incl := range includeDirs {
+			if strings.HasSuffix(self.fullPath, incl) {
+				self.countLoc = true
+				break
+			}
+		}
+	}
+
 	self.searchDir()
 	self.countDirLoc()
 	return self

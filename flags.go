@@ -37,6 +37,11 @@ var (
 	// maxFileReaders is the value of the -fr flag.
 	maxFileReaders = flag.Int("fr", runtime.NumCPU(), "")
 
+	// includeDirsFlag is the value of the -id flag.
+	includeDirsFlag = flag.String("id", "", "")
+	// includeDirs contains the parsed inputs for the -id flag.
+	includeDirs []string
+
 	// includeFilesFlag is the value of the -if flag.
 	includeFilesFlag = flag.String("if", "", "")
 	// includeFiles contains the parsed inputs for the -if flag.
@@ -119,14 +124,15 @@ Options:
         -d         Print loc by directory
             -pd <int>  Maximum depth of subdirectories to print (default: 1,000)
         --dot      Include dot directories (excluded by default)
-        -ed <str>  Directories to exclude (name or path, e.g. "lib,src/utils")
+        -ed <str>  Directories to exclude (name or path, e.g. "scripts,src/utils")
         -ef <str>  Files to exclude (name or path, e.g. "index.js,src/main.go")
         -el <str>  Languages to exclude (e.g. "HTML,Plain Text,JSON")
         -f         Print loc by file
             -mf <int>  Maximum number of files to print per directory (default: 100,000)
         -fr <int>  Number of file-reading goroutines (default: %d)
-        -if <str>  Files to include (name or path, e.g. "main.py,src/main.c")
-        -il <str>  Languages to include, all others excluded (e.g. "Python,JavaScript,C")
+        -id <str>  Directories to include, excluding others (name or path, e.g. "build,src/lib")
+        -if <str>  Files to include, excluding others (name or path, e.g. "main.py,src/main.c")
+        -il <str>  Languages to include, excluding others (e.g. "Python,JavaScript,C")
         -ml <int>  Maximum number of languages to print per directory (default: 1,000)
         -p         Print loc as a percentage of overall total
         -q         Suppress non-critical error messages
@@ -157,6 +163,9 @@ func processFlags() {
 	}
 	if *excludeLangsFlag != "" {
 		excludeLangs = strings.Split(*excludeLangsFlag, ",")
+	}
+	if *includeDirsFlag != "" {
+		includeDirs = standardizeSeparators(strings.Split(*includeDirsFlag, ","))
 	}
 	if *includeFilesFlag != "" {
 		includeFiles = standardizeSeparators(strings.Split(*includeFilesFlag, ","))
