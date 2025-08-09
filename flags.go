@@ -21,6 +21,11 @@ var (
 	// excludeDirs contains the parsed inputs for the -ed flag.
 	excludeDirs []string
 
+	// excludeExtsFlag is the value of the -ee flag.
+	excludeExtsFlag = flag.String("ee", "", "")
+	// excludeExts contains the parsed inputs for the -ee flag.
+	excludeExts []string
+
 	// excludeFilesFlag is the value of the -ef flag.
 	excludeFilesFlag = flag.String("ef", "", "")
 	// excludeFiles contains the parsed inputs for the -ef flag.
@@ -41,6 +46,11 @@ var (
 	includeDirsFlag = flag.String("id", "", "")
 	// includeDirs contains the parsed inputs for the -id flag.
 	includeDirs []string
+
+	// includeExtsFlag is the value of the -ie flag.
+	includeExtsFlag = flag.String("ie", "", "")
+	// includeExts contains the parsed inputs for the -ie flag.
+	includeExts []string
 
 	// includeFilesFlag is the value of the -if flag.
 	includeFilesFlag = flag.String("if", "", "")
@@ -118,7 +128,7 @@ Count lines of code in directories and their subdirectories by language
 Usage: loc [options] [dirs]
          Options must come before dirs
          Option flags cannot be combined (e.g. use -d -f instead of -df)
-		 Option flags and arguments are case sensitive
+         Option flags and arguments are case sensitive
          Dirs are the names/paths of directories to search (cwd by default)
 
 Options:
@@ -126,12 +136,14 @@ Options:
             -pd <int>  Maximum depth of subdirectories to print (default: 1,000)
         --dot      Include dot directories (excluded by default)
         -ed <str>  Directories to exclude (name or path, e.g. "scripts,src/utils")
+        -ee <str>  Extensions to exclude (e.g. "yml,md,css")
         -ef <str>  Files to exclude (name or path, e.g. "index.js,src/main.go")
         -el <str>  Languages to exclude (e.g. "HTML,Plain Text,JSON")
         -f         Print loc by file
             -mf <int>  Maximum number of files to print per directory (default: 100,000)
         -fr <int>  Number of file-reading goroutines (default: %d)
         -id <str>  Directories to include, excluding others (name or path, e.g. "build,src/lib")
+        -ie <str>  Extensions to include, excluding others (e.g. "go,h,zig")
         -if <str>  Files to include, excluding others (name or path, e.g. "main.py,src/main.c")
         -il <str>  Languages to include, excluding others (e.g. "Python,JavaScript,C")
         -ml <int>  Maximum number of languages to print per directory (default: 1,000)
@@ -159,6 +171,9 @@ func processFlags() {
 	if *excludeDirsFlag != "" {
 		excludeDirs = standardizeSeparators(strings.Split(*excludeDirsFlag, ","))
 	}
+	if *excludeExtsFlag != "" {
+		excludeExts = strings.Split(*excludeExtsFlag, ",")
+	}
 	if *excludeFilesFlag != "" {
 		excludeFiles = standardizeSeparators(strings.Split(*excludeFilesFlag, ","))
 	}
@@ -167,6 +182,9 @@ func processFlags() {
 	}
 	if *includeDirsFlag != "" {
 		includeDirs = standardizeSeparators(strings.Split(*includeDirsFlag, ","))
+	}
+	if *includeExtsFlag != "" {
+		includeExts = strings.Split(*includeExtsFlag, ",")
 	}
 	if *includeFilesFlag != "" {
 		includeFiles = standardizeSeparators(strings.Split(*includeFilesFlag, ","))

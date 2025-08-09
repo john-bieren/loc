@@ -75,17 +75,38 @@ func (d *directory) searchDir() {
 				d.subdirectories = append(d.subdirectories, subdir)
 			}
 		} else if d.countLoc {
+			fileExt := strings.TrimPrefix(filepath.Ext(entryName), ".")
 			// determine file's language by its name, which takes precedence over extension
 			fileLang, isCode := fileNames[entryName]
 			if !isCode {
 				// determine file's language by its extension
-				fileLang, isCode = extensions[filepath.Ext(entryName)]
+				fileLang, isCode = extensions[fileExt]
 			}
 			if !isCode {
 				continue
 			}
 
 			var skipFile bool
+			// check for matches with included/excluded extensions
+			if len(includeExts) > 0 {
+				skipFile = !slices.Contains(includeExts, fileExt)
+			} else {
+				skipFile = slices.Contains(excludeExts, fileExt)
+			}
+			if skipFile {
+				continue
+			}
+
+			// check for matches with included/excluded languages
+			if len(includeLangs) > 0 {
+				skipFile = !slices.Contains(includeLangs, fileLang)
+			} else {
+				skipFile = slices.Contains(excludeLangs, fileLang)
+			}
+			if skipFile {
+				continue
+			}
+
 			// check for matches with included/excluded files
 			if len(includeFiles) > 0 {
 				skipFile = true
@@ -102,16 +123,6 @@ func (d *directory) searchDir() {
 						break
 					}
 				}
-			}
-			if skipFile {
-				continue
-			}
-
-			// check for matches with included/excluded languages
-			if len(includeLangs) > 0 {
-				skipFile = !slices.Contains(includeLangs, fileLang)
-			} else {
-				skipFile = slices.Contains(excludeLangs, fileLang)
 			}
 			if skipFile {
 				continue

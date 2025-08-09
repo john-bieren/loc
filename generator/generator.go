@@ -172,7 +172,7 @@ func generateExtensionsMap(
 		language := extensionMappings[extension]
 		// skip custom mappings to blank strings
 		if language != "" {
-			newLine := fmt.Sprintf("\n\t\".%s\": \"%s\",", extension, language)
+			newLine := fmt.Sprintf("\n\t\"%s\": \"%s\",", extension, language)
 			fileLines = append(fileLines, newLine)
 			langsUsed[language] = struct{}{}
 		}
