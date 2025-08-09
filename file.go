@@ -8,7 +8,7 @@ import (
 
 type file struct {
 	fullPath string
-	fileType string
+	language string
 	bytes    int
 	loc      int
 }
@@ -22,7 +22,7 @@ func (f *file) countFileLoc() {
 	}
 	defer file.Close()
 
-	comChars, hasComments := singleLineCommentChars[f.fileType]
+	comChars, hasComments := singleLineCommentChars[f.language]
 	reader := bufio.NewReader(file)
 	var endOfFile, skipLine bool
 	for !endOfFile {
@@ -62,7 +62,7 @@ func (f *file) countFileLoc() {
 func newFile(path, lang string, size int64) *file {
 	self := &file{
 		fullPath: path,
-		fileType: lang,
+		language: lang,
 		bytes:    int(size),
 	}
 	self.countFileLoc()

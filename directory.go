@@ -75,11 +75,11 @@ func (d *directory) searchDir() {
 				d.subdirectories = append(d.subdirectories, subdir)
 			}
 		} else if d.countLoc {
-			// determine file's language by file name
-			fileType, isCode := fileNames[entryName]
+			// determine file's language by its name, which takes precedence over extension
+			fileLang, isCode := fileNames[entryName]
 			if !isCode {
-				// determine file's language by file extension
-				fileType, isCode = extensions[filepath.Ext(entryName)]
+				// determine file's language by its extension
+				fileLang, isCode = extensions[filepath.Ext(entryName)]
 			}
 			if !isCode {
 				continue
@@ -109,9 +109,9 @@ func (d *directory) searchDir() {
 
 			// check for matches with included/excluded languages
 			if len(includeLangs) > 0 {
-				skipFile = !slices.Contains(includeLangs, fileType)
+				skipFile = !slices.Contains(includeLangs, fileLang)
 			} else {
-				skipFile = slices.Contains(excludeLangs, fileType)
+				skipFile = slices.Contains(excludeLangs, fileLang)
 			}
 			if skipFile {
 				continue
@@ -125,7 +125,7 @@ func (d *directory) searchDir() {
 				defer func() { <-semaphore }()
 
 				size := info.Size()
-				file := newFile(fullPath, fileType, size)
+				file := newFile(fullPath, fileLang, size)
 				mu.Lock()
 				d.files = append(d.files, file)
 				mu.Unlock()
@@ -138,9 +138,9 @@ func (d *directory) searchDir() {
 // countDirLoc counts the lines of code for each language in all indexed files.
 func (d *directory) countDirLoc() {
 	for _, file := range d.files {
-		d.locCounts[file.fileType] += file.loc
-		d.fileCounts[file.fileType]++
-		d.byteCounts[file.fileType] += file.bytes
+		d.locCounts[file.language] += file.loc
+		d.fileCounts[file.language]++
+		d.byteCounts[file.language] += file.bytes
 	}
 
 	for _, subdir := range d.subdirectories {

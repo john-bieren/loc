@@ -118,6 +118,7 @@ Count lines of code in directories and their subdirectories by language
 Usage: loc [options] [dirs]
          Options must come before dirs
          Option flags cannot be combined (e.g. use -d -f instead of -df)
+		 Option flags and arguments are case sensitive
          Dirs are the names/paths of directories to search (cwd by default)
 
 Options:
