@@ -71,8 +71,10 @@ func (d *directory) searchDir() {
 					continue
 				}
 
-				subdir := newDirectory(fullPath, d.parents+1, d.countLoc)
-				d.subdirectories = append(d.subdirectories, subdir)
+				subdir, ok := newDirectory(fullPath, d.parents+1, d.countLoc)
+				if ok {
+					d.subdirectories = append(d.subdirectories, subdir)
+				}
 			}
 		} else if d.countLoc {
 			fileExt := strings.TrimPrefix(filepath.Ext(entryName), ".")
@@ -329,7 +331,7 @@ func (d *directory) appendAllFiles(input []*file) []*file {
 }
 
 // newDirectory is the constructor for instances of the directory struct.
-func newDirectory(path string, numParents int, parentCountLoc bool) *directory {
+func newDirectory(path string, numParents int, parentCountLoc bool) (*directory, bool) {
 	self := &directory{
 		fullPath:     path,
 		parents:      numParents,
@@ -354,5 +356,5 @@ func newDirectory(path string, numParents int, parentCountLoc bool) *directory {
 
 	self.searchDir()
 	self.countDirLoc()
-	return self
+	return self, len(self.fileCounts) != 0
 }
