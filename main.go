@@ -71,7 +71,7 @@ func main() {
 		mainDir.countDirLoc()
 	}
 
-	if len(mainDir.locCounts) == 0 {
+	if len(mainDir.fileCounts) == 0 {
 		fmt.Println("No code files found")
 		return
 	}

@@ -248,14 +248,11 @@ func (d *directory) printTreeLoc() {
 
 // printLocSummary prints loc by file type for d's tree.
 func (d *directory) printLocSummary() {
-	if len(d.locCounts) == 0 {
-		return
-	}
 	indent := strings.Repeat("    ", d.parents)
 
 	// print directory name, if applicable
 	if *printDirFlag && d.parents > 0 {
-		fmt.Printf("%s%s/\n", indent, filepath.Base(d.fullPath))
+		fmt.Printf("%s%s%s\n", indent, filepath.Base(d.fullPath), pathSeparator)
 		indent += " " // loc totals should have an extra space if directory names are printed
 	}
 
