@@ -106,6 +106,10 @@ func gatherLanguageInfo() (map[string]string, map[string]string, map[string][]an
 				if !ok {
 					fmt.Println("Error reading extensions for", language)
 				} else {
+					// skip extensions which contain periods; loc doesn't recognize multiple extensions
+					if strings.Count(ext, ".") > 0 {
+						continue
+					}
 					currentMapping, ok := extensionMappings[ext]
 					if ok {
 						// sort languages alphabetically for deterministic output
@@ -172,8 +176,8 @@ func generateExtensionsMap(
 		language := extensionMappings[extension]
 		// skip custom mappings to blank strings
 		if language != "" {
-			newLine := fmt.Sprintf("\n\t\"%s\": \"%s\",", extension, language)
-			fileLines = append(fileLines, newLine)
+			line := fmt.Sprintf("\n\t\"%s\": \"%s\",", extension, language)
+			fileLines = append(fileLines, line)
 			langsUsed[language] = struct{}{}
 		}
 	}
@@ -207,8 +211,8 @@ func generateFileNamesMap(
 		language := fileNameMappings[fileName]
 		// skip custom mappings to blank strings
 		if language != "" {
-			newLine := fmt.Sprintf("\n\t\"%s\": \"%s\",", fileName, language)
-			fileLines = append(fileLines, newLine)
+			line := fmt.Sprintf("\n\t\"%s\": \"%s\",", fileName, language)
+			fileLines = append(fileLines, line)
 			langsUsed[language] = struct{}{}
 		}
 	}
@@ -260,8 +264,8 @@ func generateSingleCharsMap(
 					chars = append(chars, char)
 				}
 			}
-			newLine := fmt.Sprintf("\n\t\"%s\": {\"%s\"},", language, strings.Join(chars, "\", \""))
-			fileLines = append(fileLines, newLine)
+			line := fmt.Sprintf("\n\t\"%s\": {\"%s\"},", language, strings.Join(chars, "\", \""))
+			fileLines = append(fileLines, line)
 		} else {
 			fileLines = append(fileLines, fmt.Sprintf("\n\t\"%s\": {},", language))
 		}
