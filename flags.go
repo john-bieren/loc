@@ -153,7 +153,8 @@ Options:
         -sd <int>  Maximum depth of subdirectories to search (default: 1,000)
         --help     Print this message and exit
         --license  Print license information and exit
-        --version  Print version and exit`
+        --version  Print version and exit
+`
 )
 
 // processFlags runs exit flags, parses string flags, and checks for invalid inputs.
