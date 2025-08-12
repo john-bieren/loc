@@ -19,6 +19,7 @@ var fileHeadersPrinted bool
 type directory struct {
 	fullPath       string
 	parents        int
+	compressLevel  int
 	countLoc       bool
 	printSubdirs   bool
 	subdirectories []*directory
@@ -252,7 +253,10 @@ func (d *directory) printLocSummary() {
 
 	// print directory name, if applicable
 	if *printDirFlag && d.parents > 0 {
-		fmt.Printf("%s%s%s\n", indent, filepath.Base(d.fullPath), pathSeparator)
+		// print partial path if d has been compressed
+		pathSplit := splitPath(d.fullPath)
+		pathSplit = pathSplit[len(pathSplit)-d.compressLevel:]
+		fmt.Printf("%s%s%s\n", indent, strings.Join(pathSplit, pathSeparator), pathSeparator)
 		indent += " " // loc totals should have an extra space if directory names are printed
 	}
 
@@ -327,15 +331,24 @@ func (d *directory) appendAllFiles(input []*file) []*file {
 	return input
 }
 
+// decrementParents decrements the parents attribute for d and all subdirectories.
+func (d *directory) decrementParents() {
+	d.parents--
+	for _, sub := range d.subdirectories {
+		sub.decrementParents()
+	}
+}
+
 // newDirectory is the constructor for instances of the directory struct.
 func newDirectory(path string, numParents int, parentCountLoc bool) (*directory, bool) {
 	self := &directory{
-		fullPath:     path,
-		parents:      numParents,
-		printSubdirs: numParents+1 <= *maxPrintDepth,
-		locCounts:    make(map[string]int),
-		fileCounts:   make(map[string]int),
-		byteCounts:   make(map[string]int),
+		fullPath:      path,
+		parents:       numParents,
+		compressLevel: 1,
+		printSubdirs:  numParents+1 <= *maxPrintDepth,
+		locCounts:     make(map[string]int),
+		fileCounts:    make(map[string]int),
+		byteCounts:    make(map[string]int),
 	}
 
 	// check whether files should be counted according to includeDirs
@@ -353,5 +366,17 @@ func newDirectory(path string, numParents int, parentCountLoc bool) (*directory,
 
 	self.searchDir()
 	self.countDirLoc()
+
+	// for cleaner -d output, compress the directory if it adds no files or aggregation
+	if len(self.files) == 0 && len(self.subdirectories) == 1 &&
+		// don't compress mainDir so that -d output makes sense
+		self.parents > 0 &&
+		// given parents decrement below, don't print unintended subdirs
+		self.printSubdirs {
+		child := self.subdirectories[0]
+		child.compressLevel++    // to add the compressed dirs to the printed path
+		child.decrementParents() // to avoid extra indenting
+		return child, true
+	}
 	return self, len(self.fileCounts) != 0
 }
