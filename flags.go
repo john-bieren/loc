@@ -135,17 +135,17 @@ Options:
         -d         Print loc by directory
             -pd <int>  Maximum depth of subdirectories to print (default: 1,000)
         --dot      Include dot directories (excluded by default)
-        -ed <str>  Directories to exclude (name or path, e.g. "scripts,src/utils")
-        -ee <str>  Extensions to exclude (e.g. "yml,md,css")
-        -ef <str>  Files to exclude (name or path, e.g. "index.js,src/main.go")
-        -el <str>  Languages to exclude (e.g. "HTML,Plain Text,JSON")
+        -ed <str>  Directories to exclude (name or path, e.g. "node_modules,src/constants")
+        -ee <str>  Extensions to exclude (e.g. "json,md,css")
+        -ef <str>  Files to exclude (name or path, e.g. "htmx.js,src/version.c")
+        -el <str>  Languages to exclude (e.g. "HTML,Plain Text,YAML")
         -f         Print loc by file
             -mf <int>  Maximum number of files to print per directory (default: 100,000)
         -fr <int>  Number of file-reading goroutines (default: %d)
         -id <str>  Directories to include, excluding others (name or path, e.g. "build,src/lib")
-        -ie <str>  Extensions to include, excluding others (e.g. "go,h,zig")
-        -if <str>  Files to include, excluding others (name or path, e.g. "main.py,src/main.c")
-        -il <str>  Languages to include, excluding others (e.g. "Python,JavaScript,C")
+        -ie <str>  Extensions to include, excluding others (e.g. "go,sh,zig")
+        -if <str>  Files to include, excluding others (name or path, e.g. "main.lua,src/index.ts")
+        -il <str>  Languages to include, excluding others (e.g. "Python,JavaScript,C++")
         -ml <int>  Maximum number of languages to print per directory (default: 1,000)
         -p         Print loc as a percentage of overall total
         -q         Suppress non-critical error messages
@@ -153,8 +153,7 @@ Options:
         -sd <int>  Maximum depth of subdirectories to search (default: 1,000)
         --help     Print this message and exit
         --license  Print license information and exit
-        --version  Print version and exit
-`
+        --version  Print version and exit`
 )
 
 // processFlags runs exit flags, parses string flags, and checks for invalid inputs.
@@ -235,6 +234,7 @@ func standardizeSeparators(input []string) []string {
 
 // usage is a custom usage output for --help and relevant error messages.
 func usage() {
-	fmt.Printf(usageMessage, version, *maxFileReaders)
+	formattedMessage := fmt.Sprintf(usageMessage, version, *maxFileReaders)
+	fmt.Println(formattedMessage)
 	os.Exit(0)
 }
