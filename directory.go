@@ -214,7 +214,7 @@ func (d *directory) printTreeLoc() {
 					indent,
 					float64(file.loc)/totalLoc*100,
 					float64(file.bytes)/totalBytes*100,
-					strings.TrimPrefix(fileName, pathSeparator),
+					strings.TrimLeft(fileName, pathSeparator),
 				)
 			} else {
 				fmt.Printf(
@@ -222,7 +222,7 @@ func (d *directory) printTreeLoc() {
 					indent,
 					addCommas(file.loc),
 					formatByteCount(file.bytes),
-					strings.TrimPrefix(fileName, pathSeparator),
+					strings.TrimLeft(fileName, pathSeparator),
 				)
 			}
 		}
