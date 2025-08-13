@@ -5,15 +5,23 @@ A command line utility for recursively counting lines of code in directories and
 ### Example output
 
 <pre>
-<code><b>Language: loc | size | files</b>
-7 langs: 12,231 | 714.7 kb | 53
-Python: 11,392 | 684.1 kb | 44
+<code>>>> loc -d
+<b>Language: loc | size | files</b>
+5 langs: 6,419 | 346.0 kb | 41
+Python: 5,684 | 318.2 kb | 34
 C++: 351 | 14.3 kb | 2
 C: 323 | 11.4 kb | 2
-Go: 72 | 1.9 kb | 1
 Ruby: 33 | 1.1 kb | 1
-Shell: 32 | 938 b | 1
-Powershell: 28 | 939 b | 2
+Powershell: 28 | 952 b | 2
+    dir1\
+     Python: 4,100 | 233.1 kb | 14
+    dir2\
+     5 langs: 1,929 | 91.3 kb | 25
+     Python: 1,194 | 63.5 kb | 18
+     C++: 351 | 14.3 kb | 2
+     C: 323 | 11.4 kb | 2
+     Ruby: 33 | 1.1 kb | 1
+     Powershell: 28 | 952 b | 2
 </code></pre>
 
 ## Usage
@@ -56,7 +64,7 @@ Options:
 
 ### Binary releases
 
-Binaries for Windows and Linux on x86_64 are [available](https://github.com/john-bieren/loc/releases) starting from v3.0.0.
+Binaries for Windows and Linux on x86_64 are [available](https://github.com/john-bieren/loc/releases).
 
 ### Build from source
 
