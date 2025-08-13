@@ -98,9 +98,9 @@ loc uses three maps, located in `languages.go`, to store language information:
 ```JSON
 {
     "extensions": {
-        "hc": "HolyC",
         "heex": "HEEx",
         "json": "JSON",
+        "st": "Smalltalk",
         "yaml": "YAML",
         "yml": "YAML"
     },
@@ -110,11 +110,12 @@ loc uses three maps, located in `languages.go`, to store language information:
         "LICENCE.txt": "License",
         "LICENSE.txt": "License",
         "README": "README",
-        "README.md": "README"
+        "README.md": "README",
+        "exclude": "Git Exclude"
     },
     "singleLineCommentChars": {
-        "HolyC": ["#"]
+        "Git Exclude": ["#"]
     }
 }
 ```
-Shown here are the custom mappings used in the most recent binary release (except for HolyC).
+Shown here are the custom mappings used in the most recent binary release.
