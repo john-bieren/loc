@@ -256,7 +256,7 @@ func (d *directory) printLocSummary() {
 		// print partial path if d has been compressed
 		pathSplit := splitPath(d.fullPath)
 		pathSplit = pathSplit[len(pathSplit)-d.compressLevel:]
-		fmt.Printf("%s%s%s\n", indent, strings.Join(pathSplit, pathSeparator), pathSeparator)
+		fmt.Printf("%s%s%s\n", indent, filepath.Join(pathSplit...), pathSeparator)
 		indent += " " // loc totals should have an extra space if directory names are printed
 	}
 

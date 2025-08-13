@@ -173,11 +173,7 @@ func sumMapValues[k comparable](m map[k]int) int {
 
 // toAbsPath converts a path into an absolute path.
 func toAbsPath(path string) string {
-	if path == "." {
-		path = cwd
-	} else if path == ".." {
-		path = parentDir(cwd)
-	} else if !filepath.IsAbs(path) {
+	if !filepath.IsAbs(path) {
 		if strings.HasPrefix(path, "-") {
 			fmt.Printf("Warning: argument \"%s\" may be a misplaced flag, flags must come before arguments\n", path)
 		}
