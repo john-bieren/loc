@@ -31,14 +31,14 @@ Options:
         -d         Print loc by directory
             -pd <int>  Maximum depth of subdirectories to print (default: 1,000)
         --dot      Include dot directories (excluded by default)
-        -ed <str>  Directories to exclude (name or path, e.g. "node_modules,src/constants")
+        -ed <str>  Directory trees to exclude (name or path, e.g. "node_modules,src/constants")
         -ee <str>  Extensions to exclude (e.g. "json,md,css")
         -ef <str>  Files to exclude (name or path, e.g. "htmx.js,src/version.c")
         -el <str>  Languages to exclude (e.g. "HTML,Plain Text,YAML")
         -f         Print loc by file
             -mf <int>  Maximum number of files to print per directory (default: 100,000)
         -fr <int>  Number of file-reading goroutines (default: system-specific)
-        -id <str>  Directories to include, excluding others (name or path, e.g. "build,src/lib")
+        -id <str>  Directory trees to include, excluding others (name or path, e.g. "build,src/lib")
         -ie <str>  Extensions to include, excluding others (e.g. "go,sh,zig")
         -if <str>  Files to include, excluding others (name or path, e.g. "main.lua,src/index.ts")
         -il <str>  Languages to include, excluding others (e.g. "Python,JavaScript,C++")
