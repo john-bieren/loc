@@ -76,7 +76,7 @@ Binaries for Windows and Linux on x86_64 are [available](https://github.com/john
     ```
     go generate
     ```
-    See the [custom mappings](https://github.com/john-bieren/loc?tab=readme-ov-file#custom-mappings) section for more information about `languages.go`.
+    See the [custom mappings](https://github.com/john-bieren/loc?tab=readme-ov-file#custom-mappings-must-build-from-source) section for more information about `languages.go`.
 3. Compile the program:
     ```
     go build
@@ -91,7 +91,7 @@ On Windows, loc may be slowed down significantly by Windows Defender's real-time
 I'm new to Go, and this is just a personal project. As such, loc has some notable limitations:
 * Multi-line comments and non-comment docstrings are counted as lines of code.
 * Traversal of directory trees is not concurrent, though file processing is.
-* Files are assigned a language based only on their extension, resulting in a few conflicts where extensions belong to multiple languages. These conflicts are resolved by mapping the extensions to "lang_1 or lang_2", unless applicable custom mappings are used.
+* Files are assigned a language based only on their extension, resulting in a few conflicts where extensions belong to multiple languages. These conflicts are resolved by mapping the extensions to "lang 1 or lang 2", unless applicable custom mappings are used.
 
 There are similar, more advanced programs, like [scc](https://github.com/boyter/scc), with more features and better methods for counting lines of code.
 
