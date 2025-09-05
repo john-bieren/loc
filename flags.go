@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"path/filepath"
 	"runtime"
 	"slices"
 	"strings"
@@ -169,25 +170,25 @@ func processFlags() {
 	}
 
 	if *excludeDirsFlag != "" {
-		excludeDirs = standardizeSeparators(strings.Split(*excludeDirsFlag, ","))
+		excludeDirs = standardizePaths(strings.Split(*excludeDirsFlag, ","))
 	}
 	if *excludeExtsFlag != "" {
 		excludeExts = strings.Split(*excludeExtsFlag, ",")
 	}
 	if *excludeFilesFlag != "" {
-		excludeFiles = standardizeSeparators(strings.Split(*excludeFilesFlag, ","))
+		excludeFiles = standardizePaths(strings.Split(*excludeFilesFlag, ","))
 	}
 	if *excludeLangsFlag != "" {
 		excludeLangs = strings.Split(*excludeLangsFlag, ",")
 	}
 	if *includeDirsFlag != "" {
-		includeDirs = standardizeSeparators(strings.Split(*includeDirsFlag, ","))
+		includeDirs = standardizePaths(strings.Split(*includeDirsFlag, ","))
 	}
 	if *includeExtsFlag != "" {
 		includeExts = strings.Split(*includeExtsFlag, ",")
 	}
 	if *includeFilesFlag != "" {
-		includeFiles = standardizeSeparators(strings.Split(*includeFilesFlag, ","))
+		includeFiles = standardizePaths(strings.Split(*includeFilesFlag, ","))
 	}
 	if *includeLangsFlag != "" {
 		includeLangs = strings.Split(*includeLangsFlag, ",")
@@ -209,24 +210,31 @@ func processFlags() {
 }
 
 /*
-standardizeSeparators corrects path separators in a slice of paths.
-This includes using the proper separators for the user's OS, and ensuring that
-there is a leading separator, as these paths will match to entries which
-contain them as a suffix. For example, "-ed lib" would exclude a directory
-named "my_lib", while changing "lib" to "/lib" prevents this.
+standardizePaths formats each item in a slice of path suffixes.
+This includes using the proper separators for the user's OS,
+handling "." and "..", and ensuring that partial paths have a leading separator
+(for example, "-ed lib" would exclude a directory named "my_lib", while changing
+"lib" to "/lib" prevents this).
 */
-func standardizeSeparators(input []string) []string {
+func standardizePaths(input []string) []string {
 	var result []string
 	for _, path := range input {
-		if pathSeparator == "\\" {
-			path = strings.ReplaceAll(path, "/", "\\")
-			path = strings.Trim(path, "\\")
-			path = fmt.Sprintf("\\%s", path)
-		} else {
-			path = strings.ReplaceAll(path, "\\", "/")
-			path = strings.Trim(path, "/")
-			path = fmt.Sprintf("/%s", path)
+		// manually convert leading "." and ".." into their equivalent full paths
+		if path[0] == '.' {
+			if path[1] == '.' {
+				path = strings.Replace(path, "..", parentDir(cwd), 1)
+			} else {
+				path = strings.Replace(path, ".", cwd, 1)
+			}
 		}
+
+		// correct separators, handle non-leading "." and "..", and other edge cases
+		path = filepath.Clean(path)
+		// ensure leading separator
+		if !filepath.IsAbs(path) && path[0] != os.PathSeparator {
+			path = pathSeparator + path
+		}
+
 		result = append(result, path)
 	}
 	return result

@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-// pathSeparator is the OS-specific slash character used in paths.
+// pathSeparator is the OS-specific path separator character.
 const pathSeparator = string(filepath.Separator)
 
 // addCommas converts an integer to a string with thousands separators.
