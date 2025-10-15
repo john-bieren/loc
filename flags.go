@@ -169,28 +169,27 @@ func processFlags() {
 		os.Exit(0)
 	}
 
-	if *excludeDirsFlag != "" {
-		excludeDirs = standardizePaths(strings.Split(*excludeDirsFlag, ","))
-	}
-	if *excludeExtsFlag != "" {
-		excludeExts = strings.Split(*excludeExtsFlag, ",")
-	}
-	if *excludeFilesFlag != "" {
-		excludeFiles = standardizePaths(strings.Split(*excludeFilesFlag, ","))
-	}
-	if *excludeLangsFlag != "" {
-		excludeLangs = strings.Split(*excludeLangsFlag, ",")
-	}
 	if *includeDirsFlag != "" {
 		includeDirs = standardizePaths(strings.Split(*includeDirsFlag, ","))
+	} else if *excludeDirsFlag != "" {
+		excludeDirs = standardizePaths(strings.Split(*excludeDirsFlag, ","))
 	}
+
 	if *includeExtsFlag != "" {
 		includeExts = strings.Split(*includeExtsFlag, ",")
+	} else if *excludeExtsFlag != "" {
+		excludeExts = strings.Split(*excludeExtsFlag, ",")
 	}
+
 	if *includeFilesFlag != "" {
 		includeFiles = standardizePaths(strings.Split(*includeFilesFlag, ","))
+	} else if *excludeFilesFlag != "" {
+		excludeFiles = standardizePaths(strings.Split(*excludeFilesFlag, ","))
 	}
-	if *includeLangsFlag != "" {
+
+	if *excludeLangsFlag != "" {
+		excludeLangs = strings.Split(*excludeLangsFlag, ",")
+	} else if *includeLangsFlag != "" {
 		includeLangs = strings.Split(*includeLangsFlag, ",")
 	}
 
