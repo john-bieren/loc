@@ -74,6 +74,7 @@ Binaries for Windows and Linux on x86_64 are [available](https://github.com/john
     ```
 2. Navigate to the project directory and generate `languages.go`, the program's store of language information like file extensions and comment characters:
     ```
+    cd loc
     go generate
     ```
     See the [custom mappings](https://github.com/john-bieren/loc?tab=readme-ov-file#custom-mappings-must-build-from-source) section for more information about `languages.go`.

@@ -194,8 +194,8 @@ func processFlags() {
 	}
 
 	if !slices.Contains([]string{"loc", "size", "files"}, *sortColumn) {
-		// "loc" is already the default option when sorting results
 		fmt.Printf("-s input \"%s\" is invalid, defaulting to \"loc\"\n", *sortColumn)
+		// "loc" is already the default option when sorting results
 	}
 
 	if *maxFileReaders < 1 {
