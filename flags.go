@@ -199,8 +199,8 @@ func processFlags() {
 	}
 
 	if *maxFileReaders < 1 {
-		fmt.Printf("-fr input %d is invalid, defaulting to 1\n", *maxFileReaders)
-		*maxFileReaders = 1
+		fmt.Printf("-fr input %d is invalid, defaulting to %d\n", *maxFileReaders, runtime.NumCPU())
+		*maxFileReaders = runtime.NumCPU()
 	}
 
 	if !*printDirFlag {
