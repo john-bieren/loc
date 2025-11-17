@@ -187,10 +187,10 @@ func processFlags() {
 		excludeFiles = standardizePaths(strings.Split(*excludeFilesFlag, ","))
 	}
 
-	if *excludeLangsFlag != "" {
-		excludeLangs = strings.Split(*excludeLangsFlag, ",")
-	} else if *includeLangsFlag != "" {
+	if *includeLangsFlag != "" {
 		includeLangs = strings.Split(*includeLangsFlag, ",")
+	} else if *excludeLangsFlag != "" {
+		excludeLangs = strings.Split(*excludeLangsFlag, ",")
 	}
 
 	if !slices.Contains([]string{"loc", "size", "files"}, *sortColumn) {
