@@ -24,6 +24,29 @@ Powershell: 28 | 952 b | 2
      Powershell: 28 | 952 b | 2
 </code></pre>
 
+## Install
+
+### Binary releases
+
+Binaries for Windows and Linux on x86_64 are [available](https://github.com/john-bieren/loc/releases).
+
+### Build from source
+
+1. Clone the repository:
+    ```
+    git clone https://github.com/john-bieren/loc.git
+    ```
+2. Navigate to the project directory and generate `languages.go`, the program's store of language information like file extensions and comment characters:
+    ```
+    cd loc
+    go generate
+    ```
+    See the [custom mappings](https://github.com/john-bieren/loc?tab=readme-ov-file#custom-mappings-must-build-from-source) section for more information about `languages.go`.
+3. Compile the program:
+    ```
+    go build
+    ```
+
 ## Usage
 
 This usage information can be found by running `loc --help`:
@@ -59,29 +82,6 @@ Options:
         --license  Print license information and exit
         --version  Print version and exit
 ```
-
-## Install
-
-### Binary releases
-
-Binaries for Windows and Linux on x86_64 are [available](https://github.com/john-bieren/loc/releases).
-
-### Build from source
-
-1. Clone the repository:
-    ```
-    git clone https://github.com/john-bieren/loc.git
-    ```
-2. Navigate to the project directory and generate `languages.go`, the program's store of language information like file extensions and comment characters:
-    ```
-    cd loc
-    go generate
-    ```
-    See the [custom mappings](https://github.com/john-bieren/loc?tab=readme-ov-file#custom-mappings-must-build-from-source) section for more information about `languages.go`.
-3. Compile the program:
-    ```
-    go build
-    ```
 
 ## Performance note
 
