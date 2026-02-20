@@ -124,7 +124,7 @@ SOFTWARE.`
 	// usageMessage is the output of usage().
 	usageMessage = `loc %s
 Count lines of code in directories and their subdirectories by language
-         Note: multi-line comments and non-comment docstrings are counted as lines of code
+         Note: docstrings and multi-line comments are counted as lines of code
 
 Usage: loc [options] [dirs]
          Options must come before dirs

@@ -90,7 +90,7 @@ On Windows, loc may be slowed down significantly by Windows Defender's real-time
 ## Limitations
 
 I'm new to Go, and this is just a personal project. As such, loc has some notable limitations:
-* Multi-line comments and non-comment docstrings are counted as lines of code.
+* Docstrings and multi-line comments are counted as lines of code.
 * Traversal of directory trees is not concurrent, though file processing is.
 * Files are assigned a language based only on their extension, resulting in a few conflicts where extensions belong to multiple languages. These conflicts are resolved by mapping the extensions to "lang 1 or lang 2", unless applicable custom mappings are used.
 
