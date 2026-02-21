@@ -32,20 +32,16 @@ Binaries for Windows and Linux on x86_64 are [available](https://github.com/john
 
 ### Build from source
 
-1. Clone the repository:
-    ```
-    git clone https://github.com/john-bieren/loc.git
-    ```
-2. Navigate to the project directory and generate `languages.go`, the program's store of language information like file extensions and comment characters:
-    ```
-    cd loc
-    go generate
-    ```
-    See the [custom mappings](https://github.com/john-bieren/loc?tab=readme-ov-file#custom-mappings-must-build-from-source) section for more information about `languages.go`.
-3. Compile the program:
-    ```
-    go build
-    ```
+Clone the repository, generate `languages.go`, and compile the program:
+
+```shell
+git clone https://github.com/john-bieren/loc.git
+cd loc
+go generate
+go build
+```
+
+See the [custom mappings](https://github.com/john-bieren/loc?tab=readme-ov-file#custom-mappings-must-build-from-source) section for more information about the `go generate` command and `languages.go`.
 
 ## Usage
 
