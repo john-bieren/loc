@@ -43,9 +43,8 @@ func formatByteCount(byteCount int) string {
 		return fmt.Sprintf("%.1f kb", float64(byteCount)/1_000)
 	} else if byteCount <= 1_000_000_000 {
 		return fmt.Sprintf("%.1f mb", float64(byteCount)/1_000_000)
-	} else {
-		return fmt.Sprintf("%.1f gb", float64(byteCount)/1_000_000_000)
 	}
+	return fmt.Sprintf("%.1f gb", float64(byteCount)/1_000_000_000)
 }
 
 // parentDir returns the path to the parent of the given entry.
@@ -94,8 +93,8 @@ func quickSort(sourceMap map[string]int, keys []string, low, high int) {
 
 // removeSliceDuplicates removes duplicate values from a slice.
 func removeSliceDuplicates[T comparable](inputSlice []T) []T {
-	values := make(map[T]bool)
-	uniqueSlice := []T{}
+	values := make(map[T]bool, len(inputSlice))
+	uniqueSlice := make([]T, 0, len(inputSlice))
 	for _, item := range inputSlice {
 		if _, exists := values[item]; !exists {
 			values[item] = true
@@ -138,9 +137,8 @@ func sortFiles(slice []*file, sortBy string) []*file {
 	sort.Slice(slice, func(i, j int) bool {
 		if sortBy == "size" {
 			return slice[i].bytes > slice[j].bytes
-		} else {
-			return slice[i].loc > slice[j].loc
 		}
+		return slice[i].loc > slice[j].loc
 	})
 	return slice
 }
