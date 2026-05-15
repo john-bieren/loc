@@ -20,7 +20,12 @@ func (f *file) countFileLoc() {
 		warn("Error opening file:", err)
 		return
 	}
-	defer file.Close()
+	defer func(file *os.File) {
+		err := file.Close()
+		if err != nil {
+			warn("Error closing file:", err)
+		}
+	}(file)
 
 	comChars, hasComments := singleLineCommentChars[f.language]
 	reader := bufio.NewReader(file)

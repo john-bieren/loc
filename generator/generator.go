@@ -40,7 +40,12 @@ func loadFiles() {
 	if err != nil {
 		panic(fmt.Sprintln("Error getting languages.json:", err))
 	}
-	defer resp.Body.Close()
+	defer func(Body io.ReadCloser) {
+		err := Body.Close()
+		if err != nil {
+			panic(fmt.Sprintln("Error closing languages.json:", err))
+		}
+	}(resp.Body)
 
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
@@ -60,7 +65,12 @@ func loadFiles() {
 		}
 		return
 	}
-	defer file.Close()
+	defer func(file *os.File) {
+		err := file.Close()
+		if err != nil {
+			fmt.Println("Error closing custom_mappings.json", err)
+		}
+	}(file)
 
 	decoder := json.NewDecoder(file)
 	err = decoder.Decode(&customMappings)
