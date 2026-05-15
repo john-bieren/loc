@@ -12,7 +12,7 @@ import (
 	"strings"
 )
 
-// languagesUrl is the link to the raw languages.json file in scc's github repository.
+// languagesUrl is the link to the raw languages.json file in scc's GitHub repository.
 const languagesUrl = "https://raw.githubusercontent.com/boyter/scc/refs/heads/master/languages.json"
 
 // languagesInfo is the map version of languages.json.

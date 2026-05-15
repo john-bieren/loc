@@ -35,7 +35,7 @@ func addCommas(num int) string {
 	return string(result)
 }
 
-// formatByteCount converts a raw byte count into a string formatted in the relveant units.
+// formatByteCount converts a raw byte count into a string formatted in the relevant units.
 func formatByteCount(byteCount int) string {
 	if byteCount <= 1_000 {
 		return fmt.Sprintf("%d b", byteCount)
@@ -54,7 +54,7 @@ func parentDir(dirPath string) string {
 	parentPathParts := pathParts[:len(pathParts)-1]
 	parentPath := filepath.Join(parentPathParts...)
 
-	// the \ after the drive letter is not added by Join
+	// Join does not add the \ after the drive letter
 	if runtime.GOOS == "windows" && parentPath[1] == ':' {
 		parentPath = strings.Replace(parentPath, ":", ":\\", 1)
 	}

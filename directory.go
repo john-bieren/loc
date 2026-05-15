@@ -322,7 +322,7 @@ func (d *directory) printLocSummary() {
 	}
 }
 
-// appendAllFiles appends all files which descend from d to the input slice.
+// appendAllFiles appends all files that descend from d to the input slice.
 func (d *directory) appendAllFiles(input []*file) []*file {
 	input = append(input, d.files...)
 	for _, subdir := range d.subdirectories {
